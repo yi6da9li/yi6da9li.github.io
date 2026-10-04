@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>装箱模拟器 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=transpi-tools-20261001" />
+  <style>
+    /* ===== 装箱模拟器专属样式（不影响其他工具页） ===== */
+    .pk-wrap { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 920px){ .pk-wrap { grid-template-columns: 1fr; } }
+    .pk-panel { background: var(--card-bg); border: 1px solid var(--gold); border-radius: 12px; padding: 22px; margin-bottom: 20px; }
+    .pk-panel h2 { color: var(--gold); font-size: 17px; margin: 0 0 14px; }
+    .pk-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pk-row .field { flex: 1 1 90px; min-width: 84px; }
+    .pk-cargo { border: 1px solid #2a3a55; border-radius: 10px; padding: 12px; margin-bottom: 12px; background: var(--navy-2); position: relative; }
+    .pk-cargo .pk-del { position: absolute; top: 8px; right: 10px; background: transparent; border: 1px solid #6b3b3b; color: #e08; cursor: pointer; border-radius: 6px; font-size: 12px; padding: 2px 8px; }
+    .pk-cargo .pk-del:hover { background: #6b3b3b; color: #fff; }
+    .pk-add { width: 100%; background: transparent; border: 1px dashed var(--gold); color: var(--gold); border-radius: 8px; padding: 10px; cursor: pointer; font-family: inherit; font-size: 14px; }
+    .pk-add:hover { background: rgba(212,175,55,.1); }
+    .pk-toggles { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+    .pk-toggles label { font-size: 13px; color: var(--text-gray); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .pk-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+    .pk-btn-2 { background: var(--navy-2); color: var(--gold); border: 1px solid var(--gold); border-radius: 8px; padding: 10px 14px; font-size: 14px; cursor: pointer; font-family: inherit; }
+    .pk-btn-2:hover { background: rgba(212,175,55,.12); }
+    .pk-stage { background: var(--card-bg); border: 1px solid var(--gold); border-radius: 12px; padding: 16px; }
+    .pk-canvas-box { position: relative; width: 100%; height: 440px; background: linear-gradient(180deg,#0b1830,#0a1628); border-radius: 10px; overflow: hidden; cursor: grab; }
+    .pk-canvas-box.grabbing { cursor: grabbing; }
+    #pkCanvas { display: block; width: 100%; height: 100%; }
+    .pk-hint { position: absolute; left: 12px; bottom: 10px; font-size: 11px; color: var(--text-gray); background: rgba(0,0,0,.35); padding: 4px 8px; border-radius: 6px; }
+    .pk-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 12px; color: var(--text-gray); }
+    .pk-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .pk-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+    .pk-stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 12px; margin-top: 14px; }
+    .pk-stat { background: var(--navy-2); border: 1px solid #2a3a55; border-radius: 10px; padding: 12px; text-align: center; }
+    .pk-stat .v { font-size: 22px; color: var(--gold); font-weight: 700; font-family: "SFMono-Regular",Consolas,monospace; }
+    .pk-stat .l { font-size: 12px; color: var(--text-gray); margin-top: 4px; }
+    .pk-bar { height: 8px; background: #1b2c46; border-radius: 5px; overflow: hidden; margin-top: 6px; }
+    .pk-bar > i { display: block; height: 100%; background: var(--gold); }
+    .pk-tabs { display: flex; gap: 8px; margin: 18px 0 12px; border-bottom: 1px solid #2a3a55; }
+    .pk-tab { background: none; border: none; color: var(--text-gray); padding: 10px 14px; cursor: pointer; font-family: inherit; font-size: 14px; border-bottom: 2px solid transparent; }
+    .pk-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .pk-pane { display: none; }
+    .pk-pane.active { display: block; }
+    table.pk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.pk-table th, table.pk-table td { border: 1px solid #2a3a55; padding: 7px 9px; text-align: left; }
+    table.pk-table th { color: var(--gold); background: var(--navy-2); }
+    .pk-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+    .pk-viol { color: #ff9b9b; font-size: 13px; margin: 4px 0; }
+    .pk-ok { color: #7ee0a0; font-size: 13px; }
+    .pk-steps { max-height: 320px; overflow: auto; font-size: 13px; }
+    .pk-steps div { padding: 5px 8px; border-bottom: 1px solid #1b2c46; font-family: "SFMono-Regular",Consolas,monospace; }
+    .pk-selbox { margin-top: 12px; font-size: 13px; color: var(--text-gray); }
+    .pk-selbox button { margin: 4px 4px 0 0; background: var(--navy-2); border: 1px solid var(--gold); color: var(--gold); border-radius: 6px; padding: 6px 10px; cursor: pointer; font-family: inherit; font-size: 12px; }
+    .pk-selbox button:hover { background: rgba(212,175,55,.12); }
+    .pk-note { color: var(--text-gray); font-size: 12px; margin-top: 12px; }
+    @media print {
+      .pk-wrap > div:first-child, .pk-tabs, .pk-hint, .pk-selbox, .pk-btns, .tool-back { display: none !important; }
+      body { background: #fff; color: #000; }
+      .pk-stage, .pk-panel { border-color: #999; background: #fff; }
+    }
+    /* ===== 重心与配载 ===== */
+    .pk-cog-banner { padding:14px 16px; border-radius:10px; font-weight:700; font-size:15px; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+    .pk-cog-banner.safe { background:rgba(126,224,160,.15); border:1px solid #4caf70; color:#8df0ac; }
+    .pk-cog-banner.warn { background:rgba(230,195,78,.15); border:1px solid #c9a23a; color:#f0d77a; }
+    .pk-cog-banner.danger { background:rgba(255,91,91,.15); border:1px solid #c44; color:#ff9b9b; }
+    .pk-cog-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }
+    .pk-cog-cell { background:var(--navy-2); border:1px solid #2a3a55; border-radius:10px; padding:12px; }
+    .pk-cog-cell .v { font-size:17px; font-weight:700; font-family:"SFMono-Regular",Consolas,monospace; }
+    .pk-cog-cell .l { font-size:12px; color:var(--text-gray); margin-top:3px; }
+    .pk-cog-cell.ok .v{ color:#7ee0a0; } .pk-cog-cell.warn .v{ color:#f0d77a; } .pk-cog-cell.danger .v{ color:#ff8a8a; }
+    .pk-cog-msg { font-size:13px; margin:6px 0; padding:8px 10px; border-radius:8px; line-height:1.5; }
+    .pk-cog-msg.warn { background:rgba(230,195,78,.12); border:1px solid #5a4d22; color:#f0d77a; }
+    .pk-cog-msg.danger { background:rgba(255,91,91,.12); border:1px solid #5a2222; color:#ff9b9b; }
+    .pk-cog-msg.ok { background:rgba(126,224,160,.1); border:1px solid #2a5a3a; color:#8df0ac; }
+    .pk-diagrams { display:flex; gap:18px; flex-wrap:wrap; margin-top:14px; }
+    .pk-diagram { background:var(--navy-2); border:1px solid #2a3a55; border-radius:10px; padding:10px; }
+    .pk-diagram canvas { display:block; background:#0a1628; border-radius:6px; }
+    .pk-diagram .cap { font-size:12px; color:var(--text-gray); text-align:center; margin-top:6px; }
+    /* ===== 多柜分柜建议 ===== */
+    #pkMulti, #pkContTabs { display:none; }
+    .pk-multi { margin:14px 0 4px; background:var(--navy-2); border:1px solid #2a3a55; border-radius:12px; padding:14px 16px; }
+    .pk-multi-banner { font-size:15px; font-weight:700; margin-bottom:10px; color:#cfe3ff; }
+    .pk-multi-banner b { color:#7ee0a0; font-size:18px; }
+    .pk-multi-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:6px; }
+    .pk-multi-table th, .pk-multi-table td { border:1px solid #2a3a55; padding:6px 8px; text-align:center; }
+    .pk-multi-table th { background:#16243d; color:#9fb6d6; font-weight:600; }
+    .pk-multi-table tr.cur td { background:rgba(78,161,255,.14); }
+    .pk-multi-note { font-size:12px; color:var(--text-gray); margin-top:8px; line-height:1.5; }
+    .pk-cont-tabs { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:8px 0 4px; }
+    .pk-ctab-label { font-size:13px; color:var(--text-gray); }
+    .pk-ctab { cursor:pointer; border:1px solid #2a3a55; background:#16243d; color:#cfe3ff; border-radius:8px; padding:6px 14px; font-size:13px; font-weight:600; }
+    .pk-ctab:hover { border-color:#4ea1ff; }
+    .pk-ctab.active { background:#4ea1ff; color:#06121f; border-color:#4ea1ff; }
+    /* 装柜结果摘要条（始终可见，多柜高亮） */
+    .pk-resbar { margin:14px 0 0; padding:12px 16px; border-radius:10px; font-size:14px; line-height:1.55;
+      background:var(--navy-2); border:1px solid #2a3a55; color:var(--text); }
+    .pk-resbar b { color:var(--accent); font-size:15px; }
+    .pk-resbar .hint { display:block; margin-top:5px; font-size:12.5px; opacity:.82; }
+    .pk-resbar.single { border-color:var(--accent); }
+    .pk-resbar.multi { background:rgba(230,195,78,.13); border-color:#c9a23a; color:#ecd9a0; }
+    .pk-resbar.multi b { color:#ffd84d; }
+  </style>
+</head>
+<body>
+  <div class="tool-page">
+    <a class="tool-back" href="index.html">← 返回 航运派 Trans Pi</a>
+    <h1 class="tool-h1">装箱模拟器</h1>
+    <p class="tool-sub">三维装载排布与方案生成：支持多规格货物混合装柜、摆放规则（立放/侧放/旋转、承重、堆码、易碎/重货）、后装先卸（多目的地）。<b>当货物数量/体积超过 1 个集装箱容量时，自动分柜并给出「需几个什么箱型」的建议与每个柜的 3D 装柜图、装箱清单、重心配载</b>。同时测算运输「重心与配载」——前后/左右偏载、重心高度与侧翻临界、前后轴载荷，明显提示偏载与失稳危险。结果仅供参考，现场以实际操作为准。</p>
+
+    <div class="pk-wrap">
+      <!-- ============ 左侧：参数设置 ============ -->
+      <div>
+        <div class="pk-panel">
+          <h2>① 集装箱与规则</h2>
+          <div class="pk-row">
+            <div class="field"><label>箱型 Container</label>
+              <select id="pkBox">
+                <option value="20GP">20GP（22G1 · 内 5.898×2.352×2.392m）</option>
+                <option value="40GP">40GP（42G1 · 内 12.031×2.352×2.392m）</option>
+                <option value="40HQ" selected>40HQ / 40HC（45G1 · 内 12.031×2.350×2.697m）</option>
+                <option value="45HQ">45HQ（L5G1 · 内 13.555×2.348×2.695m）</option>
+                <option value="40RH">40RH 冷藏高箱（45R1 · 内 11.578×2.290×2.425m）</option>
+              </select>
+            </div>
+          </div>
+          <div class="pk-toggles">
+            <label><input type="checkbox" id="pkMultiStop" /> 启用多目的地 / 后装先卸（按「卸货顺序」排序，卸货靠前的装柜时靠近箱门）</label>
+            <label><input type="checkbox" id="pkShowDoor" checked /> 显示箱门开口示意</label>
+          </div>
+          <div class="pk-note" id="pkBoxInfo"></div>
+        </div>
+
+        <div class="pk-panel">
+          <h2>② 货物清单</h2>
+          <div id="pkCargoList"></div>
+          <button class="pk-add" id="pkAddCargo">＋ 添加一种货物</button>
+        </div>
+
+        <div class="pk-panel">
+          <h2>③ 生成与导出</h2>
+          <div class="pk-btns">
+            <button class="tool-btn" id="pkRun">开始模拟装箱</button>
+            <button class="pk-btn-2" id="pkDemo">演示多柜</button>
+            <button class="pk-btn-2" id="pkReset">重置参数</button>
+          </div>
+          <div class="pk-note">点击后若货物数量/体积超过单柜容量，系统会<b>自动分柜</b>并给出「建议柜数 + 每柜明细 + 各箱型柜数估算」，每个柜独立生成 3D 装柜图与重心配载。</div>
+          <div class="pk-btns" style="margin-top:10px">
+            <button class="pk-btn-2" id="pkImport">导入 CSV</button>
+            <button class="pk-btn-2" id="pkExport">导出装箱清单 CSV</button>
+            <button class="pk-btn-2" id="pkTpl">下载模板</button>
+            <button class="pk-btn-2" id="pkPrint">打印装柜图</button>
+          </div>
+          <input type="file" id="pkFile" accept=".csv,text/csv" style="display:none" />
+          <div class="pk-note">CSV 列：名称,长(cm),宽(cm),高(cm),单重(kg),数量,摆放方式(自由/平放/固定),顶部承重(kg),易碎(0/1),重货打底(0/1),卸货顺序(数字)。Excel 可另存为 CSV 后导入。</div>
+        </div>
+
+        <div class="pk-panel">
+          <h2>④ 运输车辆与重心参数</h2>
+          <div class="pk-row">
+            <div class="field"><label>集装箱自重(kg)</label><input id="pkTare" type="number" value="3900"></div>
+            <div class="field"><label>底盘离地高度(m)</label><input id="pkDeck" type="number" step="0.05" value="1.30"></div>
+          </div>
+          <div class="pk-row" style="margin-top:10px">
+            <div class="field"><label>前轴(牵引销)允许载荷(kg)</label><input id="pkAxleF" type="number" value="12500"></div>
+            <div class="field"><label>后轴组允许载荷(kg)</label><input id="pkAxleR" type="number" value="22000"></div>
+          </div>
+          <div class="pk-note">牵引销默认距箱头 1.20m、后轴组距箱头 (箱长−1.0)m、轮距按 2.00m 估算。改箱型后「集装箱自重」按默认值重置，可手动修正。</div>
+        </div>
+      </div>
+
+      <!-- ============ 右侧：3D / 清单 / 步骤 ============ -->
+      <div>
+        <div class="pk-stage">
+          <div class="pk-canvas-box" id="pkBoxDrag">
+            <canvas id="pkCanvas"></canvas>
+            <div class="pk-hint">左键拖拽旋转 · 滚轮缩放 · 右键(或 Shift+拖)平移 · 点击货箱选中后可微调</div>
+          </div>
+          <div class="pk-legend" id="pkLegend"></div>
+          <div class="pk-stats" id="pkStats"></div>
+        </div>
+
+        <div class="pk-resbar" id="pkResBar">点「开始模拟装箱」生成方案后，这里会显示需要的集装箱数量与装载情况。</div>
+        <div class="pk-multi" id="pkMulti"></div>
+        <div class="pk-cont-tabs" id="pkContTabs"></div>
+
+        <div class="pk-tabs">
+          <button class="pk-tab active" data-pane="p3d">3D 视图</button>
+          <button class="pk-tab" data-pane="pList">装箱清单</button>
+          <button class="pk-tab" data-pane="pStep">装柜步骤</button>
+          <button class="pk-tab" data-pane="pViol">违规检测</button>
+          <button class="pk-tab" data-pane="pCog">重心配载</button>
+        </div>
+
+        <div class="pk-pane active" id="p3d">
+          <div class="pk-selbox" id="pkSelBox">未选中货箱。点击 3D 视图中的货箱以选中，再用下方按钮微调位置 / 朝向。</div>
+        </div>
+        <div class="pk-pane" id="pList">
+          <table class="pk-table" id="pkListTable"></table>
+        </div>
+        <div class="pk-pane" id="pStep">
+          <div class="pk-btns" style="margin-bottom:10px">
+            <button class="pk-btn-2" id="pkPlay">▶ 播放装柜动画</button>
+            <button class="pk-btn-2" id="pkStop">■ 停止</button>
+            <span class="pk-note" id="pkAnimInfo"></span>
+          </div>
+          <div class="pk-steps" id="pkSteps"></div>
+        </div>
+        <div class="pk-pane" id="pViol">
+          <div id="pkViolBox"></div>
+        </div>
+
+        <div class="pk-pane" id="pCog">
+          <div id="pkCogBanner" class="pk-cog-banner safe">请先点击「开始模拟装箱」生成方案，再查看重心与配载分析。</div>
+          <div class="pk-cog-grid" id="pkCogStats"></div>
+          <div id="pkCogMsg"></div>
+          <div class="pk-diagrams">
+            <div class="pk-diagram"><canvas id="pkTopView" width="220" height="150"></canvas><div class="cap">俯视：重心 G vs 箱中心</div></div>
+            <div class="pk-diagram"><canvas id="pkSideView" width="320" height="150"></canvas><div class="cap">侧视：前后轴载荷分配</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  "use strict";
+  // ============================ 数据 ============================
+  // 数据来自 container specifications.pdf（ISO 标准箱型实测内尺寸/箱门开口/重量，单位 m / kg）
+  // 数据严格取自 container specifications.pdf（ISO 实测）
+  // 重量列顺序：建议载重(rec) / Tare(皮重) / 最大载重(pay=最大净载重)；最大总重 maxGross = pay + tare
+  var CONTAINERS = {
+    '20GP': { name:'20GP', iso:'22G1', l:5.898, w:2.352, h:2.392, doorW:2.340, doorH:2.280, maxGross:30645, tare:2350, pay:28295, rec:21740, vol:33.2 },
+    '40GP': { name:'40GP', iso:'42G1', l:12.031, w:2.352, h:2.392, doorW:2.340, doorH:2.280, maxGross:32610, tare:3750, pay:28860, rec:26630, vol:67.7 },
+    '40HQ': { name:'40HQ / 40HC', iso:'45G1', l:12.031, w:2.350, h:2.697, doorW:2.340, doorH:2.585, maxGross:32500, tare:3900, pay:28600, rec:26520, vol:76.3 },
+    '45HQ': { name:'45HQ', iso:'L5G1', l:13.555, w:2.348, h:2.695, doorW:2.340, doorH:2.585, maxGross:32420, tare:4800, pay:27620, rec:25620, vol:86.0 },
+    '40RH': { name:'40RH（冷藏高箱）', iso:'45R1', l:11.578, w:2.290, h:2.425, doorW:2.290, doorH:2.557, maxGross:33845, tare:4420, pay:29425, rec:26380, vol:67.0, reefer:true }
+  };
+  // 运输底盘几何（估算）：牵引销距箱头、后轴组距箱尾、轮距
+  var GEOM = { fFront:1.20, rearMargin:1.0, track:2.00 };
+  var PALETTE = ['#4ea1ff','#ff8a4e','#5fd08a','#e6c34e','#c98bff','#ff6f9c','#4ed8d8','#ffae42','#8ab6ff','#b6e36a','#ff7a7a','#7ad1c4'];
+
+  // 货物清单（默认示例）
+  var cargoList = [
+    { name:'纸箱 A', l:120, w:100, h:90, wgt:200, qty:40, mode:'自由', maxTop:600, fragile:false, heavy:false, stop:1 },
+    { name:'木箱 B', l:80, w:80, h:80, wgt:350, qty:20, mode:'平放', maxTop:1000, fragile:false, heavy:true, stop:1 },
+    { name:'易碎品 C', l:60, w:40, h:50, wgt:30, qty:15, mode:'自由', maxTop:0, fragile:true, heavy:false, stop:2 }
+  ];
+
+  var PLACED = [];      // 已放置货箱（当前查看柜）
+  var LEFT = [];        // 跨柜最终未装入货件（逐项）
+  var SELECTED = -1;    // 选中索引
+  var ANIM_MAX = 0;     // 动画显示数量
+  var COG = null;       // 重心与配载计算结果
+  var MULTI = false;        // 是否多柜（分柜）模式
+  var ALL_PLACED = [];      // 每柜已装：[ [box,...], ... ]
+  var ALL_LEFT = [];        // 跨柜最终未能装入的货件（逐项）
+  var CUR = 0;              // 当前查看的柜索引
+  var TOTAL_CAP = 2500;     // 单次模拟处理货件上限（防卡顿）
+
+  // ============================ 工具函数 ============================
+  function $(id){ return document.getElementById(id); }
+  function num(v, d){ var x = parseFloat(v); return isFinite(x) ? x : (d||0); }
+  function perms(a){ // 3 元素唯一排列（最多 6）
+    var res=[], seen={};
+    (function rec(cur, rem){
+      if(rem.length===0){ var k=cur.join(','); if(!seen[k]){ seen[k]=1; res.push(cur.slice()); } }
+      else { for(var i=0;i<rem.length;i++){ cur.push(rem[i]); rec(cur, rem.slice(0,i).concat(rem.slice(i+1))); cur.pop(); } }
+    })([], a.slice());
+    return res;
+  }
+  function orientations(dims, mode){
+    var P = perms(dims);
+    if(mode==='固定') return [dims];
+    if(mode==='平放') return P.filter(function(p){ return p[2]<=p[0] && p[2]<=p[1]; }); // 高不为最长边
+    return P; // 自由
+  }
+  function boxOverlap(placed, x,y,z,l,w,h){
+    for(var i=0;i<placed.length;i++){
+      var b=placed[i];
+      if(x < b.x+b.l-1e-4 && x+l > b.x+1e-4 &&
+         y < b.y+b.w-1e-4 && y+w > b.y+1e-4 &&
+         z < b.z+b.h-1e-4 && z+h > b.z+1e-4) return true;
+    }
+    return false;
+  }
+  function inAnyBox(placed, x,y,z){
+    for(var i=0;i<placed.length;i++){
+      var b=placed[i];
+      if(x> b.x+1e-4 && x< b.x+b.l-1e-4 && y> b.y+1e-4 && y< b.y+b.w-1e-4 && z> b.z+1e-4 && z< b.z+b.h-1e-4) return true;
+    }
+    return false;
+  }
+
+  // ============================ 装载算法（极值法 + 多朝向 + 多柜分柜） ============================
+  // 把货物清单展开为逐项 item（颜色按货物种类，跨柜一致）
+  function expandItems(){
+    var items = [];
+    for(var c=0;c<cargoList.length;c++){
+      var g = cargoList[c];
+      if(g.qty<=0) continue;
+      var color = PALETTE[c % PALETTE.length];
+      for(var k=0;k<g.qty;k++){
+        items.push({
+          name:g.name, dims:[g.l/100, g.w/100, g.h/100], wgt:g.wgt,
+          mode:g.mode, maxTop:g.maxTop, fragile:g.fragile, heavy:g.heavy, stop:g.stop||1, color:color
+        });
+      }
+    }
+    return items;
+  }
+  // 排序：多目的地→卸货顺序倒序（先卸的靠门）；否则 重货优先打底、易碎最后、再按体积
+  function sortItems(items, multiStop){
+    items.sort(function(a,b){
+      var d=0;
+      if(multiStop) d = b.stop - a.stop;
+      if(d===0) d = (a.heavy?0:1) - (b.heavy?0:1);
+      if(d===0) d = (a.fragile?1:0) - (b.fragile?1:0);
+      if(d===0){ var va=a.dims[0]*a.dims[1]*a.dims[2], vb=b.dims[0]*b.dims[1]*b.dims[2]; d = vb-va; }
+      return d;
+    });
+    return items;
+  }
+  // 把一批 item 装入单个集装箱 cont，返回 { placed, left }
+  function packInto(cont, items, multiStop){
+    items = items.slice();
+    sortItems(items, multiStop);
+    var LIMIT = 800;                 // 单柜处理上限（防卡顿）
+    var left = [];
+    if(items.length > LIMIT){ left = items.slice(LIMIT); items = items.slice(0, LIMIT); }
+    var L=cont.l, W=cont.w, H=cont.h, dW=cont.doorW, dH=cont.doorH;
+    // —— 装柜即考虑重心/配载：读取底盘与轴限几何，算出前后轴平衡的目标重心 X ——
+    var axleF = num($('pkAxleF').value, 12500);
+    var axleR = num($('pkAxleR').value, 22000);
+    var xf = GEOM.fFront, xr = L - GEOM.rearMargin;
+    var rAR = axleF/axleR;
+    var xTarget = (xr + rAR*xf)/(1+rAR);          // 使前后轴载荷比≈轴限比的重心 X（偏后，后轴可承重更大）
+    if(!(xTarget>xf && xTarget<xr)) xTarget = L/2;
+    var K_Y = 0.5, K_X = 0.4, X_FILL = 100;       // 轻货沿箱长均匀铺填(X_FILL 大→容积高)；重货受 xBAL 温和后移以保轴荷安全
+    var placed = [];
+    var sumW=0, sumWX=0, sumWY=0;                  // 已装货物的重量矩（实时估算综合重心偏载）
+    var eps = [{x:0,y:0,z:0}];
+    for(var i=0;i<items.length;i++){
+      var it = items[i];
+      var oris = orientations(it.dims, it.mode);
+      var best=null, bestCost=Infinity;
+      for(var e=0;e<eps.length;e++){
+        var ep=eps[e];
+        for(var o=0;o<oris.length;o++){
+          var ol=oris[o][0], ow=oris[o][1], oh=oris[o][2];
+          if(ep.x+ol > L+1e-4) continue;
+          if(ep.y+ow > W+1e-4) continue;
+          if(ep.z+oh > H+1e-4) continue;
+          if(ow > dW+1e-4 || oh > dH+1e-4) continue; // 箱门开口限制（近似）
+          if(boxOverlap(placed, ep.x,ep.y,ep.z, ol,ow,oh)) continue;
+          var cx = ep.x+ol/2, cy = ep.y+ow/2;        // 本箱中心
+          var nW = sumW + it.wgt;
+          var ny = (sumWY + it.wgt*cy)/nW;           // 放入后综合重心 Y（左右）
+          var nx = (sumWX + it.wgt*cx)/nW;           // 放入后综合重心 X（前后）
+          // 基础填充：底部优先（压低重心）→ 由后向前铺填（靠近轴荷平衡目标）→ 横向居中；再叠加按本箱重量加权的平衡代价
+          var yBAL = K_Y * it.wgt * Math.abs(ny - W/2);     // 左右对称居中
+          var xBAL = K_X * it.wgt * Math.abs(nx - xTarget); // 前后按轴荷平衡目标居中
+          var yFILL = Math.abs(cy - W/2) * 3;               // 横向铺填也偏向中线
+          var cost = ep.z*10000 + ep.x*X_FILL + yFILL + yBAL + xBAL; // 重心感知：底优先+轻货沿箱长均匀铺填+重货按轴荷目标后移+横向居中
+          if(cost < bestCost){ bestCost=cost; best={x:ep.x,y:ep.y,z:ep.z,l:ol,w:ow,h:oh}; }
+        }
+      }
+      if(best){
+        placed.push({ name:it.name, x:best.x,y:best.y,z:best.z, l:best.l,w:best.w,h:best.h,
+          wgt:it.wgt, maxTop:it.maxTop, fragile:it.fragile, heavy:it.heavy, stop:it.stop,
+          color:it.color, id:placed.length, flag:null });
+        sumW += it.wgt; sumWX += it.wgt*(best.x+best.l/2); sumWY += it.wgt*(best.y+best.w/2); // 更新重量矩
+        eps.push({x:best.x+best.l, y:best.y, z:best.z});
+        eps.push({x:best.x, y:best.y+best.w, z:best.z});
+        eps.push({x:best.x, y:best.y, z:best.z+best.h});
+        var kept=[];
+        for(var p=0;p<eps.length;p++){
+          var pt=eps[p];
+          if(pt.x<-1e-4||pt.y<-1e-4||pt.z<-1e-4||pt.x>L+1e-4||pt.y>W+1e-4||pt.z>H+1e-4) continue;
+          if(inAnyBox(placed, pt.x,pt.y,pt.z)) continue;
+          var dup=false;
+          for(var q=0;q<kept.length;q++){ if(Math.abs(kept[q].x-pt.x)<1e-3&&Math.abs(kept[q].y-pt.y)<1e-3&&Math.abs(kept[q].z-pt.z)<1e-3){dup=true;break;} }
+          if(!dup) kept.push(pt);
+        }
+        eps = kept;
+      } else {
+        left.push(it);
+      }
+    }
+    return { placed: placed, left: left };
+  }
+  // 主流程：把全部货物贪心装入若干同型集装箱，超出单柜自动分柜
+  function pack(){
+    var key=$('pkBox').value, cont=CONTAINERS[key];
+    var multiStop=$('pkMultiStop').checked;
+    var all = expandItems();
+    if(all.length > TOTAL_CAP){ all = all.slice(0, TOTAL_CAP); }
+    ALL_PLACED=[]; ALL_LEFT=[];
+    var remaining = all;
+    var MAXC = 60;                   // 分柜上限（超出视为极端情况，提示改用更大箱型）
+    for(var c=0;c<MAXC;c++){
+      var res = packInto(cont, remaining, multiStop);
+      if(res.placed.length===0){ ALL_LEFT = ALL_LEFT.concat(res.left); break; } // 一件都装不下→停止，避免死循环
+      ALL_PLACED.push(res.placed);
+      remaining = res.left;
+      if(remaining.length===0) break;
+    }
+    MULTI = (ALL_PLACED.length>1) || (ALL_LEFT.length>0);
+    CUR = 0;
+    showContainer(0);
+  }
+  // 切换到第 idx 个柜并刷新该柜的全部视图
+  function showContainer(idx){
+    CUR = (idx<0?0:(idx>=ALL_PLACED.length?ALL_PLACED.length-1:idx));
+    PLACED = ALL_PLACED[CUR] || [];
+    LEFT = ALL_LEFT.slice();
+    SELECTED = -1; ANIM_MAX = PLACED.length;
+    computeViolations();
+    updateStats();
+    renderLegend();
+    renderList();
+    renderSteps();
+    renderViol();
+    computeCoG();
+    updateSelBox();
+    render();
+    renderMulti();
+    renderResultBar();
+  }
+  function itemVol(b){ return (b.l!==undefined)? (b.l*b.w*b.h) : (b.dims[0]*b.dims[1]*b.dims[2]); }
+  function cogLevel2(lv){ return lv==='safe'?'✓ 安全':(lv==='warn'?'⚠ 注意':'⛔ 危险'); }
+  // 分柜建议面板 + 柜切换标签
+  function renderMulti(){
+    var mt=$('pkMulti'), ct=$('pkContTabs');
+    if(!mt||!ct) return;
+    if(!MULTI){ mt.style.display='none'; ct.style.display='none'; mt.innerHTML=''; ct.innerHTML=''; return; }
+    mt.style.display='block'; ct.style.display='flex';
+    var cont=CONTAINERS[$('pkBox').value];
+    var n=ALL_PLACED.length;
+    var totalVol=0, totalWgt=0;
+    for(var c=0;c<n;c++) for(var i=0;i<ALL_PLACED[c].length;i++){ var b=ALL_PLACED[c][i]; totalVol+=itemVol(b); totalWgt+=b.wgt; }
+    var leftVol=0, leftWgt=0;
+    for(var k=0;k<ALL_LEFT.length;k++){ leftVol+=itemVol(ALL_LEFT[k]); leftWgt+=ALL_LEFT[k].wgt; }
+    var html='';
+    if(n===0){
+      html += '<div class="pk-multi-banner" style="color:#ff9b9b">⛔ 当前 '+cont.name+' 无法装入任何货物（单件尺寸可能超过箱容或箱门开口），共 '+ALL_LEFT.length+' 件未装入。请换更大箱型或调整货物尺寸。</div>';
+    } else {
+      html += '<div class="pk-multi-banner">📦 建议 <b>'+n+'</b> 个 '+cont.name+'（ISO '+cont.iso+'，内 '+
+              cont.l+'×'+cont.w+'×'+cont.h+'m）'+
+              (ALL_LEFT.length? ' ｜ 仍有 <b>'+ALL_LEFT.length+'</b> 件（约 '+(leftVol*100).toFixed(1)+' CBM / '+Math.round(leftWgt)+'kg）无法装入，请改更大箱型或拆分货物。'
+                               : ' ｜ 全部装入，无需再加柜。')+'</div>';
+    }
+    html += '<table class="pk-multi-table"><tr><th>柜号</th><th>已装件数</th><th>体积利用率</th><th>载重利用率</th><th>配载状态</th></tr>';
+    for(var c2=0;c2<n;c2++){
+      var P=ALL_PLACED[c2], v=0, w=0;
+      for(var i2=0;i2<P.length;i2++){ v+=itemVol(P[i2]); w+=P[i2].wgt; }
+      var cog=computeCoGCore(P);
+      html += '<tr'+(c2===CUR?' class="cur"':'')+'><td>柜 '+(c2+1)+(c2===CUR?'（当前）':'')+'</td><td>'+P.length+'</td>'+
+        '<td>'+(v/cont.vol*100).toFixed(1)+'%</td><td>'+(w/cont.pay*100).toFixed(1)+'%</td><td>'+cogLevel2(cog.level)+'</td></tr>';
+    }
+    if(ALL_LEFT.length){
+      html += '<tr><td>未装</td><td>'+ALL_LEFT.length+'</td><td>'+(leftVol/cont.vol*100).toFixed(1)+'%*</td><td>'+(leftWgt/cont.pay*100).toFixed(1)+'%*</td><td>—</td></tr>';
+    }
+    html += '</table>';
+    html += '<div class="pk-multi-note">* 未装件若另配柜，按其体积/重量占该箱型比例估算，不计入上方柜数。</div>';
+    html += renderTypeEstimate(totalVol, totalWgt, leftVol, leftWgt, cont);
+    mt.innerHTML = html;
+    var tabs='';
+    if(n>1){
+      tabs += '<span class="pk-ctab-label">分柜查看：</span>';
+      for(var t=0;t<n;t++){ tabs += '<button class="pk-ctab'+(t===CUR?' active':'')+'" onclick="showContainer('+t+')">柜 '+(t+1)+'</button>'; }
+    }
+    ct.innerHTML = tabs;
+  }
+  // 各箱型所需柜数估算（体积/重量双约束取大）
+  function renderTypeEstimate(totalVol, totalWgt, leftVol, leftWgt, selCont){
+    var EFF=0.85; // 估算装载效率
+    var keys=Object.keys(CONTAINERS);
+    var html='<div class="pk-multi-note" style="margin-top:10px">📐 各箱型所需柜数估算（体积按 '+Math.round(EFF*100)+'% 装载效率、重量按净载重；含未装件）：</div>';
+    html+='<table class="pk-multi-table"><tr><th>箱型</th><th>容积(CBM)</th><th>净载重(kg)</th><th>按体积</th><th>按重量</th><th>取大(估算)</th></tr>';
+    var bestKey=null, bestN=Infinity;
+    var selKey=$('pkBox').value;
+    for(var m=0;m<keys.length;m++){
+      var key=keys[m], t=CONTAINERS[key];
+      var byVol=Math.max(1, Math.ceil((totalVol+leftVol)/(t.vol*EFF)));
+      var byWgt=Math.max(1, Math.ceil((totalWgt+leftWgt)/t.pay));
+      var est=Math.max(byVol,byWgt);
+      if(est<bestN){ bestN=est; bestKey=key; }
+      html+='<tr'+(key===selKey?' class="cur"':'')+'><td>'+t.name+'</td><td>'+t.vol+'</td><td>'+t.pay+'</td><td>'+byVol+'</td><td>'+byWgt+'</td><td><b>'+est+'</b></td></tr>';
+    }
+    html+='</table>';
+    html+='<div class="pk-multi-note">💡 最省柜方案约 <b>'+bestN+'</b> 个 '+CONTAINERS[bestKey].name+'；当前选择 '+selCont.name+' 实测需 <b>'+ALL_PLACED.length+'</b> 个'+(ALL_LEFT.length?'（仍有未装）':'')+'。</div>';
+    return html;
+  }
+  // 始终可见的装柜结果摘要条（单柜/多柜都显示，多柜高亮）
+  function renderResultBar(){
+    var bar=$('pkResBar'); if(!bar) return;
+    var cont=CONTAINERS[$('pkBox').value];
+    var n=ALL_PLACED.length;
+    if(n===0){
+      if(ALL_LEFT.length>0){
+        bar.className='pk-resbar multi';
+        bar.innerHTML='⛔ 当前 '+cont.name+' 无法装入任何货物（单件尺寸可能超过箱容或箱门开口），共 <b>'+ALL_LEFT.length+'</b> 件未装入。请换更大箱型、调整货物尺寸，或点「演示多柜」对比其它箱型。';
+      } else {
+        bar.className='pk-resbar';
+        bar.innerHTML='点「开始模拟装箱」生成方案后，这里会显示需要的集装箱数量与装载情况。';
+      }
+      return;
+    }
+    var totalPlaced=0, totalVol=0, totalWgt=0;
+    for(var c=0;c<n;c++) for(var i=0;i<ALL_PLACED[c].length;i++){ var b=ALL_PLACED[c][i]; totalPlaced+=1; totalVol+=itemVol(b); totalWgt+=b.wgt; }
+    var utilV=(totalVol/(n*cont.vol)*100), utilW=(totalWgt/(n*cont.pay)*100);
+    if(!MULTI){
+      // 单柜即可装下
+      bar.className='pk-resbar single';
+      bar.innerHTML='✅ 当前货物 <b>1 个 '+cont.name+'</b> 即可装下，共装入 <b>'+totalPlaced+'</b> 件（体积利用率 '+utilV.toFixed(1)+'%、载重利用率 '+utilW.toFixed(1)+'%）。'+
+        '<span class="hint">如需测试「超过 1 个柜自动分柜」效果：把某货物数量调大（例如 400），或点上方「演示多柜」。</span>';
+    } else {
+      bar.className='pk-resbar multi';
+      var leftInfo = ALL_LEFT.length ? '，仍有 <b>'+ALL_LEFT.length+'</b> 件无法装入（请改更大箱型或拆分）' : '，全部装入无需再加柜';
+      bar.innerHTML='⚠ 货物超过 1 个柜容量：建议 <b>'+n+'</b> 个 '+cont.name+'（ISO '+cont.iso+'）'+leftInfo+'。下方为逐柜明细，可用「分柜查看」切换每个柜的 3D 装柜图与重心配载。';
+    }
+  }
+
+  // ============================ 违规检测 ============================
+  function overlapXY(a,b){
+    return a.x < b.x+b.l-1e-4 && a.x+a.l > b.x+1e-4 &&
+           a.y < b.y+b.w-1e-4 && a.y+a.w > b.y+1e-4;
+  }
+  function overlapExcluding(placed, skipIdx){
+    var b=placed[skipIdx];
+    for(var i=0;i<placed.length;i++){
+      if(i===skipIdx) continue;
+      var o=placed[i];
+      if(b.x < o.x+o.l-1e-4 && b.x+b.l > o.x+1e-4 &&
+         b.y < o.y+o.w-1e-4 && b.y+b.w > o.y+1e-4 &&
+         b.z < o.z+o.h-1e-4 && b.z+b.h > o.z+1e-4) return true;
+    }
+    return false;
+  }
+  function computeViolations(){
+    for(var i=0;i<PLACED.length;i++){
+      var b=PLACED[i]; b.flag=null; b._vmsg='';
+      // 手动微调可能产生重叠
+      if(overlapExcluding(PLACED, i)){ b.flag='overlap'; b._vmsg='「'+b.name+'」与其他货箱重叠'; }
+      // 顶部承重 + 上方货物
+      var wAbove=0;
+      for(var j=0;j<PLACED.length;j++){
+        if(j===i) continue;
+        var u=PLACED[j];
+        if(overlapXY(b,u) && u.z > b.z+b.h-1e-4){ wAbove += u.wgt; }
+      }
+      if(b.maxTop>0 && wAbove > b.maxTop + 1e-4){
+        b.flag = b.flag || 'overstack';
+        b._vmsg = (b._vmsg?b._vmsg+'；':'')+'顶部承重超限：上方累计 '+Math.round(wAbove)+'kg > 上限 '+b.maxTop+'kg';
+      }
+      // 易碎必须最上层
+      if(b.fragile && wAbove > 1e-4){
+        b.flag = 'fragile';
+        b._vmsg = '易碎品「'+b.name+'」上方仍有货物，应置于最上层';
+      }
+      // 重货必须打底
+      if(b.heavy && b.z > 1e-3){
+        b.flag = 'heavy';
+        b._vmsg = '重货「'+b.name+'」未打底（z='+(b.z*100).toFixed(0)+'cm）';
+      }
+    }
+  }
+
+  // ============================ 重心与配载分析 ============================
+  function computeCoGCore(items){
+    var key=$('pkBox').value, cont=CONTAINERS[key];
+    var tare = num($('pkTare').value, 0);
+    var deck = num($('pkDeck').value, 1.30);
+    var axleF = num($('pkAxleF').value, 12500);
+    var axleR = num($('pkAxleR').value, 22000);
+    var L=cont.l, W=cont.w, H=cont.h;
+    var Wc=0, Mx=0, My=0, Mz=0;
+    for(var i=0;i<items.length;i++){
+      var b=items[i]; var w=b.wgt;
+      Wc += w; Mx += w*(b.x+b.l/2); My += w*(b.y+b.w/2); Mz += w*(b.z+b.h/2);
+    }
+    var Wt = Wc + tare;
+    var xcg, ycg, zcg;
+    if(Wt>0){ xcg=(Mx + tare*(L/2))/Wt; ycg=(My + tare*(W/2))/Wt; zcg=(Mz + tare*(H/2))/Wt; }
+    else { xcg=L/2; ycg=W/2; zcg=H/2; }
+    var dx = xcg - L/2;   // + 朝箱门/后
+    var dy = ycg - W/2;   // + 朝 +y(右)
+    var Hground = deck + zcg;                       // 重心距地面高度
+    var aCrit = (GEOM.track/2) / Math.max(0.1,Hground); // 侧翻临界横向加速度(g)
+    // 前后轴载荷（牵引销/后轴组双支点梁）
+    var xf = GEOM.fFront, xr = L - GEOM.rearMargin, span = xr - xf;
+    var Rf=0, Rr=0, tipF=false, tipR=false;
+    if(span>0){
+      if(xcg <= xf){ Rf = Wt; Rr = 0; tipF = true; }       // 重心在牵引销前 → 前翻
+      else if(xcg >= xr){ Rf = 0; Rr = Wt; tipR = true; }  // 重心在后轴后 → 后翻
+      else { Rf = Wt*(xr - xcg)/span; Rr = Wt*(xcg - xf)/span; }
+    }
+    // 状态判定
+    var msgs=[], level='safe';
+    function push(lv, txt){ msgs.push({lv:lv, txt:txt}); if(lv==='danger') level='danger'; else if(lv==='warn' && level!=='danger') level='warn'; }
+    if(Wt > cont.maxGross + 1e-4) push('danger','⛔ 总重(货＋皮) '+Math.round(Wt)+'kg 超过集装箱最大总重 '+cont.maxGross+'kg，属超载，禁止运输。');
+    if(Wc > cont.rec + 1e-4 && Wc <= cont.pay + 1e-4) push('warn','⚠ 货物重量 '+Math.round(Wc)+'kg 已超过 PDF 建议载重 '+cont.rec+'kg（未超最大净载重 '+cont.pay+'kg），建议留安全余量或分柜。');
+    var dyMM = dy*1000, dypct = Math.abs(dy)/W*100;
+    if(Math.abs(dyMM) > 235) push('danger','⚠ 左右偏载严重：重心偏向'+(dy>0?'右':'左')+' '+Math.round(Math.abs(dyMM))+'mm（'+dypct.toFixed(1)+'%），转弯极易侧翻，必须将货物向中线对称布置。');
+    else if(Math.abs(dyMM) > 117) push('warn','⚠ 左右偏载偏大：重心偏'+(dy>0?'右':'左')+' '+Math.round(Math.abs(dyMM))+'mm（'+dypct.toFixed(1)+'%），建议尽量对称装载。');
+    if(aCrit < 0.35) push('danger','⚠ 重心过高：距地面 '+Hground.toFixed(2)+'m，侧翻临界横向加速度仅 '+aCrit.toFixed(2)+'g，轻微转弯即有侧翻危险，务必降低堆高、重货打底。');
+    else if(aCrit < 0.5) push('warn','⚠ 重心偏高：距地面 '+Hground.toFixed(2)+'m，侧翻临界加速度 '+aCrit.toFixed(2)+'g，转弯需降速。');
+    if(tipF) push('danger','⛔ 重心过于靠前（超出牵引销），存在前翻 / 牵引销超载风险，请将重货后移。');
+    if(tipR) push('danger','⛔ 重心过于靠后（超出后轴），存在后翻 / 尾板超载风险，请将重货前移。');
+    if(Rf > axleF + 1e-4) push('danger','⛔ 前轴(牵引销)载荷 '+Math.round(Rf)+'kg 超过允许 '+axleF+'kg，前轴超载。');
+    else if(Rf > axleF*0.9) push('warn','⚠ 前轴载荷 '+Math.round(Rf)+'kg 已达允许值 '+axleF+'kg 的 90%，余量不足。');
+    if(Rr > axleR + 1e-4) push('danger','⛔ 后轴组载荷 '+Math.round(Rr)+'kg 超过允许 '+axleR+'kg，后轴超载。');
+    else if(Rr > axleR*0.9) push('warn','⚠ 后轴组载荷 '+Math.round(Rr)+'kg 已达允许值 '+axleR+'kg 的 90%，余量不足。');
+    if(!msgs.length) push('ok','✓ 重心居中、高度与轴荷均在安全范围，运输稳定性良好。');
+    return { Wc:Wc, Wt:Wt, tare:tare, xcg:xcg, ycg:ycg, zcg:zcg, dx:dx, dy:dy,
+            Hground:Hground, aCrit:aCrit, xf:xf, xr:xr, Rf:Rf, Rr:Rr,
+            axleF:axleF, axleR:axleR, tipF:tipF, tipR:tipR, level:level, msgs:msgs, cont:cont };
+  }
+  function computeCoG(){
+    COG = computeCoGCore(PLACED);
+    renderCoG();
+  }
+  function cogLevel(ratio, danger, warn){ if(ratio>danger) return 'danger'; if(ratio>warn) return 'warn'; return 'ok'; }
+  function cogLevelInv(v, danger, warn){ if(v<danger) return 'danger'; if(v<warn) return 'warn'; return 'ok'; }
+  function cogCell(l,v,lv){ return '<div class="pk-cog-cell '+lv+'"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>'; }
+  function renderCoG(){
+    var banner=$('pkCogBanner');
+    if(!COG || PLACED.length===0){
+      banner.className='pk-cog-banner safe';
+      banner.textContent='请先点击「开始模拟装箱」生成方案，再查看重心与配载分析。';
+      $('pkCogStats').innerHTML=''; $('pkCogMsg').innerHTML=''; return;
+    }
+    var c=COG, L=c.cont.l, W=c.cont.w;
+    banner.className='pk-cog-banner '+c.level;
+    banner.textContent = (c.level==='safe'?'✓ 配载安全':(c.level==='warn'?'⚠ 配载注意':'⛔ 配载危险')) +
+      ' ｜ 综合重心 ('+c.xcg.toFixed(2)+', '+c.ycg.toFixed(2)+', '+c.zcg.toFixed(2)+')m ｜ 总重 '+Math.round(c.Wt)+'kg';
+    var cells=[
+      cogCell('综合重心 X (m)', c.xcg.toFixed(2)+' 偏'+(c.dx>=0?'后':'前')+' '+Math.round(Math.abs(c.dx*1000))+'mm', cogLevel(Math.abs(c.dx)/L,0.10,0.05)),
+      cogCell('综合重心 Y (m)', c.ycg.toFixed(2)+' 偏'+(c.dy>=0?'右':'左')+' '+Math.round(Math.abs(c.dy*1000))+'mm', cogLevel(Math.abs(c.dy)/W,0.10,0.05)),
+      cogCell('重心距地面 (m)', c.Hground.toFixed(2), cogLevelInv(c.aCrit,0.35,0.5)),
+      cogCell('侧翻临界加速度 (g)', c.aCrit.toFixed(2), cogLevelInv(c.aCrit,0.35,0.5)),
+      cogCell('前轴载荷 (kg)', Math.round(c.Rf)+' / '+c.axleF, cogLevel(c.Rf/c.axleF,1.0,0.9)),
+      cogCell('后轴载荷 (kg)', Math.round(c.Rr)+' / '+c.axleR, cogLevel(c.Rr/c.axleR,1.0,0.9)),
+      cogCell('总重 / 最大总重 (kg)', Math.round(c.Wt)+' / '+c.cont.maxGross, cogLevel(c.Wt/c.cont.maxGross,1.0,0.9))
+    ];
+    $('pkCogStats').innerHTML=cells.join('');
+    var mh=''; for(var i=0;i<c.msgs.length;i++){ mh+='<div class="pk-cog-msg '+c.msgs[i].lv+'">'+c.msgs[i].txt+'</div>'; }
+    $('pkCogMsg').innerHTML=mh;
+    drawTopView(); drawSideView();
+  }
+  function drawTopView(){
+    var cv=$('pkTopView'); if(!cv||!COG) return; var g=cv.getContext('2d');
+    var Wc=cv.width, Hc=cv.height, pad=18, c=COG, L=c.cont.l, Wd=c.cont.w;
+    g.clearRect(0,0,Wc,Hc);
+    function mx(x){ return pad + (x/L)*(Wc-2*pad); }
+    function my(y){ return (Hc-pad) - (y/Wd)*(Hc-2*pad); }
+    g.strokeStyle='rgba(212,175,55,.9)'; g.lineWidth=1.5; g.strokeRect(mx(0),my(Wd),mx(L)-mx(0),my(0)-my(Wd));
+    g.strokeStyle='rgba(255,255,255,.35)'; g.setLineDash([4,3]);
+    g.beginPath(); g.moveTo(mx(L/2),my(0)); g.lineTo(mx(L/2),my(Wd)); g.moveTo(mx(0),my(Wd/2)); g.lineTo(mx(L),my(Wd/2)); g.stroke(); g.setLineDash([]);
+    var col=c.level==='danger'?'#ff5b5b':(c.level==='warn'?'#e6c34e':'#7ee0a0');
+    var cx=mx(c.xcg), cy=my(c.ycg);
+    g.strokeStyle=col; g.setLineDash([5,3]); g.lineWidth=1.5;
+    g.beginPath(); g.moveTo(mx(L/2),my(Wd/2)); g.lineTo(cx,cy); g.stroke(); g.setLineDash([]);
+    g.fillStyle=col; g.beginPath(); g.arc(cx,cy,6,0,Math.PI*2); g.fill();
+    g.strokeStyle='#fff'; g.lineWidth=1.5; g.stroke();
+    g.fillStyle='rgba(255,255,255,.85)'; g.font='10px monospace';
+    g.fillText('G',cx+8,cy-6); g.fillText('中心',mx(L/2)+4,my(Wd/2)-4);
+  }
+  function drawSideView(){
+    var cv=$('pkSideView'); if(!cv||!COG) return; var g=cv.getContext('2d');
+    var Wc=cv.width, Hc=cv.height, pad=22, c=COG, L=c.cont.l;
+    g.clearRect(0,0,Wc,Hc);
+    function mx(x){ return pad + (x/L)*(Wc-2*pad); }
+    var yBox=42;
+    g.strokeStyle='rgba(212,175,55,.9)'; g.lineWidth=2;
+    g.beginPath(); g.moveTo(mx(0),yBox); g.lineTo(mx(L),yBox); g.stroke();
+    g.fillStyle='rgba(126,224,160,.9)';
+    [c.xf, c.xr].forEach(function(xp){ var x=mx(xp); g.beginPath(); g.moveTo(x,yBox); g.lineTo(x-6,yBox+12); g.lineTo(x+6,yBox+12); g.closePath(); g.fill(); });
+    var col=c.level==='danger'?'#ff5b5b':(c.level==='warn'?'#e6c34e':'#7ee0a0');
+    var cx=mx(c.xcg);
+    g.fillStyle=col; g.beginPath(); g.arc(cx,yBox,6,0,Math.PI*2); g.fill();
+    g.strokeStyle='#fff'; g.lineWidth=1.5; g.stroke();
+    g.fillStyle='rgba(255,255,255,.85)'; g.font='10px monospace'; g.fillText('G',cx+8,yBox-8);
+    var barY=82, barH=48, barW=72;
+    function bar(x, val, lim, label){
+      var ratio=val/lim; var bcol=ratio>1?'#ff5b5b':(ratio>0.9?'#e6c34e':'#7ee0a0');
+      g.fillStyle='#1b2c46'; g.fillRect(x,barY,barW,barH);
+      var h=Math.min(barH, ratio*barH); g.fillStyle=bcol; g.fillRect(x,barY+barH-h,barW,h);
+      g.strokeStyle='rgba(255,255,255,.4)'; g.strokeRect(x,barY,barW,barH);
+      g.fillStyle='rgba(255,255,255,.85)'; g.font='10px monospace';
+      g.fillText(label,x,barY-4); g.fillText(Math.round(val)+'/'+lim,x,barY+barH+12);
+    }
+    bar(mx(c.xf)-barW/2, c.Rf, c.axleF, '前轴');
+    bar(mx(c.xr)-barW/2, c.Rr, c.axleR, '后轴');
+  }
+  function drawCoG3D(){
+    if(!COG || PLACED.length===0) return;
+    var c=COG;
+    var pC=proj({x:c.xcg,y:c.ycg,z:c.zcg});
+    var pCtr=proj({x:c.cont.l/2,y:c.cont.w/2,z:c.zcg});
+    var pFloor=proj({x:c.xcg,y:c.ycg,z:0});
+    var col=c.level==='danger'?'#ff5b5b':(c.level==='warn'?'#e6c34e':'#7ee0a0');
+    ctx.strokeStyle=hexA(col,0.9); ctx.setLineDash([6,4]); ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(pCtr.sx,pCtr.sy); ctx.lineTo(pC.sx,pC.sy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pC.sx,pC.sy); ctx.lineTo(pFloor.sx,pFloor.sy); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=col; ctx.beginPath(); ctx.arc(pC.sx,pC.sy,7,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#fff'; ctx.font='11px monospace'; ctx.fillText('G',pC.sx+9,pC.sy-7);
+  }
+
+  // ============================ 统计 ============================
+  function updateStats(){
+    var key=$('pkBox').value, cont=CONTAINERS[key];
+    var vol=0, wgt=0;
+    for(var i=0;i<PLACED.length;i++){ vol += PLACED[i].l*PLACED[i].w*PLACED[i].h; wgt += PLACED[i].wgt; }
+    var utilV = (vol/cont.vol*100);
+    var utilW = (wgt/cont.pay*100);
+    var totalQty = PLACED.length + LEFT.length;
+    var boxesNeed = PLACED.length>0 ? Math.ceil(totalQty / Math.max(1,PLACED.length)) : 0;
+    $('pkStats').innerHTML =
+      stat(Math.round(PLACED.length), '已装入件数') +
+      stat((utilV).toFixed(1)+'%', '体积利用率') + bar(utilV) +
+      stat((utilW).toFixed(1)+'%', '载重利用率') + bar(utilW) +
+      stat(Math.round(vol*10)/10+' / '+cont.vol, '占用体积 (CBM)') +
+      stat(Math.round(wgt)+' / '+cont.pay, '货物重量 / 净载重 (kg)') +
+      stat(LEFT.length, '未装入件数');
+    $('pkBoxInfo').innerHTML = '当前箱型：' + cont.name + '（ISO '+cont.iso+'）｜ 内尺寸 ' + cont.l+'×'+cont.w+'×'+cont.h +
+      'm ｜ 箱门开口 ' + cont.doorW+'×'+cont.doorH + 'm ｜ 最大总重 ' + cont.maxGross + 'kg ｜ 最大净载重 ' + cont.pay + 'kg ｜ 建议载重 ' + cont.rec + 'kg ｜ 容积 ' + cont.vol + ' CBM';
+  }
+  function stat(v,l){ return '<div class="pk-stat"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>'; }
+  function bar(p){ var w=Math.max(0,Math.min(100,p)); return '<div class="pk-stat" style="grid-column:span 2"><div class="pk-bar"><i style="width:'+w+'%"></i></div></div>'; }
+
+  // ============================ 图例 ============================
+  function renderLegend(){
+    var html='';
+    var seen={};
+    for(var i=0;i<PLACED.length;i++){ var b=PLACED[i]; if(!seen[b.name]){ seen[b.name]=1; html+='<span><i style="background:'+b.color+'"></i>'+b.name+'</span>'; } }
+    html += '<span><i style="background:#ff5b5b"></i>违规/重叠</span>';
+    html += '<span style="color:#7ee0a0">● 综合重心 G</span>';
+    $('pkLegend').innerHTML = html;
+  }
+
+  // ============================ 装箱清单 ============================
+  function renderList(){
+    var rows = '<tr><th>名称</th><th>长(cm)</th><th>宽(cm)</th><th>高(cm)</th><th>位置 x,y,z(m)</th><th>朝向</th><th>重量(kg)</th><th>卸货序</th></tr>';
+    // 按装载顺序（靠近箱门优先）
+    var arr = PLACED.slice().sort(function(a,b){ return (b.x-a.x) || (a.z-b.z) || (a.y-b.y); });
+    for(var i=0;i<arr.length;i++){
+      var b=arr[i];
+      rows += '<tr><td><span class="pk-swatch" style="background:'+b.color+'"></span>'+b.name+'</td>'+
+        '<td>'+(b.l*100).toFixed(0)+'</td><td>'+(b.w*100).toFixed(0)+'</td><td>'+(b.h*100).toFixed(0)+'</td>'+
+        '<td>'+b.x.toFixed(2)+', '+b.y.toFixed(2)+', '+b.z.toFixed(2)+'</td>'+
+        '<td>'+(b.flag?'⚠':'')+'</td><td>'+b.wgt+'</td><td>'+(b.stop||1)+'</td></tr>';
+    }
+    if(LEFT.length){ rows += '<tr><td colspan="8" class="pk-viol">未装入 '+LEFT.length+' 件'+(MULTI?'（跨柜合计，详见上方分柜建议）':'（超出箱容或受规则限制），建议增加箱数或调整货物。')+'</td></tr>'; }
+    $('pkListTable').innerHTML = rows;
+  }
+
+  // ============================ 装柜步骤 ============================
+  function renderSteps(){
+    var arr = PLACED.slice().sort(function(a,b){ return (b.x-a.x) || (a.z-b.z) || (a.y-b.y); });
+    var html='';
+    for(var i=0;i<arr.length;i++){
+      var b=arr[i];
+      html += '<div>步骤 '+(i+1)+'：装入「'+b.name+'」 @ ('+b.x.toFixed(2)+', '+b.y.toFixed(2)+', '+b.z.toFixed(2)+')m  ｜ '+b.l*100+'×'+b.w*100+'×'+b.h*100+'cm ｜ '+b.wgt+'kg'+(b.stop>1?(' ｜ 卸货序'+b.stop):'')+'</div>';
+    }
+    if(!arr.length) html='<div class="pk-note">尚未生成方案，请点击「开始模拟装箱」。</div>';
+    $('pkSteps').innerHTML = html;
+  }
+
+  // ============================ 违规面板 ============================
+  function renderViol(){
+    var v=[];
+    for(var i=0;i<PLACED.length;i++){ if(PLACED[i].flag){ v.push((PLACED[i]._vmsg||PLACED[i].name+' 存在违规')); } }
+    if(boxOverlapAll()) v.push('存在货箱相互重叠（多为手动微调所致），请微调或重新模拟。');
+    var html = v.length ? ('<div class="pk-viol">共 '+v.length+' 项提示：</div><div class="pk-viol">'+v.join('<br>')+'</div>') : '<div class="pk-ok">✓ 未检测到明显重叠或承重/堆码违规。</div>';
+    $('pkViolBox').innerHTML = html;
+  }
+  function boxOverlapAll(){
+    for(var i=0;i<PLACED.length;i++){
+      for(var j=i+1;j<PLACED.length;j++){
+        var a=PLACED[i], b=PLACED[j];
+        if(a.x < b.x+b.l-1e-4 && a.x+a.l > b.x+1e-4 &&
+           a.y < b.y+b.w-1e-4 && a.y+a.w > b.y+1e-4 &&
+           a.z < b.z+b.h-1e-4 && a.z+a.h > b.z+1e-4) return true;
+      }
+    }
+    return false;
+  }
+
+  // ============================ 3D 渲染（Canvas，无外部库） ============================
+  var canvas, ctx, DPR=1;
+  var yaw=0.7, pitch=0.5, zoom=1, panX=0, panY=0;
+  var screenCenters=[]; // 货箱中心屏幕坐标，用于拾取
+  function initCanvas(){
+    canvas=$('pkCanvas'); ctx=canvas.getContext('2d');
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    bindCanvasEvents();
+  }
+  function resizeCanvas(){
+    var box=canvas.parentElement;
+    DPR = window.devicePixelRatio||1;
+    canvas.width = box.clientWidth*DPR; canvas.height = box.clientHeight*DPR;
+    render();
+  }
+  function proj(p){ // p:{x,y,z} 世界坐标(米)
+    var cx=CONTAINERS[$('pkBox').value].l/2, cy=CONTAINERS[$('pkBox').value].w/2, cz=CONTAINERS[$('pkBox').value].h/2;
+    var x=p.x-cx, y=p.y-cy, z=p.z-cz;
+    var cyaw=Math.cos(yaw), syaw=Math.sin(yaw);
+    var x1=x*cyaw - y*syaw, y1=x*syaw + y*cyaw, z1=z;
+    var cp=Math.cos(pitch), sp=Math.sin(pitch);
+    var y2=y1*cp - z1*sp, z2=y1*sp + z1*cp;
+    var cont=CONTAINERS[$('pkBox').value];
+    var baseScale = Math.min(canvas.width, canvas.height) / (Math.max(cont.l,cont.w,cont.h)*2.4);
+    var s=baseScale*zoom;
+    return { sx: canvas.width/2 + x1*s + panX*DPR, sy: canvas.height/2 - z2*s + panY*DPR, depth: y2 };
+  }
+  function boxCorners(b){
+    var pts=[];
+    for(var i=0;i<8;i++){
+      var X=b.x + ((i&1)?b.l:0);
+      var Y=b.y + ((i&2)?b.w:0);
+      var Z=b.z + ((i&4)?b.h:0);
+      pts.push(proj({x:X,y:Y,z:Z}));
+    }
+    return pts;
+  }
+  var FACES=[[0,1,3,2],[4,5,7,6],[0,1,5,4],[2,3,7,6],[0,2,6,4],[1,3,7,5]];
+  function drawBox3D(b, visible){
+    if(!visible) return;
+    var pts=boxCorners(b);
+    var isSel = (b.id===SELECTED);
+    var fill = b.flag ? '#ff5b5b' : b.color;
+    var alpha = isSel ? 0.95 : 0.82;
+    // 6 面按深度排序
+    var order=[];
+    for(var f=0;f<FACES.length;f++){
+      var fc = (pts[FACES[f][0]].depth+pts[FACES[f][1]].depth+pts[FACES[f][2]].depth+pts[FACES[f][3]].depth)/4;
+      order.push({f:f,d:fc});
+    }
+    order.sort(function(a,b){ return b.d-a.d; });
+    for(var k=0;k<order.length;k++){
+      var idx=FACES[order[k].f];
+      ctx.beginPath();
+      ctx.moveTo(pts[idx[0]].sx, pts[idx[0]].sy);
+      for(var m=1;m<4;m++) ctx.lineTo(pts[idx[m]].sx, pts[idx[m]].sy);
+      ctx.closePath();
+      ctx.fillStyle = hexA(fill, alpha);
+      ctx.fill();
+      ctx.lineWidth = isSel?2.2:1; ctx.strokeStyle = isSel? '#fff' : 'rgba(0,0,0,.55)';
+      ctx.stroke();
+    }
+  }
+  function hexA(hex,a){
+    if(hex[0]!=='#') return hex;
+    var r=parseInt(hex.substr(1,2),16), g=parseInt(hex.substr(3,2),16), b=parseInt(hex.substr(5,2),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+  function drawContainer(){
+    var cont=CONTAINERS[$('pkBox').value];
+    var L=cont.l,W=cont.w,H=cont.h;
+    var corners=[];
+    for(var i=0;i<8;i++){ corners.push(proj({x:(i&1)?L:0, y:(i&2)?W:0, z:(i&4)?H:0})); }
+    ctx.strokeStyle = 'rgba(212,175,55,.9)'; ctx.lineWidth=1.6;
+    for(var f=0;f<FACES.length;f++){
+      var idx=FACES[f];
+      ctx.beginPath(); ctx.moveTo(corners[idx[0]].sx,corners[idx[0]].sy);
+      for(var m=1;m<4;m++) ctx.lineTo(corners[idx[m]].sx,corners[idx[m]].sy);
+      ctx.closePath(); ctx.stroke();
+    }
+    // 箱门开口（x=L 面）
+    if($('pkShowDoor').checked){
+      var dw=cont.doorW, dh=cont.doorH;
+      var dx=L, y0=(W-dw)/2, z0=0; // 底部对齐
+      var dpts=[ proj({x:dx,y:y0,z:z0}), proj({x:dx,y:y0+dw,z:z0}), proj({x:dx,y:y0+dw,z:z0+dh}), proj({x:dx,y:y0,z:z0+dh}) ];
+      ctx.strokeStyle='rgba(126,224,160,.9)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(dpts[0].sx,dpts[0].sy);
+      for(var n=1;n<4;n++) ctx.lineTo(dpts[n].sx,dpts[n].sy);
+      ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+    }
+  }
+  function render(){
+    if(!ctx) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    drawContainer();
+    screenCenters=[];
+    for(var i=0;i<PLACED.length;i++){
+      var b=PLACED[i];
+      var vis = (i < ANIM_MAX);
+      drawBox3D(b, vis);
+      var c = proj({x:b.x+b.l/2, y:b.y+b.w/2, z:b.z+b.h/2});
+      screenCenters.push({id:b.id, sx:c.sx, sy:c.sy});
+    }
+    drawCoG3D();
+  }
+
+  // ============================ 画布交互 ============================
+  function bindCanvasEvents(){
+    var box=$('pkBoxDrag');
+    var dragging=false, panning=false, lx=0, ly=0;
+    box.addEventListener('mousedown', function(e){
+      var rect=canvas.getBoundingClientRect();
+      var mx=(e.clientX-rect.left)*DPR, my=(e.clientY-rect.top)*DPR;
+      if(e.button===2 || e.shiftKey){ panning=true; }
+      else {
+        // 拾取
+        var best=-1, bd=30*DPR;
+        for(var i=0;i<screenCenters.length;i++){
+          var dx=screenCenters[i].sx-mx, dy=screenCenters[i].sy-my, d=Math.sqrt(dx*dx+dy*dy);
+          if(d<bd){ bd=d; best=screenCenters[i].id; }
+        }
+        SELECTED = best; updateSelBox(); render();
+        dragging=true;
+      }
+      lx=e.clientX; ly=e.clientY; box.classList.add('grabbing');
+    });
+    window.addEventListener('mousemove', function(e){
+      if(!dragging && !panning) return;
+      var dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX; ly=e.clientY;
+      if(panning){ panX += dx; panY += dy; render(); }
+      else { yaw += dx*0.01; pitch += dy*0.01; if(pitch>1.4)pitch=1.4; if(pitch<-1.4)pitch=-1.4; render(); }
+    });
+    window.addEventListener('mouseup', function(){ dragging=false; panning=false; box.classList.remove('grabbing'); });
+    box.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+    box.addEventListener('wheel', function(e){
+      e.preventDefault(); zoom *= (e.deltaY<0?1.08:0.92); if(zoom<0.2)zoom=0.2; if(zoom>6)zoom=6; render();
+    }, {passive:false});
+  }
+  function updateSelBox(){
+    if(SELECTED<0){ $('pkSelBox').innerHTML='未选中货箱。点击 3D 视图中的货箱以选中，再用下方按钮微调位置 / 朝向。'; return; }
+    var b=null; for(var i=0;i<PLACED.length;i++) if(PLACED[i].id===SELECTED) b=PLACED[i];
+    if(!b){ $('pkSelBox').innerHTML='未选中货箱。'; return; }
+    $('pkSelBox').innerHTML =
+      '已选中「'+b.name+'」@ ('+b.x.toFixed(2)+', '+b.y.toFixed(2)+', '+b.z.toFixed(2)+')m ｜ '+
+      (b.l*100).toFixed(0)+'×'+(b.w*100).toFixed(0)+'×'+(b.h*100).toFixed(0)+'cm ｜ '+b.wgt+'kg'+
+      '<br><button onclick="nudge(-1,0,0)">← X -5cm</button>'+
+      '<button onclick="nudge(1,0,0)">X +5cm →</button>'+
+      '<button onclick="nudge(0,-1,0)">Y -5cm</button>'+
+      '<button onclick="nudge(0,1,0)">Y +5cm</button>'+
+      '<button onclick="nudge(0,0,-1)">Z↓ -5cm</button>'+
+      '<button onclick="nudge(0,0,1)">Z↑ +5cm</button>'+
+      '<button onclick="rotateSel()">旋转朝向</button>'+
+      '<button onclick="removeSel()">删除该箱</button>'+
+      '<button onclick="resetView()">重置视角</button>';
+  }
+  function inBounds(b, cont){ return b.x>=-1e-4 && b.y>=-1e-4 && b.z>=-1e-4 && b.x+b.l<=cont.l+1e-4 && b.y+b.w<=cont.w+1e-4 && b.z+b.h<=cont.h+1e-4; }
+  function nudge(dx,dy,dz){
+    if(SELECTED<0) return;
+    var b=null; for(var i=0;i<PLACED.length;i++) if(PLACED[i].id===SELECTED) b=PLACED[i];
+    if(!b) return;
+    var cont=CONTAINERS[$('pkBox').value];
+    b.x=Math.max(0, Math.min(cont.l-b.l, b.x+dx*0.05));
+    b.y=Math.max(0, Math.min(cont.w-b.w, b.y+dy*0.05));
+    b.z=Math.max(0, Math.min(cont.h-b.h, b.z+dz*0.05));
+    computeViolations(); computeCoG(); render(); renderViol(); updateSelBox(); updateStats(); renderList();
+  }
+  function rotateSel(){
+    if(SELECTED<0) return;
+    var b=null; for(var i=0;i<PLACED.length;i++) if(PLACED[i].id===SELECTED) b=PLACED[i];
+    if(!b) return;
+    var c=b.l; b.l=b.w; b.w=b.h; b.h=c; // 循环旋转 90°
+    var cont=CONTAINERS[$('pkBox').value];
+    if(!inBounds(b,cont)){ // 旋转后越界则回退
+      var c2=b.l; b.l=b.w; b.w=b.h; b.h=c2;
+    }
+    computeViolations(); computeCoG(); render(); renderViol(); updateSelBox(); renderList();
+  }
+  function removeSel(){
+    if(SELECTED<0) return;
+    var arr = MULTI ? ALL_PLACED[CUR] : PLACED;
+    var idx=-1; for(var i=0;i<arr.length;i++){ if(arr[i].id===SELECTED){ idx=i; break; } }
+    if(idx<0) return;
+    arr.splice(idx,1);
+    if(MULTI) PLACED = ALL_PLACED[CUR]; // 保持引用一致（splice 已就地修改）
+    SELECTED=-1; computeViolations(); computeCoG(); render(); renderLegend(); renderList(); renderSteps(); renderViol(); updateSelBox(); updateStats();
+    renderMulti();
+  }
+  function resetView(){ yaw=0.7; pitch=0.5; zoom=1; panX=0; panY=0; render(); }
+
+  // ============================ 动画 ============================
+  var animTimer=null;
+  function playAnim(){
+    stopAnim(); ANIM_MAX=0; var total=PLACED.length; var n=0;
+    animTimer=setInterval(function(){
+      n++; ANIM_MAX=Math.min(total, n*2); render();
+      $('pkAnimInfo').textContent='已展示 '+Math.min(total,ANIM_MAX)+' / '+total+' 件';
+      if(ANIM_MAX>=total){ stopAnim(); }
+    }, 120);
+  }
+  function stopAnim(){ if(animTimer){ clearInterval(animTimer); animTimer=null; } }
+
+  // ============================ 货物清单 UI ============================
+  function renderCargoUI(){
+    var html='';
+    for(var i=0;i<cargoList.length;i++){
+      var g=cargoList[i];
+      html += '<div class="pk-cargo">'+
+        '<button class="pk-del" onclick="delCargo('+i+')">删除</button>'+
+        '<div class="pk-row">'+
+          fld('名称','cn'+(i),g.name,'text')+
+          fld('长(cm)','cl'+(i),g.l)+ fld('宽(cm)','cw'+(i),g.w)+ fld('高(cm)','ch'+(i),g.h)+
+        '</div>'+
+        '<div class="pk-row" style="margin-top:8px">'+
+          fld('单重(kg)','cwgt'+(i),g.wgt)+ fld('数量','cq'+(i),g.qty)+
+          '<div class="field"><label>摆放方式</label><select id="cm'+(i)+'">'+
+            opt('自由','自由',g.mode)+opt('平放','平放',g.mode)+opt('固定','固定',g.mode)+'</select></div>'+
+        '</div>'+
+        '<div class="pk-row" style="margin-top:8px">'+
+          fld('顶部承重(kg)','cmt'+(i),g.maxTop)+
+          fld('卸货顺序','cst'+(i),g.stop)+
+        '</div>'+
+        '<div class="pk-toggles" style="margin-top:8px">'+
+          '<label><input type="checkbox" id="cf'+(i)+'" '+(g.fragile?'checked':'')+'/> 易碎·只能放最上层</label>'+
+          '<label><input type="checkbox" id="ch'+(i)+'" '+(g.heavy?'checked':'')+'/> 重货·必须打底</label>'+
+        '</div>'+
+      '</div>';
+    }
+    $('pkCargoList').innerHTML=html;
+  }
+  function fld(label,id,val,type){ type=type||'number'; return '<div class="field"><label>'+label+'</label><input id="'+id+'" type="'+type+'" value="'+val+'"></div>'; }
+  function opt(v,label,sel){ return '<option value="'+v+'" '+(v===sel?'selected':'')+'>'+label+'</option>'; }
+  function delCargo(i){ cargoList.splice(i,1); renderCargoUI(); }
+
+  function readCargoUI(){
+    for(var i=0;i<cargoList.length;i++){
+      var g=cargoList[i];
+      g.name = $('cn'+i).value || ('货物'+(i+1));
+      g.l = num($('cl'+i).value,0); g.w = num($('cw'+i).value,0); g.h = num($('ch'+i).value,0);
+      g.wgt = num($('cwgt'+i).value,0); g.qty = Math.max(0, parseInt($('cq'+i).value)||0);
+      g.mode = $('cm'+i).value; g.maxTop = num($('cmt'+i).value,0); g.stop = Math.max(1, parseInt($('cst'+i).value)||1);
+      g.fragile = $('cf'+i).checked; g.heavy = $('ch'+i).checked;
+    }
+  }
+
+  // ============================ 导入 / 导出 ============================
+  function exportCSV(){
+    var lines=['集装箱,步骤,名称,长(cm),宽(cm),高(cm),位置X(m),位置Y(m),位置Z(m),重量(kg),卸货顺序'];
+    if(MULTI){
+      for(var c=0;c<ALL_PLACED.length;c++){
+        var arr=ALL_PLACED[c].slice().sort(function(a,b){ return (b.x-a.x)||(a.z-b.z)||(a.y-b.y); });
+        for(var i=0;i<arr.length;i++){ var b=arr[i];
+          lines.push(['柜'+(c+1),(i+1),b.name,(b.l*100).toFixed(0),(b.w*100).toFixed(0),(b.h*100).toFixed(0),
+            b.x.toFixed(2),b.y.toFixed(2),b.z.toFixed(2),b.wgt,(b.stop||1)].join(',')); }
+        var cog=computeCoGCore(ALL_PLACED[c]);
+        lines.push(['柜'+(c+1),'重心','综合重心X(m)',cog.xcg.toFixed(2),'Y(m)',cog.ycg.toFixed(2),'Z(m)',cog.zcg.toFixed(2),'','']);
+        lines.push(['柜'+(c+1),'重心','距地面(m)',cog.Hground.toFixed(2),'侧翻临界g',cog.aCrit.toFixed(2),'状态',cog.level,'','']);
+        lines.push(['柜'+(c+1),'重心','前轴(kg)',Math.round(cog.Rf),'后轴(kg)',Math.round(cog.Rr),'总重(kg)',Math.round(cog.Wt),'','']);
+        lines.push('');
+      }
+    } else {
+      var arr2 = PLACED.slice().sort(function(a,b){ return (b.x-a.x)||(a.z-b.z)||(a.y-b.y); });
+      for(var i2=0;i2<arr2.length;i2++){ var b2=arr2[i2];
+        lines.push(['1',(i2+1),b2.name,(b2.l*100).toFixed(0),(b2.w*100).toFixed(0),(b2.h*100).toFixed(0),
+          b2.x.toFixed(2),b2.y.toFixed(2),b2.z.toFixed(2),b2.wgt,(b2.stop||1)].join(',')); }
+      if(COG){ lines.push('');
+        lines.push('重心配载,综合重心X(m),'+COG.xcg.toFixed(2)+',Y(m),'+COG.ycg.toFixed(2)+',Z(m),'+COG.zcg.toFixed(2));
+        lines.push('重心配载,距地面(m),'+COG.Hground.toFixed(2)+',侧翻临界g,'+COG.aCrit.toFixed(2)+',状态,'+COG.level);
+        lines.push('重心配载,前轴载荷(kg),'+Math.round(COG.Rf)+',后轴载荷(kg),'+Math.round(COG.Rr)+',总重(kg),'+Math.round(COG.Wt));
+      }
+    }
+    if(ALL_LEFT.length){ for(var j=0;j<ALL_LEFT.length;j++){ var it=ALL_LEFT[j];
+      lines.push(['未装','',it.name,(it.dims[0]*100).toFixed(0),(it.dims[1]*100).toFixed(0),(it.dims[2]*100).toFixed(0),'','','','',it.wgt,it.stop||1].join(',')); } }
+    download('装箱清单.csv', lines.join('\n'));
+  }
+  function download(name, text){
+    var blob=new Blob(['\ufeff'+text], {type:'text/csv;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  }
+  function importCSV(file){
+    var reader=new FileReader();
+    reader.onload=function(){
+      var text=reader.result; var rows=text.split(/\r?\n/).filter(function(r){ return r.trim(); });
+      if(!rows.length) return;
+      cargoList=[];
+      for(var i=0;i<rows.length;i++){
+        var c=rows[i].split(',');
+        if(c.length<6) continue;
+        if(i===0 && c[0].indexOf('名称')>=0) continue; // 跳过表头
+        cargoList.push({
+          name:c[0].trim()||('货物'+(i+1)),
+          l:num(c[1],0), w:num(c[2],0), h:num(c[3],0), wgt:num(c[4],0), qty:Math.max(0,parseInt(c[5])||0),
+          mode:(c[6]||'自由').trim(), maxTop:num(c[7],0),
+          fragile:(c[8]||'0').trim()==='1', heavy:(c[9]||'0').trim()==='1', stop:Math.max(1,parseInt(c[10])||1)
+        });
+      }
+      if(cargoList.length){ renderCargoUI(); alert('已导入 '+cargoList.length+' 种货物，点击「开始模拟装箱」生成方案。'); }
+      else alert('未解析到有效数据，请检查 CSV 格式。');
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+  function downloadTemplate(){
+    var tpl='名称,长(cm),宽(cm),高(cm),单重(kg),数量,摆放方式,顶部承重(kg),易碎(0/1),重货打底(0/1),卸货顺序\n'+
+      '纸箱A,120,100,90,200,40,自由,600,0,0,1\n'+
+      '木箱B,80,80,80,350,20,平放,1000,0,1,1\n'+
+      '易碎C,60,40,50,30,15,自由,0,1,0,2';
+    download('装箱模拟器模板.csv', tpl);
+  }
+
+  // ============================ 初始化 ============================
+  function init(){
+    renderCargoUI();
+    initCanvas();
+    updateStats();
+    $('pkBox').addEventListener('change', function(){ $('pkTare').value = CONTAINERS[$('pkBox').value].tare; updateStats(); computeCoG(); render(); });
+    ['pkTare','pkDeck','pkAxleF','pkAxleR'].forEach(function(id){
+      $(id).addEventListener('input', function(){ computeCoG(); });
+    });
+    $('pkShowDoor').addEventListener('change', render);
+    $('pkRun').addEventListener('click', function(){ readCargoUI(); pack(); });
+    $('pkDemo').addEventListener('click', function(){
+      cargoList=[
+        {name:'标准纸箱',l:120,w:100,h:90,wgt:120,qty:520,mode:'自由',maxTop:600,fragile:false,heavy:false,stop:1},
+        {name:'木箱(重货)',l:80,w:80,h:80,wgt:200,qty:60,mode:'平放',maxTop:1000,fragile:false,heavy:true,stop:1},
+        {name:'易碎品',l:60,w:40,h:50,wgt:20,qty:100,mode:'自由',maxTop:0,fragile:true,heavy:false,stop:2}
+      ];
+      renderCargoUI();
+      $('pkBox').value='40HQ'; $('pkTare').value=CONTAINERS['40HQ'].tare;
+      pack();
+      alert('已载入 720 件超量示例并自动模拟：本应触发多柜分柜，请查看上方摘要条与下方「分柜查看」标签。');
+    });
+    $('pkReset').addEventListener('click', function(){
+      cargoList=[
+        {name:'纸箱 A',l:120,w:100,h:90,wgt:200,qty:40,mode:'自由',maxTop:600,fragile:false,heavy:false,stop:1},
+        {name:'木箱 B',l:80,w:80,h:80,wgt:350,qty:20,mode:'平放',maxTop:1000,fragile:false,heavy:true,stop:1},
+        {name:'易碎品 C',l:60,w:40,h:50,wgt:30,qty:15,mode:'自由',maxTop:0,fragile:true,heavy:false,stop:2}
+      ]; renderCargoUI();
+    });
+    $('pkAddCargo').addEventListener('click', function(){
+      cargoList.push({name:'新货物',l:100,w:100,h:100,wgt:100,qty:10,mode:'自由',maxTop:0,fragile:false,heavy:false,stop:1}); renderCargoUI();
+    });
+    $('pkImport').addEventListener('click', function(){ $('pkFile').click(); });
+    $('pkFile').addEventListener('change', function(e){ if(e.target.files[0]) importCSV(e.target.files[0]); });
+    $('pkExport').addEventListener('click', exportCSV);
+    $('pkTpl').addEventListener('click', downloadTemplate);
+    $('pkPrint').addEventListener('click', function(){ window.print(); });
+    $('pkPlay').addEventListener('click', playAnim);
+    $('pkStop').addEventListener('click', stopAnim);
+    // tabs
+    var tabs=document.querySelectorAll('.pk-tab');
+    for(var i=0;i<tabs.length;i++){
+      tabs[i].addEventListener('click', function(){
+        for(var j=0;j<tabs.length;j++) tabs[j].classList.remove('active');
+        this.classList.add('active');
+        var panes=document.querySelectorAll('.pk-pane');
+        for(var k=0;k<panes.length;k++) panes[k].classList.remove('active');
+        $(this.getAttribute('data-pane')).classList.add('active');
+      });
+    }
+  }
+  window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

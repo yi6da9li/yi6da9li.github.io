@@ -1,0 +1,74 @@
+:root {
+  --gold: #D4AF37;
+  --navy: #0a1628;
+  --navy-2: #0d1d33;
+  --card-bg: #10203a;
+  --text: #e8edf5;
+  --text-gray: #aab6c8;
+  --font-cn: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--navy);
+  color: var(--text);
+  font-family: var(--font-cn);
+  line-height: 1.6;
+}
+.tool-page { max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }
+.tool-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--gold); text-decoration: none; font-size: 14px; margin-bottom: 24px;
+}
+.tool-back:hover { text-decoration: underline; }
+.tool-h1 { font-size: 30px; color: var(--gold); margin: 0 0 8px; font-weight: 700; }
+.tool-sub { color: var(--text-gray); margin: 0 0 32px; font-size: 15px; }
+.tool-panel {
+  background: var(--card-bg); border: 1px solid var(--gold);
+  border-radius: 12px; padding: 28px; margin-bottom: 24px;
+}
+.tool-panel h2 { color: var(--gold); font-size: 18px; margin: 0 0 16px; }
+.tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; color: var(--text-gray); }
+.field input, .field select {
+  background: var(--navy-2); border: 1px solid #2a3a55; color: var(--text);
+  border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit;
+}
+.field input:focus, .field select:focus { outline: none; border-color: var(--gold); }
+.tool-btn {
+  margin-top: 20px; background: var(--gold); color: #0a1628; border: none;
+  border-radius: 8px; padding: 12px 22px; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+.tool-btn:hover { opacity: .9; }
+.tool-result {
+  margin-top: 24px; background: var(--navy-2); border: 1px dashed var(--gold);
+  border-radius: 10px; padding: 20px; white-space: pre-wrap;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px; color: var(--text); line-height: 1.7;
+}
+.tool-note { color: var(--text-gray); font-size: 12px; margin-top: 12px; }
+/* 世界时间 */
+.clock-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.clock-card {
+  background: var(--card-bg); border: 1px solid #2a3a55;
+  border-radius: 12px; padding: 20px; text-align: center;
+}
+.clock-card .city { color: var(--gold); font-size: 16px; font-weight: 700; }
+.clock-card .time {
+  font-size: 30px; font-family: "SFMono-Regular", Consolas, monospace;
+  margin: 8px 0 4px; letter-spacing: 1px;
+}
+.clock-card .date { color: var(--text-gray); font-size: 13px; }
+/* 船公司 */
+.carrier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.carrier-item {
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--card-bg); border: 1px solid var(--gold);
+  border-radius: 12px; padding: 18px; text-decoration: none; color: var(--text);
+  transition: transform .25s, box-shadow .25s;
+}
+.carrier-item:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(212,175,55,.18); }
+.carrier-item .name { color: var(--gold); font-size: 16px; font-weight: 700; }
+.carrier-item .domain { color: var(--text-gray); font-size: 12px; }

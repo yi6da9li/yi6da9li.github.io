@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>常见船公司查询链接 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=transpi-tools-20261001" />
+</head>
+<body>
+  <div class="tool-page">
+    <a class="tool-back" href="index.html">← 返回 航运派 Trans Pi</a>
+    <h1 class="tool-h1">常见船公司查询链接</h1>
+    <p class="tool-sub">主流班轮公司官网直达，查船期、运价、提单与 track & trace 一站搞定。点击卡片在新标签打开。</p>
+    <div class="carrier-grid" id="carriers"></div>
+  </div>
+
+  <script>
+    var carriers = [
+      { name: 'MSC 地中海航运', url: 'https://www.msccargo.cn/zh', domain: 'msccargo.cn' },
+      { name: 'MAERSK 马士基', url: 'https://www.maersk.com.cn/', domain: 'maersk.com.cn' },
+      { name: 'CMA CGM 达飞', url: 'https://www.cma-cgm.com/', domain: 'cma-cgm.com' },
+      { name: 'COSCO 中远海运', url: 'https://lines.coscoshipping.com/home/', domain: 'coscoshipping.com' },
+      { name: 'OOCL 东方海外', url: 'https://www.oocl.com/schi/Pages/default.aspx', domain: 'oocl.com' },
+      { name: 'Hapag-Lloyd 赫伯罗特', url: 'https://www.hapag-lloyd.cn/zh/home.html', domain: 'hapag-lloyd.cn' },
+      { name: 'ONE 海洋网联', url: 'https://www.one-line-services.com.cn/en', domain: 'one-line-services.com.cn' },
+      { name: 'EVERGREEN 长荣海运', url: 'https://www.evergreen-shipping.cn/', domain: 'evergreen-shipping.cn' },
+      { name: 'HMM 现代商船', url: 'https://www.hmm21.com/', domain: 'hmm21.com' },
+      { name: 'YANG MING 阳明海运', url: 'https://www.yangming.com/en', domain: 'yangming.com' },
+      { name: 'ZIM 以星航运', url: 'https://www.zimchina.com/', domain: 'zimchina.com' },
+      { name: 'WAN HAI 万海航运', url: 'https://cn.wanhai.com/', domain: 'wanhai.com' },
+      { name: 'MATSON 美森轮船', url: 'https://www.matson.com/', domain: 'matson.com' },
+      { name: 'SM LINE 森罗商船', url: 'https://smlines.com/cn/', domain: 'smlines.com' }
+    ];
+    var wrap = document.getElementById('carriers');
+    carriers.forEach(function (c) {
+      var a = document.createElement('a');
+      a.className = 'carrier-item';
+      a.href = c.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.innerHTML = '<span class="name">' + c.name + '</span><span class="domain">' + c.domain + ' →</span>';
+      wrap.appendChild(a);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>AI 词典：从 AI 到大模型，一次搞懂 20 个核心概念 | 航运派</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=transpi-text-20261001" />
+  <link rel="stylesheet" href="article.css?v=ai-concept-20261001" />
+</head>
+<body>
+
+  <!-- 背景音乐 -->
+  <audio id="bgm" loop preload="auto">
+    <source src="assets/bgm.mp3" type="audio/mpeg" />
+  </audio>
+  <button id="bgmToggle" class="bgm-toggle" aria-label="背景音乐开关" title="背景音乐">
+    <svg class="bgm-icon-on" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 9v6h4l5 4V5L9 9H5z" fill="currentColor"/>
+      <path d="M16 8.5a4 4 0 010 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <path d="M18.5 6a7 7 0 010 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    </svg>
+    <svg class="bgm-icon-off" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 9v6h4l5 4V5L9 9H5z" fill="currentColor"/>
+      <path d="M16 9l5 5m0-5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+      <div class="nav-links">
+        <a href="about.html">关于</a>
+        <a href="index.html#about">专栏</a>
+        <a href="index.html#ai-academy">AI学院</a>
+        <a href="index.html#footer">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 文章主体 -->
+  <article class="article">
+    <div class="container article-inner">
+      <a class="article-back" href="index.html#ai-academy">← 返回 · 航运派AI学院</a>
+      <span class="eyebrow">航运派AI学院</span>
+      <h1 class="article-title">AI 词典：从 AI 到大模型，一次搞懂 20 个核心概念</h1>
+      <div class="article-meta">航运派威廉 · 2026-10-01</div>
+      <p class="article-lede">和航运一样，AI 也有一套自己的"行话"。这篇把最常出现的 20 个概念按"核心—日常—进阶—产品"四层拆开讲，目的是让你刷到 AI 新闻、用到 AI 工具时，不再被一堆缩写劝退。看完这篇，你就能听懂大部分 AI 讨论到底在说什么。</p>
+
+      <h2>一、最核心的 5 个词</h2>
+
+      <h3>AI（人工智能 / Artificial Intelligence）</h3>
+      <p>人工智能就是"让机器像人一样去感知、思考、行动"的统称。它不是某一个具体东西，而是一整个领域——从你手机里的语音助手，到工厂里的质检机器人，都算 AI。我们今天聊的"大模型、聊天机器人"只是 AI 里最新、最火的一支。</p>
+
+      <h3>机器学习（Machine Learning, ML）</h3>
+      <p>传统写程序是你把规则一条条告诉电脑；机器学习反过来——你给电脑看成千上万个"例子"（这是猫、那不是猫），它自己从中总结出规律，以后遇到新图片就能判断。一句话：不是人教它"如果怎样就怎样"，而是它从数据里自己学。</p>
+
+      <h3>深度学习（Deep Learning, DL）</h3>
+      <p>它是机器学习里的一种"进阶打法"。它用一种叫"神经网络"的结构（下面会讲），层数可以叠得很深，所以叫"深度"。这种打法特别擅长处理图像、语音、语言这类复杂 messy 的数据，近几年 AI 的突破基本都靠它撑着。</p>
+
+      <h3>LLM（大语言模型 / Large Language Model）</h3>
+      <p>大语言模型，简单说就是"读了海量书、文章、网页后训练出来的超级语言机器"。它干的事是"预测下一个词"——你打一句，它续一句，连起来就像在对话。ChatGPT、文心一言、通义千问背后都是 LLM。它懂语言，但不"理解"世界，只是概率高手。</p>
+
+      <h3>生成式 AI / AIGC（Generative AI）</h3>
+      <p>前面的 AI 多是"判断型"（这是猫吗？这封邮件是垃圾吗？）；生成式 AI 是"创造型"——你给个要求，它现编出一段新文字、一张新图、一段新视频。AIGC 就是"AI 生成内容"的缩写。你现在用的聊天、画图、做视频工具，都属于这一类。</p>
+
+      <h2>二、每天都会听到的词</h2>
+
+      <h3>GPT（生成式预训练 Transformer）</h3>
+      <p>这是 OpenAI 给自家技术起的名字，现在很多人把它当成"聊天 AI"的代名词。拆开看：Generative=会生成，Pre-trained=先在大数据上预习过，Transformer=一种特殊的模型架构（擅长处理语言顺序）。记住"GPT 是一种会聊天的 AI 技术"就够了。</p>
+
+      <h3>Prompt（提示词 / 指令）</h3>
+      <p>就是你跟 AI 说话时输入的那些字。AI 是"你问得清楚，它答得越好"的工具。同样让它写周报，写"写周报"和写"用邮件语气、三点式、给领导看、含本周3件事"——出来的东西天差地别。学会写提示词，等于学会"怎么向 AI 提要求"。</p>
+
+      <h3>Inference（推理）</h3>
+      <p>模型训练好之后，你输入问题、它吐出答案的这个过程叫推理。注意它不等于人类的逻辑推理，本质还是"根据学过的模式算下一个最可能的输出"。平时你跟 ChatGPT 聊天，每一句回答都是一次 inference。</p>
+
+      <h3>Token（词元）</h3>
+      <p>AI 不直接"看字"，而是把文字切成小碎片来处理，这些碎片叫 token。一个英文单词大概 1 个 token，一个汉字可能被切成半个到一个 token。<strong>重点：token 是 AI 服务的"计费单位"</strong>——你问得越长、它答得越长，花的 token 越多，账单越高。</p>
+
+      <h3>Hallucination（幻觉）</h3>
+      <p>指 AI "一本正经地编造假信息"——比如它说"根据 2023 年某论文…"其实那篇论文根本不存在。因为 LLM 是按概率续写，不是查数据库，所以会"脑补"。<strong>实用忠告：AI 给的事实、数据、引用，重要场合一定要自己再去核实。</strong></p>
+
+      <h2>三、进阶但越来越常见的词</h2>
+
+      <h3>Fine-tuning（微调）</h3>
+      <p>大模型是"通才"，微调就是把它再"专人特训"一下。比如你拿一堆你们公司的客服对话去喂它，它就变成"懂你们业务的客服 AI"。成本比从零训练低得多，是普通人/小公司用 AI 落地最现实的路径。</p>
+
+      <h3>Multimodal（多模态）</h3>
+      <p>"模态"就是信息的类型（文字、图片、声音、视频）。多模态 AI 能同时吃多种类型、也能产出多种类型——比如你发一张图问"这上面写了什么"，它看图又读字再回答。现在的趋势就是 AI 越来越"五感俱全"。</p>
+
+      <h3>Agent（智能体）</h3>
+      <p>普通聊天 AI 是"你问一句它答一句"；Agent 是"你给个目标，它自己拆步骤、调工具、反复试错直到完成"。比如你说"帮我调研竞品并出一份 PPT"，Agent 会自己搜网页、整理、生成。可以理解为：从"问答机"升级成了"能干活的小助理"。</p>
+
+      <h3>RAG（检索增强生成 / Retrieval-Augmented Generation）</h3>
+      <p>RAG 解决的是"AI 不懂你的私有资料、还爱胡说"的问题。做法是：你问之前，先让 AI 去你的文档库里检索相关片段，再带着这些真材料去回答。等于给 AI "先翻书再答题"，既减少幻觉，又能用上内部知识。做企业 AI 应用基本都靠它。</p>
+
+      <h3>Embedding（嵌入 / 向量化）</h3>
+      <p>AI 看不懂文字，但看得懂数字。Embedding 就是把一句话、一段词变成一个长长的数字数组（向量），意思相近的文字，向量也挨得近。靠这个，AI 才能做"语义搜索"——你搜"怎么省钱"，它能找到"降低开支的方法"这种同义内容。RAG、推荐系统都建在它上面。</p>
+
+      <h3>Neural Network（神经网络）</h3>
+      <p>深度学习的结构骨架，灵感来自人脑神经元。它由很多层"小计算节点"串起来，数据从一层流到下一层，每层都在提取一点特征（第一层认边缘，再上层认形状，再上层认整张脸）。别被名字吓到——它就是一套"多层数学函数叠加"的处理流水线。</p>
+
+      <h2>四、常见产品形态（听懂新闻用）</h2>
+
+      <h3>Chatbot（聊天机器人）</h3>
+      <p>最直观的 AI 产品：一个对话框，你打字它回话。ChatGPT、Claude、豆包、文心一言都算。它是大多数人接触 AI 的第一站。</p>
+
+      <h3>Text-to-Image（文生图）</h3>
+      <p>输入一段文字描述，AI 画出一张图。比如"一只戴墨镜的猫在月球上弹吉他"，Midjourney、Stable Diffusion、即梦都能干。设计师、运营做图的好帮手。</p>
+
+      <h3>Text-to-Video（文生视频）</h3>
+      <p>比文生图更进阶：输入文字（或图），AI 直接生成一段动态视频。可灵、Sora、即梦视频版都在做这件事。目前画质和时长还在快速进化中。</p>
+
+      <h3>TTS（文字转语音 / Text-to-Speech）</h3>
+      <p>把文字念出来。你听的有声书、导航播报、AI 配音，背后都是 TTS。现在还能模仿真人音色，做短视频配音很常用。</p>
+
+      <h3>ASR（语音识别 / Automatic Speech Recognition）</h3>
+      <p>和 TTS 反过来：把人说的话变成文字。会议转写、字幕生成、语音输入法都靠它。和 TTS 一对，就组成了"语音 ↔ 文字"的双向通道。</p>
+
+      <p>概念记住一层，工具就少一层门槛。下一篇我们会聊"主流工具怎么选"，把上面这些词落到你每天真能用上的产品里。</p>
+      <p><strong>观市场热点，学实操干货，知行业风向，就看航运派。</strong></p>
+
+      <div class="related">
+        <div class="related-title">看了今天的文章，你可能还会喜欢</div>
+        <a class="related-card" href="index.html#ai-academy">
+          <span class="related-cat">航运派AI学院</span>
+          <span class="related-name">返回 AI学院，查看其他板块</span>
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        本篇为 AI 通识科普，内容用于个人学习与行业交流，不构成任何投资、技术或商业决策建议。文中涉及的产品名称归各自公司所有；AI 技术发展极快，具体能力与定价以各家官方最新说明为准。正如文中所述，AI 可能出现"幻觉"，文中事实性表述建议在重要场合自行核实。
+      </div>
+    </div>
+  </article>
+
+  <!-- 页脚 -->
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html">关于 William</a>
+        <a href="index.html#about">专栏订阅</a>
+        <a href="index.html#footer">商务合作</a>
+      </div>
+      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var audio = document.getElementById('bgm');
+      var btn = document.getElementById('bgmToggle');
+      if (!audio || !btn) return;
+      audio.volume = 0.25;
+
+      var KEY_TIME = 'bgm_currentTime';
+      var KEY_STATE = 'bgm_isPlaying';
+
+      function markPlaying() { btn.classList.add('is-playing'); localStorage.setItem(KEY_STATE, '1'); }
+      function markPaused()  { btn.classList.remove('is-playing'); localStorage.setItem(KEY_STATE, '0'); }
+
+      function tryPlay() {
+        audio.play().then(markPlaying).catch(function (e) {
+          console.warn('BGM autoplay blocked, waiting for first user gesture:', e);
+        });
+      }
+
+      // 跨页面恢复播放进度
+      var savedTime = parseFloat(localStorage.getItem(KEY_TIME) || '0');
+      if (savedTime > 0 && !isNaN(savedTime) && isFinite(savedTime)) {
+        try { audio.currentTime = savedTime; } catch (e) {}
+      }
+      var wasPlaying = localStorage.getItem(KEY_STATE) === '1';
+      if (wasPlaying) {
+        tryPlay();
+      }
+
+      // 节流记录进度（每 1 秒）
+      var lastSaved = 0;
+      audio.addEventListener('timeupdate', function () {
+        var now = Date.now();
+        if (now - lastSaved > 1000) {
+          localStorage.setItem(KEY_TIME, String(audio.currentTime));
+          lastSaved = now;
+        }
+      });
+
+      // 页面卸载前最后保存一次
+      window.addEventListener('beforeunload', function () {
+        localStorage.setItem(KEY_TIME, String(audio.currentTime));
+        localStorage.setItem(KEY_STATE, audio.paused ? '0' : '1');
+      });
+
+      // 首次用户交互兜底（仅当上次是播放状态）
+      function firstGesture() {
+        if (wasPlaying && audio.paused) {
+          tryPlay();
+        }
+        document.removeEventListener('click',     firstGesture, true);
+        document.removeEventListener('keydown',   firstGesture, true);
+        document.removeEventListener('pointerdown', firstGesture, true);
+      }
+      document.addEventListener('click',     firstGesture, true);
+      document.addEventListener('keydown',   firstGesture, true);
+      document.addEventListener('pointerdown', firstGesture, true);
+
+      // 手动开关
+      btn.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        if (audio.paused) {
+          audio.play().then(markPlaying).catch(function (e) { console.warn('BGM play failed:', e); });
+        } else {
+          audio.pause();
+          markPaused();
+        }
+      });
+
+      // 切回标签页时恢复
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden && audio.paused && localStorage.getItem(KEY_STATE) === '1') {
+          tryPlay();
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>货代报价单生成器 · 航运派 Trans Pi</title>
+<style>
+/* ============ 基础 ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ui-bg:#eef1f6; --ui-card:#ffffff; --ui-line:#e2e7ef; --ui-line2:#eef1f6;
+  --ui-text:#1f2937; --ui-muted:#6b7280; --ui-accent:#1A3D68; --ui-accent2:#4285B4;
+  --radius:10px;
+}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+  background:var(--ui-bg); color:var(--ui-text); font-size:13px; -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:12.5px;color:var(--ui-text)}
+
+/* ============ 顶栏 ============ */
+.topbar{
+  height:52px;display:flex;align-items:center;gap:14px;padding:0 16px;
+  background:#fff;border-bottom:1px solid var(--ui-line);position:sticky;top:0;z-index:50;
+}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;color:var(--ui-accent);white-space:nowrap}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--ui-accent2);box-shadow:0 0 0 3px rgba(66,133,180,.18)}
+.brand small{font-weight:500;color:var(--ui-muted);font-size:11px;letter-spacing:.4px}
+.tb-spacer{flex:1}
+.btn{
+  border:1px solid var(--ui-line);background:#fff;color:var(--ui-text);
+  padding:7px 13px;border-radius:8px;font-size:12.5px;font-weight:500;transition:.15s;white-space:nowrap;
+}
+.btn:hover{border-color:var(--ui-accent2);color:var(--ui-accent)}
+.btn-primary{background:var(--ui-accent);border-color:var(--ui-accent);color:#fff}
+.btn-primary:hover{background:#14314f;color:#fff}
+.btn-sm{padding:4px 9px;font-size:11.5px;border-radius:6px}
+.zoombox{display:flex;align-items:center;gap:7px;color:var(--ui-muted);font-size:11.5px}
+.zoombox input[type=range]{width:96px}
+
+/* ============ 布局 ============ */
+.app{display:flex;height:calc(100vh - 52px);overflow:hidden}
+.panel{
+  width:398px;min-width:398px;background:#fff;border-right:1px solid var(--ui-line);
+  overflow-y:auto;overflow-x:hidden;padding-bottom:60px;
+}
+.panel::-webkit-scrollbar,.stage::-webkit-scrollbar{width:9px}
+.panel::-webkit-scrollbar-thumb,.stage::-webkit-scrollbar-thumb{background:#c9d2e0;border-radius:9px}
+.stage{flex:1;overflow:auto;padding:26px 20px 90px;display:flex;justify-content:center;align-items:flex-start}
+.zoomwrap{transform-origin:top center}
+
+/* ============ 面板控件 ============ */
+details.sec{border-bottom:1px solid var(--ui-line2)}
+details.sec>summary{
+  list-style:none;cursor:pointer;padding:12px 15px;font-weight:600;font-size:13px;
+  display:flex;align-items:center;gap:8px;user-select:none;background:#fff;position:relative;
+}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary:hover{background:#f7f9fc}
+details.sec>summary .ico{
+  width:19px;height:19px;border-radius:5px;background:rgba(66,133,180,.12);color:var(--ui-accent);
+  display:grid;place-items:center;font-size:11px;font-weight:700;
+}
+details.sec>summary .arw{margin-left:auto;color:#9aa5b5;transition:.2s;font-size:10px}
+details.sec[open]>summary .arw{transform:rotate(90deg)}
+details.sec>summary em{font-style:normal;color:var(--ui-muted);font-weight:400;font-size:11px}
+.sec-body{padding:2px 15px 16px}
+
+.fg{margin-bottom:9px}
+.fg label,.lb{display:block;font-size:11.5px;color:var(--ui-muted);margin-bottom:4px;font-weight:500}
+.inp,textarea.inp,select.inp{
+  width:100%;padding:7px 9px;border:1px solid var(--ui-line);border-radius:7px;background:#fcfdfe;transition:.15s;
+}
+.inp:focus{outline:none;border-color:var(--ui-accent2);background:#fff;box-shadow:0 0 0 3px rgba(66,133,180,.12)}
+textarea.inp{resize:vertical;min-height:78px;line-height:1.65}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.hint{font-size:11px;color:var(--ui-muted);line-height:1.6;margin-top:5px}
+.chkline{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ui-text);padding:4px 0;cursor:pointer}
+.chkline input{width:14px;height:14px;accent-color:var(--ui-accent)}
+.chkgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px}
+.blksep{font-size:11px;font-weight:700;color:var(--ui-accent);margin:13px 0 5px;padding-bottom:4px;border-bottom:1px dashed var(--ui-line);letter-spacing:.3px}
+
+/* 模板选择 */
+.tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tpl{
+  border:1px solid var(--ui-line);border-radius:9px;padding:9px 10px;background:#fcfdfe;text-align:left;transition:.15s;
+}
+.tpl:hover{border-color:var(--ui-accent2);background:#fff}
+.tpl.on{border-color:var(--ui-accent);background:rgba(26,61,104,.05);box-shadow:0 0 0 2px rgba(26,61,104,.09)}
+.tpl b{display:block;font-size:12.5px;margin-bottom:2px}
+.tpl span{font-size:10.5px;color:var(--ui-muted);letter-spacing:.3px}
+
+/* 配色 */
+.sch-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sch{border:1px solid var(--ui-line);border-radius:9px;padding:8px 9px;background:#fff;text-align:left;transition:.15s}
+.sch:hover{border-color:var(--ui-accent2)}
+.sch.on{border-color:var(--ui-accent);box-shadow:0 0 0 2px rgba(26,61,104,.09)}
+.sch b{display:block;font-size:12px;margin-bottom:6px;font-weight:600}
+.sw{display:flex;gap:3px}
+.sw i{width:100%;height:15px;border-radius:3px;border:1px solid rgba(0,0,0,.07)}
+.custom-colors{margin-top:10px;padding:11px;border:1px dashed var(--ui-line);border-radius:9px;background:#fbfcfe}
+.cc-row{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.cc-row:last-child{margin-bottom:0}
+.cc-row span{font-size:11.5px;color:var(--ui-muted);flex:1}
+.cc-row input[type=color]{width:38px;height:24px;padding:0;border:1px solid var(--ui-line);border-radius:5px;background:none;cursor:pointer}
+.cc-row input[type=text]{width:82px;padding:4px 6px;border:1px solid var(--ui-line);border-radius:5px;font-size:11px;font-family:ui-monospace,Consolas,monospace}
+
+/* 上传 */
+.drop{
+  border:1.5px dashed #ccd6e3;border-radius:9px;padding:14px;text-align:center;background:#fbfcfe;
+  cursor:pointer;transition:.15s;font-size:12px;color:var(--ui-muted);
+}
+.drop:hover{border-color:var(--ui-accent2);color:var(--ui-accent);background:#fff}
+.drop.has{padding:9px}
+.drop img{max-height:52px;max-width:100%;object-fit:contain;display:block;margin:0 auto}
+.mini-actions{display:flex;gap:6px;margin-top:7px}
+
+/* 费用编辑器 */
+.grp{border:1px solid var(--ui-line);border-radius:10px;margin-bottom:11px;overflow:hidden;background:#fff}
+.grp-hd{display:flex;align-items:center;gap:6px;padding:7px 8px;background:#f6f9fc;border-bottom:1px solid var(--ui-line)}
+.grp-hd input{flex:1;padding:5px 7px;border:1px solid transparent;border-radius:6px;background:transparent;font-weight:600;font-size:12.5px}
+.grp-hd input:focus{outline:none;background:#fff;border-color:var(--ui-accent2)}
+.icobtn{
+  width:23px;height:23px;border:1px solid var(--ui-line);background:#fff;border-radius:6px;
+  display:grid;place-items:center;font-size:11px;color:var(--ui-muted);flex:none;
+}
+.icobtn:hover{border-color:var(--ui-accent2);color:var(--ui-accent)}
+.icobtn.dg:hover{border-color:#e07a7a;color:#c94a4a}
+.grp-bd{padding:8px}
+.frow{border:1px solid var(--ui-line2);border-radius:8px;padding:7px;margin-bottom:7px;background:#fcfdfe}
+.frow:last-child{margin-bottom:0}
+.fr1{display:flex;gap:5px;margin-bottom:5px}
+.fr1 input{flex:1;padding:5px 7px;border:1px solid var(--ui-line);border-radius:6px;font-weight:500}
+.fr2{margin-bottom:5px}
+.fr2 input{width:100%;padding:5px 7px;border:1px solid var(--ui-line);border-radius:6px;font-size:11.5px;color:var(--ui-muted)}
+.fr3{display:grid;grid-template-columns:64px 44px 58px 1fr auto;gap:4px;align-items:center}
+.fr3 input,.fr3 select{padding:5px 4px;border:1px solid var(--ui-line);border-radius:6px;font-size:11.5px;width:100%;text-align:center}
+.fr3 .tg{display:flex;align-items:center;gap:3px;font-size:10.5px;color:var(--ui-muted);white-space:nowrap;cursor:pointer;padding-left:2px}
+.fr3 .tg input{width:13px;height:13px;accent-color:var(--ui-accent)}
+.grp-ft{display:flex;gap:6px;padding:0 8px 9px}
+.addbtn{flex:1;border:1px dashed #ccd6e3;background:#fff;border-radius:7px;padding:6px;font-size:11.5px;color:var(--ui-muted)}
+.addbtn:hover{border-color:var(--ui-accent2);color:var(--ui-accent)}
+
+/* 弹窗 */
+.mask{position:fixed;inset:0;background:rgba(18,26,38,.42);z-index:200;display:grid;place-items:center;padding:24px}
+.mask.hide{display:none}
+.mbox{background:#fff;border-radius:14px;width:100%;max-width:760px;max-height:84vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.24)}
+.mbox.sm{max-width:460px}
+.mhd{padding:14px 17px;border-bottom:1px solid var(--ui-line);display:flex;align-items:center;font-weight:600;font-size:14px}
+.mhd button{margin-left:auto;border:none;background:none;font-size:19px;color:#9aa5b5;line-height:1}
+.mbd{flex:1;overflow:hidden;display:flex;min-height:280px}
+.mbd.pad{display:block;padding:17px;overflow:auto;line-height:1.85;font-size:12.5px}
+.catcol{width:186px;border-right:1px solid var(--ui-line);overflow-y:auto;background:#fafbfd;flex:none}
+.cat{padding:10px 13px;font-size:12px;cursor:pointer;border-bottom:1px solid var(--ui-line2);color:var(--ui-muted)}
+.cat:hover{background:#f2f6fb}
+.cat.on{background:#fff;color:var(--ui-accent);font-weight:600;box-shadow:inset 3px 0 0 var(--ui-accent)}
+.itemcol{flex:1;overflow-y:auto;padding:9px 13px}
+.pit{display:flex;gap:8px;align-items:flex-start;padding:6px 4px;border-radius:6px;cursor:pointer;font-size:12px;line-height:1.5}
+.pit:hover{background:#f5f8fc}
+.pit input{margin-top:2px;width:14px;height:14px;accent-color:var(--ui-accent);flex:none}
+.pit em{font-style:normal;color:var(--ui-muted);font-size:11px}
+.mft{padding:11px 17px;border-top:1px solid var(--ui-line);display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ui-muted)}
+.mft .btn{margin-left:auto}
+.toast{
+  position:fixed;left:50%;bottom:34px;transform:translateX(-50%);background:rgba(26,38,54,.94);color:#fff;
+  padding:10px 20px;border-radius:9px;font-size:12.5px;z-index:400;opacity:0;transition:.25s;pointer-events:none;
+}
+.toast.on{opacity:1;bottom:44px}
+
+/* ==================================================================
+   报价单纸张 —— 预览与打印使用同一套尺寸（mm），保证 PDF 与预览一致
+   ================================================================== */
+.sheet{
+  position:relative;width:210mm;min-height:297mm;padding:12mm 14mm;background:#fff;
+  box-shadow:0 6px 26px rgba(23,38,58,.14);
+  --c-primary:#1A3D68; --c-accent:#4285B4; --c-text:#333333; --c-muted:#707070; --c-tbg:#F2F7FB;
+  color:var(--c-text);font-size:9.4pt;line-height:1.55;
+  /* 字体优先级：Carlito(Calibri 开源克隆)/ Calibri I,l 设计纤细 > Verdana/Tahoma（小字号下字符等粗） > Segoe UI > Arial */
+  font-family:"Carlito",Calibri,"Verdana","Tahoma","Segoe UI",Arial,"Helvetica Neue",Helvetica,"Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  font-synthesis:none;text-shadow:none;-webkit-text-stroke-width:0;
+  text-rendering:geometricPrecision;
+  /* 关键修复①: 强制灰度抗锯齿, 禁止 Skia 对小字号做 force-autohinting(竖笔全黑) */
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  /* 关键修复②: 启用字距调整, 让 I,l 与 M,O 视觉等粗 */
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+  font-variant-ligatures:common-ligatures;
+}
+.pageguide{position:absolute;left:0;right:0;top:12mm;bottom:0;pointer-events:none;
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 272mm,#cfd8e4 272mm,#cfd8e4 273mm);}
+.sheet .en{font-size:8pt;color:var(--c-muted);letter-spacing:.2px}
+
+/* 页头 */
+.qhead{display:flex;align-items:flex-start;gap:8mm;padding-bottom:3mm;border-bottom:2.6pt solid var(--c-primary);position:relative}
+.qhead::after{content:"";position:absolute;left:0;right:0;bottom:-1.6mm;height:.9pt;background:var(--c-accent)}
+.qh-l{flex:1;display:flex;align-items:center;gap:4mm;min-width:0}
+.qh-l img{max-width:52mm;object-fit:contain}
+.qh-name{font-size:14.5pt;font-weight:700;color:var(--c-primary);line-height:1.25;letter-spacing:.3px}
+.qh-name .en{display:block;font-size:9pt;font-weight:700;color:var(--c-accent);margin-top:.8mm;letter-spacing:.5px}
+.qh-r{text-align:right;font-size:8.6pt;color:var(--c-muted);line-height:1.7;white-space:pre-line;max-width:66mm}
+
+/* 标题 */
+.qtitle{text-align:center;margin:6mm 0 5mm}
+.qtitle b{font-size:17pt;font-weight:700;color:var(--c-primary);letter-spacing:3px}
+.qtitle span{display:block;font-size:9pt;color:var(--c-accent);letter-spacing:3.4px;margin-top:1mm;text-transform:uppercase}
+
+/* 元信息双栏 */
+.qmeta{display:flex;gap:6mm;margin-bottom:5mm;align-items:stretch}
+.qmeta>div{flex:1;min-width:0}
+.mtitle{font-size:8.4pt;font-weight:700;color:#fff;background:var(--c-primary);padding:1.5mm 3mm;letter-spacing:.5px}
+.mtitle span{font-weight:400;opacity:.78;font-size:7.2pt;margin-left:2mm}
+.mtab{width:100%;border-collapse:collapse;border:.7pt solid #d6dee8}
+.mtab td{padding:1.5mm 3mm;font-size:8.6pt;border-bottom:.5pt solid #e7ecf2;vertical-align:top}
+.mtab tr:last-child td{border-bottom:none}
+.mtab td.k{width:26mm;color:var(--c-muted);background:var(--c-tbg);font-size:8pt;white-space:nowrap}
+.mtab td.v{font-weight:400;word-break:break-word}
+
+/* 区块标题 */
+.blk{margin-bottom:5mm;break-inside:avoid}
+.blk-h{display:flex;align-items:baseline;gap:2.5mm;border-left:2.6pt solid var(--c-accent);padding-left:2.6mm;margin-bottom:2.4mm}
+.blk-h b{font-size:10pt;color:var(--c-primary);font-weight:700;letter-spacing:.4px}
+
+/* 运输信息网格 */
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);border:.7pt solid #d6dee8;border-bottom:none}
+.sgrid .cell{display:flex;border-bottom:.7pt solid #e7ecf2;border-right:.7pt solid #e7ecf2;min-height:7mm}
+.sgrid .cell:nth-child(3n){border-right:none}
+.sgrid .cell .k{width:20mm;flex:none;background:var(--c-tbg);color:var(--c-muted);font-size:7.6pt;padding:1.4mm 2mm;display:flex;align-items:center;line-height:1.3}
+.sgrid .cell .v{flex:1;padding:1.4mm 2.4mm;font-size:8.6pt;font-weight:400;display:flex;align-items:center;word-break:break-word}
+
+/* 费用表 */
+table.fee{width:100%;border-collapse:collapse;table-layout:fixed}
+table.fee th{
+  background:var(--c-primary);color:#fff;font-size:8pt;font-weight:700;padding:2mm 2mm;
+  text-align:left;letter-spacing:.3px;border-right:.5pt solid rgba(255,255,255,.2);
+}
+table.fee th:last-child{border-right:none}
+table.fee th .en{color:rgba(255,255,255,.72);display:block;font-size:6.4pt;font-weight:400}
+table.fee td{padding:1.7mm 2mm;font-size:8.6pt;border-bottom:.5pt solid #e2e8f0;vertical-align:top;word-break:break-word}
+table.fee td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.fee td.mid{text-align:center}
+table.fee tr.zebra td{background:var(--c-tbg)}
+table.fee td .en{display:block;font-size:6.9pt;line-height:1.4}
+table.fee td.rk{color:var(--c-muted);font-size:7.9pt}
+table.fee tr.grp-tr td{
+  background:var(--c-tbg);background:color-mix(in srgb,var(--c-accent) 17%,#fff);
+  font-weight:700;font-size:8.6pt;color:var(--c-primary);
+  padding:1.7mm 2mm;letter-spacing:.4px;border-bottom:.5pt solid var(--c-accent);
+}
+table.fee tr.sub-tr td{font-size:8.2pt;color:var(--c-primary);font-weight:700;background:#fff;border-bottom:.7pt solid #d6dee8}
+table.fee tr.opt td{color:var(--c-muted)}
+table.fee tr{break-inside:avoid}
+.amt-cur{font-size:7.2pt;color:var(--c-muted);margin-right:.6mm}
+
+/* 合计 */
+.totalbox{display:flex;justify-content:flex-end;margin-top:4mm;break-inside:avoid}
+.tb{min-width:96mm;border:1pt solid var(--c-accent);border-radius:1mm;overflow:hidden}
+.tb-row{display:flex;justify-content:space-between;align-items:baseline;padding:1.8mm 3.4mm;font-size:9pt;border-bottom:.5pt solid #e2e8f0;background:#fff}
+.tb-row:last-child{border-bottom:none}
+.tb-row.main{background:var(--c-primary);color:#fff;font-weight:700;font-size:10.6pt;border-bottom:none}
+.tb-row.main .lbl{color:rgba(255,255,255,.85);font-size:8.4pt;font-weight:700}
+.tb-row .lbl{color:var(--c-muted)}
+.tb-row .val{font-weight:700;color:var(--c-accent);font-variant-numeric:tabular-nums}
+.tb-row.main .val{color:#fff;letter-spacing:.4px}
+.tb-row.cny{background:var(--c-tbg);color:var(--c-primary);border-left:3pt solid var(--c-accent);font-size:10.6pt}
+.tb-row.cny .lbl{color:var(--c-primary);font-weight:700;font-size:8.4pt}
+.tb-row.cny .val{color:var(--c-accent);font-weight:700}
+.tb-words{padding:1.6mm 3.4mm;font-size:7.8pt;color:var(--c-muted);background:var(--c-tbg);line-height:1.5}
+.tb-words b{color:var(--c-primary);font-weight:700}
+
+/* 条款 */
+.terms{white-space:pre-wrap;font-size:8.2pt;line-height:1.85;color:var(--c-text);border:.7pt solid #dde4ec;background:var(--c-tbg);padding:3mm 3.6mm;border-radius:1mm}
+
+/* 银行信息 */
+.bank{display:grid;grid-template-columns:1fr 1fr;gap:1mm 6mm;font-size:8.2pt;border:.7pt solid #dde4ec;padding:3mm 3.6mm;border-radius:1mm}
+.bank div span{color:var(--c-muted);display:inline-block;min-width:22mm}
+
+/* 签署 */
+.qsign{display:flex;gap:8mm;margin-top:7mm;break-inside:avoid}
+.sc{flex:1;position:relative;min-height:30mm}
+.sc-t{font-size:9pt;font-weight:700;color:var(--c-primary);border-bottom:.9pt solid var(--c-primary);padding-bottom:1.2mm;margin-bottom:2.6mm;letter-spacing:.4px}
+.sc-t span{font-weight:400;color:var(--c-muted);font-size:7pt;margin-left:1.6mm}
+.sc-l{font-size:8.4pt;line-height:2.35;color:var(--c-text)}
+.sc-l i{font-style:normal;color:var(--c-muted);display:inline-block;min-width:20mm}
+.sc-l u{text-decoration:none;border-bottom:.5pt solid #b9c4d2;display:inline-block;min-width:34mm}
+.stamp{position:absolute;pointer-events:none;object-fit:contain}
+
+/* 页脚 */
+.qfoot{margin-top:7mm;padding-top:2.4mm;border-top:.9pt solid var(--c-accent);font-size:7.4pt;color:var(--c-muted);display:flex;justify-content:space-between;gap:5mm;line-height:1.6}
+.wm{position:absolute;left:0;right:0;top:38%;text-align:center;font-size:52pt;font-weight:700;color:var(--c-primary);opacity:.055;transform:rotate(-24deg);letter-spacing:8px;pointer-events:none;white-space:nowrap}
+
+/* ============ 打印 / 导出 PDF ============ */
+@media print{
+  @page{size:A4;margin:12mm 14mm}
+  html,body{height:auto!important;overflow:visible!important;background:#fff!important}
+  .topbar,.panel,.mask,.toast,.pageguide,.no-print{display:none!important}
+  .app{display:block!important;height:auto!important;overflow:visible!important}
+  .stage{display:block!important;overflow:visible!important;padding:0!important;height:auto!important}
+  .zoomwrap{transform:none!important;width:auto!important}
+  .sheet{
+    width:auto!important;min-height:0!important;padding:0!important;margin:0!important;
+    box-shadow:none!important;border-radius:0!important;
+  }
+  table.fee thead{display:table-header-group}
+  tr,td,th{break-inside:avoid;page-break-inside:avoid}
+  .blk,.totalbox,.qsign,.qmeta{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;font-synthesis:none!important;text-shadow:none!important;-webkit-text-stroke-width:0!important;text-rendering:geometricPrecision!important;-webkit-font-smoothing:antialiased!important;-moz-osx-font-smoothing:grayscale!important;font-feature-settings:"kern" 1,"liga" 1!important}
+}
+</style>
+
+<style>
+  /* —— 与航运派站点统一视觉：深蓝底 + 金色 —— */
+  .topbar{background:#0e1b2c;border-bottom:1px solid rgba(212,175,55,.28)}
+  .brand{color:#D4AF37}
+  .brand small{color:#90a4bd}
+  .brand .dot{background:#D4AF37;box-shadow:0 0 0 3px rgba(212,175,55,.22)}
+  .btn{border-color:rgba(212,175,55,.35);color:#e8eef6}
+  .btn:hover{border-color:#D4AF37;color:#D4AF37}
+  .btn-primary{background:#D4AF37;border-color:#D4AF37;color:#0e1b2c}
+  .btn-primary:hover{background:#e6c45a;color:#0e1b2c}
+  .zoombox{color:#90a4bd}
+  .tool-back{display:inline-flex;align-items:center;color:#90a4bd;text-decoration:none;font-size:12.5px;font-weight:500;padding:7px 11px;border:1px solid rgba(212,175,55,.3);border-radius:8px;transition:.15s;white-space:nowrap}
+  .tool-back:hover{color:#D4AF37;border-color:#D4AF37}
+</style>
+</head>
+<body>
+
+<div class="topbar no-print">
+  <a class="tool-back" href="index.html">← 返回首页</a><div class="brand"><span class="dot"></span>货代报价单生成器<small>FREIGHT QUOTATION BUILDER</small></div>
+  <div class="tb-spacer"></div>
+  <div class="zoombox">预览缩放<input type="range" id="zoom" min="50" max="130" value="88"><b id="zoomv">88%</b></div>
+  <button class="btn btn-primary" id="btnSave">保存配置</button>
+  <button class="btn btn-primary" id="btnLoad">导入配置</button>
+  <button class="btn btn-primary" id="btnReset">重置</button>
+  <button class="btn btn-primary" id="btnPdf">导出 PDF</button>
+  <input type="file" id="fileJson" accept=".json" hidden>
+</div>
+
+<div class="app">
+<!-- ==================== 左侧控制面板 ==================== -->
+<aside class="panel no-print">
+
+  <details class="sec" open>
+    <summary><span class="ico">1</span>报价模板 <em>Template</em><span class="arw">▶</span></summary>
+    <div class="sec-body">
+      <div class="tpl-grid" id="tplGrid"></div>
+      <div class="hint">切换模板将套用该运输方式的<b>默认费用分组、常见收费项目、计费单位与标准条款</b>；已填写的公司与客户信息会保留。</div>
+    </div>
+  </details>
+
+  <details class="sec" open>
+    <summary><span class="ico">2</span>配色方案 <em>Color Scheme</em><span class="arw">▶</span></summary>
+    <div class="sec-body">
+      <div class="sch-grid" id="schGrid"></div>
+      <div class="custom-colors" id="ccBox" style="display:none">
+        <div class="cc-row"><span>主色（表头 / 标题）</span><input type="color" data-cc="primary"><input type="text" data-cct="primary"></div>
+        <div class="cc-row"><span>辅助色（总价 / 线条）</span><input type="color" data-cc="accent"><input type="text" data-cct="accent"></div>
+        <div class="cc-row"><span>正文文字</span><input type="color" data-cc="text"><input type="text" data-cct="text"></div>
+        <div class="cc-row"><span>次要备注文字</span><input type="color" data-cc="muted"><input type="text" data-cct="muted"></div>
+        <div class="cc-row"><span>表格底色（交替行）</span><input type="color" data-cc="tbg"><input type="text" data-cct="tbg"></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec">
+    <summary><span class="ico">3</span>企业信息与 Logo <em>Company</em><span class="arw">▶</span></summary>
+    <div class="sec-body">
+      <div class="fg">
+        <label>企业 Logo（支持 PNG / JPG / SVG，建议透明底）</label>
+        <div class="drop" id="logoDrop">点击或拖拽上传 Logo</div>
+        <input type="file" id="logoFile" accept="image/*" hidden>
+        <div class="mini-actions">
+          <button class="btn btn-sm" id="logoDel">移除 Logo</button>
+          <label class="lb" style="margin:0;display:flex;align-items:center;gap:6px;flex:1">高度
+            <input type="range" min="20" max="80" step="1" data-bind="logo.h" style="flex:1">
+          </label>
+        </div>
+      </div>
+      <div class="fg"><label>公司名称（中文）</label><input class="inp" data-bind="co.name" placeholder="例：航运派国际物流有限公司"></div>
+      <div class="fg"><label>公司名称（英文）</label><input class="inp" data-bind="co.nameEn" placeholder=""></div>
+      <div class="fg"><label>地址</label><input class="inp" data-bind="co.addr"></div>
+      <div class="row2">
+        <div class="fg"><label>电话</label><input class="inp" data-bind="co.tel"></div>
+        <div class="fg"><label>传真 / 其他</label><input class="inp" data-bind="co.fax"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>邮箱</label><input class="inp" data-bind="co.email"></div>
+        <div class="fg"><label>网址</label><input class="inp" data-bind="co.web"></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec">
+    <summary><span class="ico">4</span>单据信息与客户 <em>Quotation & Client</em><span class="arw">▶</span></summary>
+    <div class="sec-body">
+      <div class="row2">
+        <div class="fg"><label>标题（中文）</label><input class="inp" data-bind="q.title"></div>
+        <div class="fg"><label>标题（英文）</label><input class="inp" data-bind="q.titleEn"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>报价单号</label><input class="inp" data-bind="q.no"></div>
+        <div class="fg"><label>报价日期</label><input class="inp" type="date" data-bind="q.date"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>有效期至</label><input class="inp" type="date" data-bind="q.valid"></div>
+        <div class="fg"><label>业务员 / 报价人</label><input class="inp" data-bind="q.sales"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>业务员电话</label><input class="inp" data-bind="q.salesTel"></div>
+        <div class="fg"><label>业务员邮箱</label><input class="inp" data-bind="q.salesEmail"></div>
+      </div>
+      <hr style="border:none;border-top:1px dashed var(--ui-line);margin:11px 0">
+      <div class="fg"><label>客户公司名称</label><input class="inp" data-bind="cl.name"></div>
+      <div class="row2">
+        <div class="fg"><label>客户联系人</label><input class="inp" data-bind="cl.contact"></div>
+        <div class="fg"><label>联系电话</label><input class="inp" data-bind="cl.tel"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>客户邮箱</label><input class="inp" data-bind="cl.email"></div>
+        <div class="fg"><label>客户编号 / 询价号</label><input class="inp" data-bind="cl.ref"></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec">
+    <summary><span class="ico">5</span>运输信息 <em>Shipment</em><span class="arw">▶</span></summary>
+    <div class="sec-body" id="transBody"></div>
+  </details>
+
+  <details class="sec" open>
+    <summary><span class="ico">6</span>报价明细 <em>Charges</em><span class="arw">▶</span></summary>
+    <div class="sec-body">
+      <div class="row2">
+        <div class="fg"><label>主币种（合计基准）</label><select class="inp" id="mainCur"></select></div>
+        <div class="fg"><label>新增自定义币种</label>
+          <div style="display:flex;gap:5px">
+            <input class="inp" id="curNew" placeholder="如 KZT 哈萨克坚戈" style="flex:1">
+            <button class="btn btn-sm" id="curAdd">＋</button>
+          </div>
+        </div>
+      </div>
+      <div class="hint" style="margin-bottom:10px">同一张报价单可混用多币种（如海运费 USD、国内费用 CNY），系统<b>按币种分别小计，不做汇率折算</b>，符合货代实务惯例。</div>
+      <div id="feeWrap"></div>
+      <button class="addbtn" id="addGroup" style="width:100%;padding:8px">＋ 新增费用分组</button>
+    </div>
+  </details>
+
+  <details class="sec">
+    <summary><span class="ico">7</span>条款 · 银行 · 签署 <em>Terms & Signature</em><span class="arw">▶</span></summary>
+    <div class="sec-body">
+      <div class="fg"><label>备注与条款（每行一条，支持自行编号）</label><textarea class="inp" data-bind="terms" style="min-height:150px"></textarea></div>
+      <label class="chkline"><input type="checkbox" data-bind="opt.bank">显示收款银行信息</label>
+      <div class="fg" style="margin-top:6px"><label>账户名称 Account Name</label><input class="inp" data-bind="bank.acc"></div>
+      <div class="blksep">人民币收款账户（默认 CNY）</div>
+      <div class="row2">
+        <div class="fg"><label>开户银行（人民币）</label><input class="inp" data-bind="bank.name1"></div>
+        <div class="fg"><label>账号（人民币）</label><input class="inp" data-bind="bank.no1"></div>
+      </div>
+      <div class="row2"><div class="fg"><label>SWIFT / 行号</label><input class="inp" data-bind="bank.swift1"></div></div>
+      <div class="blksep">外币收款账户（币种自选）</div>
+      <div class="row2">
+        <div class="fg"><label>开户银行（外币）</label><input class="inp" data-bind="bank.name2"></div>
+        <div class="fg"><label>账号（外币）</label><input class="inp" data-bind="bank.no2"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>收款币种</label><select class="inp" id="bankCur" data-bind="bank.cur2"></select></div>
+        <div class="fg"><label>SWIFT / 行号</label><input class="inp" data-bind="bank.swift2"></div>
+      </div>
+      <hr style="border:none;border-top:1px dashed var(--ui-line);margin:11px 0">
+      <div class="row2">
+        <div class="fg"><label>报价方签字（左栏）</label><input class="inp" data-bind="sign.nameL" placeholder="如：张三"></div>
+        <div class="fg"><label>客户确认签字（右栏）</label><input class="inp" data-bind="sign.nameR" placeholder="如：李四"></div>
+      </div>
+      <label class="chkline"><input type="checkbox" data-bind="stamp.on">加盖电子章（默认不显示）</label>
+      <div id="stampBox" style="display:none;margin-top:7px">
+        <div class="drop" id="stampDrop">点击或拖拽上传电子章图片（建议透明底 PNG）</div>
+        <input type="file" id="stampFile" accept="image/*" hidden>
+        <div class="row2" style="margin-top:8px">
+          <div class="fg"><label>位置</label><select class="inp" data-bind="stamp.pos">
+            <option value="left">报价方签署区</option><option value="right">客户确认区</option><option value="total">合计栏右侧</option>
+          </select></div>
+          <div class="fg"><label>大小 mm</label><input class="inp" type="number" min="18" max="70" data-bind="stamp.size"></div>
+        </div>
+        <div class="row2">
+          <div class="fg"><label>透明度 %</label><input class="inp" type="number" min="20" max="100" data-bind="stamp.op"></div>
+          <div class="fg"><label>旋转角度 °</label><input class="inp" type="number" min="-45" max="45" data-bind="stamp.rot"></div>
+        </div>
+        <div class="row2">
+          <div class="fg"><label>水平微调 mm</label><input class="inp" type="number" data-bind="stamp.dx"></div>
+          <div class="fg"><label>垂直微调 mm</label><input class="inp" type="number" data-bind="stamp.dy"></div>
+        </div>
+        <div class="mini-actions"><button class="btn btn-sm" id="stampDel">移除电子章</button></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec">
+    <summary><span class="ico">8</span>显示选项 <em>Display</em><span class="arw">▶</span></summary>
+    <div class="sec-body">
+      <div class="chkgrid">
+        <label class="chkline"><input type="checkbox" data-bind="opt.idx">显示序号列</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.remark">显示说明列</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.unit">显示单位列</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.qty">显示数量列</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.cur">显示币种列</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.zebra">表格交替底色</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.subtotal">显示分组小计</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.words">显示金额大写</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.trans">显示运输信息</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.sign">显示签署栏</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.foot">显示页脚</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.en">显示英文对照</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.guide">分页参考线</label>
+        <label class="chkline"><input type="checkbox" data-bind="opt.wm">显示水印</label>
+      </div>
+      <div class="fg" style="margin-top:9px"><label>水印文字</label><input class="inp" data-bind="opt.wmText"></div>
+      <div class="fg"><label>页脚文字</label><input class="inp" data-bind="opt.footText"></div>
+    </div>
+  </details>
+</aside>
+
+<!-- ==================== 右侧预览 ==================== -->
+<main class="stage" id="stage">
+  <div class="zoomwrap" id="zoomwrap"><div class="sheet" id="sheet"></div></div>
+</main>
+</div>
+
+<datalist id="dlFee"></datalist>
+<datalist id="dlUnit"></datalist>
+
+<!-- 费用项目选择器 -->
+<div class="mask hide" id="pickMask">
+  <div class="mbox">
+    <div class="mhd">费用项目库 · 勾选后加入报价 <button data-close="pickMask">×</button></div>
+    <div class="mbd"><div class="catcol" id="catCol"></div><div class="itemcol" id="itemCol"></div></div>
+    <div class="mft"><span id="pickInfo">已选 0 项</span><button class="btn" id="pickClear">清空</button><button class="btn btn-primary" id="pickOk">加入报价</button></div>
+  </div>
+</div>
+
+<!-- 打印提示 -->
+<div class="mask hide" id="pdfMask">
+  <div class="mbox sm">
+    <div class="mhd">导出 PDF <button data-close="pdfMask">×</button></div>
+    <div class="mbd pad">
+      <p style="margin-bottom:9px">在弹出的打印窗口中，请按以下设置以保证 <b>PDF 与预览完全一致</b>：</p>
+      <p>① 目标打印机：<b>另存为 PDF</b>（Save as PDF）<br>
+         ② 纸张尺寸：<b>A4</b>　　③ 缩放：<b>默认 / 100%</b><br>
+         ④ 边距：<b>默认</b>（页面边距已内置 12×14mm）<br>
+         ⑤ 勾选 <b>背景图形</b>（Background graphics）<br>
+         ⑥ 取消勾选 <b>页眉和页脚</b></p>
+      <p class="hint" style="margin-top:10px">内容超过一页会自动分页，表头在每页重复，费用行不会被割裂；可在显示选项中开启「分页参考线」提前预判分页位置。</p>
+    </div>
+    <div class="mft"><label class="chkline" style="margin:0"><input type="checkbox" id="pdfNoAsk">不再提示</label><button class="btn btn-primary" id="pdfGo">继续打印</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================================================================
+   1. 基础数据：币种 / 单位 / 配色 / 费用项目库 / 模板
+   ================================================================ */
+var CUR = [
+  ["USD","美元","$"],["CNY","人民币","¥"],["EUR","欧元","€"],["GBP","英镑","£"],["JPY","日元","¥"],
+  ["HKD","港币","HK$"],["TWD","新台币","NT$"],["KRW","韩元","₩"],["SGD","新加坡元","S$"],["AUD","澳元","A$"],
+  ["CAD","加元","C$"],["CHF","瑞士法郎","CHF"],["RUB","俄罗斯卢布","₽"],["INR","印度卢比","₹"],["THB","泰铢","฿"],
+  ["VND","越南盾","₫"],["MYR","马来西亚林吉特","RM"],["IDR","印尼卢比","Rp"],["PHP","菲律宾比索","₱"],
+  ["AED","阿联酋迪拉姆","AED"],["SAR","沙特里亚尔","SAR"],["TRY","土耳其里拉","₺"],["BRL","巴西雷亚尔","R$"],
+  ["MXN","墨西哥比索","MX$"],["CLP","智利比索","CLP"],["ZAR","南非兰特","R"],["NZD","新西兰元","NZ$"],
+  ["SEK","瑞典克朗","kr"],["NOK","挪威克朗","kr"],["DKK","丹麦克朗","kr"],["PLN","波兰兹罗提","zł"],
+  ["CZK","捷克克朗","Kč"],["HUF","匈牙利福林","Ft"],["KZT","哈萨克坚戈","₸"],["EGP","埃及镑","E£"],["NGN","奈拉","₦"]
+];
+var CURNAME_EN = {USD:"US DOLLARS",CNY:"CHINESE YUAN",EUR:"EUROS",GBP:"POUNDS STERLING",JPY:"JAPANESE YEN",HKD:"HONG KONG DOLLARS",SGD:"SINGAPORE DOLLARS",AUD:"AUSTRALIAN DOLLARS",CAD:"CANADIAN DOLLARS",RUB:"RUSSIAN ROUBLES"};
+
+var UNITS = ["票","单","柜","20GP","40GP","40HQ","45HQ","20RF","40RF","CBM","W/M","KG","计费重KG","吨","件","托","板","车","次","天","小时","个","份","%","一式","全程"];
+
+var CONTAINER_TYPES=["20GP","40GP","40HQ","45HQ","20HC","40HC","20RF","40RF","20OT","40OT","20FR","40FR","20TK","40TK","40NOR","20NOR","LCL 拼箱","其他 Other"];
+
+var SCHEMES = [
+  {n:"深蓝 · 浅海蓝",d:"经典货代",c:{primary:"#1A3D68",accent:"#4285B4",text:"#333333",muted:"#707070",tbg:"#F2F7FB"}},
+  {n:"灰青 · 薄荷青",d:"沉稳专业",c:{primary:"#2F4F58",accent:"#599FA8",text:"#2D2D2D",muted:"#6E7A7C",tbg:"#F3F8F8"}},
+  {n:"藏蓝 · 哑光金",d:"高端商务",c:{primary:"#203047",accent:"#A88C5B",text:"#3A3A3A",muted:"#7A7468",tbg:"#F8F6F2"}},
+  {n:"晴空蓝 · 淡天蓝",d:"清爽现代",c:{primary:"#2E75BC",accent:"#92BDE7",text:"#222222",muted:"#777777",tbg:"#F5F9FE"}},
+  {n:"墨绿 · 苔绿",d:"绿色物流",c:{primary:"#2C4A42",accent:"#629484",text:"#333333",muted:"#6F7B76",tbg:"#F3F7F5"}},
+  {n:"自定义配色",d:"自选色盘",c:{primary:"#1A3D68",accent:"#4285B4",text:"#333333",muted:"#707070",tbg:"#F2F7FB"}}
+];
+
+/* ---------- 费用项目库（中文 / English） ---------- */
+var FEE_LIB = {
+"起运港·出口本地费用":[
+"订舱费 / Booking Fee","报关费 / Customs Declaration Fee","报关代理费 / Customs Broker Fee",
+"商检换单费 / CIQ & B/L Exchange Fee","拖车费（内陆运输） / Trucking (Inland Haulage)",
+"港口操作费THC / Terminal Handling Charge","起运港码头操作费OTHC / Origin Terminal Handling",
+"铅封费 / Seal Fee","文件费 / Documentation Fee","提单费 / B/L Fee","电放费 / Telex Release Fee",
+"改单费 / Amendment Fee","并单分单费 / Combine or Split B/L Fee","VGM申报费 / VGM Filing Fee",
+"舱单申报费 / Manifest Filing Fee","港建费 / Port Construction Fee","过磅费 / Weighing Fee",
+"查验服务费 / Customs Inspection Fee","掏箱查验费 / Inspection Devanning Fee","退关费 / Shut-out Fee",
+"押柜费（柜使用费） / Container Usage Fee","提前提柜落箱费 / Pre-pull & Drop-off Fee",
+"熏蒸费 / Fumigation Fee","植检检疫费 / Phytosanitary Fee","打托缠膜费 / Palletizing & Wrapping",
+"装柜装箱费 / Container Loading Charge","仓储费 / Warehouse Storage","仓库操作费 / Warehouse Handling Fee",
+"单证快递费 / Courier Fee","保险费 / Cargo Insurance Premium","银行手续费 / Bank Charge",
+"危险品操作附加费 / DG Handling Surcharge","危险品文件费 / DG Documentation Fee",
+"冷藏箱操作接电费 / Reefer Handling & Plug-in","超重超尺寸操作费 / Overweight or OOG Handling"],
+
+"舱单申报（按目的国）":[
+"AMS申报费（美加） / AMS Filing Fee","ISF申报费（美国10+2） / ISF Filing Fee",
+"ENS申报费（欧盟） / ENS Filing Fee","ICS2申报费（欧盟） / ICS2 Filing Fee",
+"AFR申报费（日本） / AFR Filing Fee","ACI申报费（加拿大） / ACI Filing Fee",
+"CCAM申报费（墨西哥） / CCAM Filing Fee","巴西DUV申报费 / DUV Filing Fee"],
+
+"海运费及附加费":[
+"海运基本运费 / Ocean Freight (Basic)","燃油附加费BAF / Bunker Adjustment Factor",
+"低硫燃油附加费LSS / Low Sulphur Surcharge","紧急燃油附加费EBS / Emergency Bunker Surcharge",
+"货币贬值附加费CAF / Currency Adjustment Factor","旺季附加费PSS / Peak Season Surcharge",
+"综合费率上涨GRI / General Rate Increase","运价恢复ERR / Emergency Rate Restoration",
+"港口拥堵附加费PCS / Port Congestion Surcharge","设备不平衡附加费EIS / Equipment Imbalance Surcharge",
+"设备管理费（箱管费） / Equipment Management Fee","巴拿马运河附加费 / Panama Canal Surcharge",
+"苏伊士运河附加费 / Suez Canal Surcharge","好望角绕行附加费 / Cape Diversion Surcharge",
+"战争风险附加费WRS / War Risk Surcharge","超重附加费OWS / Overweight Surcharge",
+"超尺寸附加费 / Out of Gauge Surcharge","冷藏附加费 / Reefer Surcharge",
+"危险品附加费 / Dangerous Goods Surcharge","转船附加费 / Transshipment Surcharge",
+"碳排放附加费EU ETS / Emission Surcharge","内陆段运费IHC / Inland Haulage Charge",
+"铁路联运附加费IPI / Rail Intermodal Surcharge","最低收费 / Minimum Charge"],
+
+"目的港·进口费用":[
+"目的港码头操作费DTHC / Destination Terminal Handling","目的港文件费 / Destination Documentation Fee",
+"换单费 / D/O Fee","到港通知费 / Arrival Notice Fee","清关服务费 / Customs Clearance Fee",
+"关税（代垫） / Import Duty (Advanced)","增值税消费税（代垫） / VAT or GST (Advanced)",
+"清关保函费 / Customs Bond Fee","单次清关保函SEB / Single Entry Bond","年度清关保函 / Continuous Bond",
+"海关查验费 / Customs Exam Fee","X光机查验费 / X-Ray Exam Fee","掏箱查验费 / Intensive Exam (Devanning)",
+"拆箱掏箱费 / Devanning or Unloading Charge","内陆送货费 / Inland Delivery or Drayage",
+"底盘车使用费 / Chassis Usage Fee","码头拥堵费PierPass·TMF / Traffic Mitigation Fee",
+"清洁卡车费（美西） / Clean Truck Fee","预提费 / Pre-pull Fee","堆场仓储费 / Yard Storage Fee",
+"滞港费 / Demurrage","滞箱费 / Detention","还空箱费 / Empty Return Charge",
+"卡车燃油附加费 / Trucking Fuel Surcharge","住宅地址派送费 / Residential Delivery Fee",
+"尾板车叉车费 / Liftgate Fee","等候滞留费 / Waiting Time Charge",
+"预约进仓费 / Delivery Appointment Fee","偏远地区附加费 / Remote Area Surcharge",
+"目的港CFS拼箱费 / Destination CFS Charge","目的港交货费DDC / Destination Delivery Charge"],
+
+"空运专项":[
+"空运基本运费 / Air Freight (Basic)","燃油附加费FSC / Fuel Surcharge","安全附加费SSC / Security Surcharge",
+"战争险附加费 / War Risk Surcharge (Air)","舱位保证费 / Space Guarantee Fee","最低收费 / Minimum Charge",
+"空运单费AWB / Air Waybill Fee","分单费HAWB / House AWB Fee","机场地面操作费 / Airport Terminal Handling",
+"安检过机费 / Screening or X-Ray Fee","提货费（工厂到机场） / Pick-up Charge",
+"危险品处理费 / DG Handling Fee (Air)","锂电池附加费 / Lithium Battery Surcharge",
+"冷链温控附加费 / Cold Chain Surcharge","活体动物操作费 / Live Animal Handling",
+"超大超重操作费 / Oversize or Overweight Handling","木箱包装费 / Crating Fee",
+"打托组板费 / ULD Build-up Charge","ULD使用费 / ULD Rental",
+"到货通知费 / Arrival Notice Fee (Air)","目的机场操作费 / Destination Airport THC",
+"机场仓储费 / Airport Storage Fee","清关及派送 / Clearance & Delivery (Air)"],
+
+"铁路·中欧班列专项":[
+"铁路基本运费 / Rail Freight (Basic)","铁路订舱费 / Rail Booking Fee",
+"场站操作费 / Terminal Handling (Rail Yard)","吊装装卸费 / Lifting Charge",
+"拖车费（工厂到装车站） / Trucking to Rail Terminal","关封转关费 / Customs Transit Sealing Fee",
+"铁路运单费 / SMGS Waybill Fee","换装费（宽轨换装） / Gauge Change Handling",
+"边境口岸手续费 / Border Crossing Handling Fee","冬季保温加温柜费 / Winter Heating Container Fee",
+"温控箱设备费 / Temperature Controlled Container Fee","铁路保险费（强制） / Rail Cargo Insurance",
+"木质包装熏蒸IPPC / Wood Packaging Fumigation","目的站清关T1 / Destination Clearance (T1)",
+"T1转关文件费 / T1 Transit Document Fee","中转换单费 / Transit Document Handover",
+"目的站装卸费 / Destination Loading Charge","目的站仓储费 / Destination Station Storage",
+"箱使滞留费 / Container Detention (Rail)","欧洲段卡车派送 / European Trucking Delivery",
+"超重超尺寸附加费 / Overweight or OOG Surcharge (Rail)","危险品附加费 / DG Surcharge (Rail)"],
+
+"全程物流·尾程派送":[
+"门到门全包价 / Door-to-Door All-in Rate","上门提货费 / Pick-up at Shipper",
+"出口报关及单证 / Export Clearance & Documents","主运费（海空铁） / Main Freight",
+"目的国清关 / Import Customs Clearance","关税及税金代缴 / Duty & Tax Payment Service",
+"尾程派送费 / Final Mile Delivery","亚马逊仓库派送 / Amazon FBA Delivery",
+"预约进仓费 / Warehouse Appointment Fee","贴标换标服务 / Labeling Service",
+"分拣重新包装 / Sorting & Repacking","海外仓仓储费 / Overseas Warehouse Storage",
+"海外仓操作费 / Overseas Warehouse Handling","一件代发费 / Dropshipping Fulfillment",
+"退货处理费 / Return Handling Fee","项目管理服务费 / Project Management Fee",
+"供应链垫资费 / Advance Payment Fee","全程保险 / All-risk Insurance (Door to Door)",
+"超区附加费 / Extended Area Surcharge","卸货人工费 / Unloading Labor Fee"],
+
+"单证·认证·其他":[
+"服务费代理费 / Service or Agency Fee","加班费 / Overtime Fee","更改航次费 / Vessel Change Fee",
+"取消订舱费 / Cancellation Fee","空放费 / Dead Freight","产地证CO / Certificate of Origin Fee",
+"FORM E / FORM E Certificate","领事认证 / Consular Legalization","使馆认证 / Embassy Attestation",
+"熏蒸证书费 / Fumigation Certificate","质检报告费 / Inspection Certificate",
+"免熏蒸声明 / Non-wood Declaration","保险单费 / Insurance Policy Fee",
+"汇率波动调整 / Exchange Rate Adjustment","税费 / Taxes","其他费用 / Others"]
+};
+
+/* ---------- 模板 ---------- */
+function G(n,items){return {name:n,items:items.map(function(x){return {name:x[0],rk:x[1]||"",unit:x[2]||"票",qty:x[3]===undefined?1:x[3],price:x[4]===undefined?"":x[4],cur:x[5]||"",off:!!x[6]};})};}
+
+var TEMPLATES = {
+BLANK:{label:"空白模板",en:"BLANK",trans:{},cur:"USD",
+  groups:[G("费用明细 Charges",[["","","票",1,""],["","","票",1,""],["","","票",1,""]])],
+  terms:"1. 本报价为不含税报价，除特别注明外不含目的国关税、增值税及任何政府征收费用。\n2. 报价有效期以本单载明日期为准，逾期需重新核价。\n3. 海关查验、熏蒸、超重超限、滞港滞箱等实际发生费用按实报实销。\n4. 本报价基于上述货物信息，如实际品名、重量、体积或箱型变更，费用需重新核算。\n5. 付款方式：见双方另行确认的结算约定。"},
+
+FCL:{label:"海运整柜 FCL",en:"FCL",cur:"USD",
+  trans:{mode:"海运整柜 FCL",inco:"FOB",ctyp:"40HQ",cqty:"1",vol:"",pkg:"",free:"目的港免箱期 14 天"},
+  groups:[
+    G("一、起运港费用 Origin Charges",[
+      ["订舱费 / Booking Fee","每票","票",1,"",  "CNY"],
+      ["报关费 / Customs Declaration Fee","含电子申报","票",1,"","CNY"],
+      ["拖车费（内陆运输） / Trucking (Inland Haulage)","工厂至装货港","柜",1,"","CNY"],
+      ["港口操作费THC / Terminal Handling Charge","起运港码头操作","40HQ",1,"","CNY"],
+      ["铅封费 / Seal Fee","","柜",1,"","CNY"],
+      ["文件费 / Documentation Fee","含提单","单",1,"","CNY"],
+      ["VGM申报费 / VGM Filing Fee","SOLAS 强制","柜",1,"","CNY"],
+      ["AMS申报费（美加） / AMS Filing Fee","美加线必报","单",1,"","USD"],
+      ["ISF申报费（美国10+2） / ISF Filing Fee","美国进口必报","单",1,"","USD"],
+      ["电放费 / Telex Release Fee","如需","单",1,"","CNY",true]]),
+    G("二、海运费及附加费 Ocean Freight & Surcharges",[
+      ["海运基本运费 / Ocean Freight (Basic)","","40HQ",1,"","USD"],
+      ["低硫燃油附加费LSS / Low Sulphur Surcharge","","40HQ",1,"","USD"],
+      ["旺季附加费PSS / Peak Season Surcharge","随船司公告调整","40HQ",1,"","USD"],
+      ["设备管理费 / Equipment Management Fee","","40HQ",1,"","USD"]]),
+    G("三、目的港费用 Destination Charges",[
+      ["目的港码头操作费DTHC / Destination Terminal Handling","收货人支付","40HQ",1,"","USD"],
+      ["换单费 / D/O Fee","","单",1,"","USD"],
+      ["清关服务费 / Customs Clearance Fee","不含关税","票",1,"","USD"],
+      ["底盘车使用费 / Chassis Usage Fee","美线按天计","天",1,"","USD",true],
+      ["内陆送货费 / Inland Delivery or Drayage","按实际地址核算","柜",1,"","USD",true],
+      ["滞港费 / Demurrage","超免期实报实销","天",1,"","USD",true]]),
+    G("四、其他费用 Others",[
+      ["保险费 / Cargo Insurance Premium","按 CIF 货值 110% × 0.1%","票",1,"","USD",true],
+      ["产地证CO / Certificate of Origin Fee","如需","份",1,"","CNY",true],
+      ["单证快递费 / Courier Fee","","票",1,"","CNY",true]])],
+  terms:"1. 本报价为整柜（FCL）报价，基于上述箱型箱量与航线，实际舱位以船公司确认为准。\n2. 报价有效期以本单载明日期为准，海运费随船公司运价调整（GRI / PSS / 燃油附加费）需重新核价。\n3. 报价不含目的国关税、增值税及任何政府征收费用；不含收货人一侧另行发生的仓储、超时费用。\n4. 目的港免箱期以船公司实际给出为准，超期滞箱费、滞港费按船公司标准实报实销。\n5. 海关查验、熏蒸、掏箱、超重超限（单柜货重超限）等实际发生费用按实报实销。\n6. 危险品、冷藏、超尺寸货物需另行申报核价，本报价不适用。\n7. 付款方式：出运前付清 / 月结（以双方合同约定为准）。"},
+
+LCL:{label:"海运拼箱 LCL",en:"LCL",cur:"USD",
+  trans:{mode:"海运拼箱 LCL",inco:"FOB",ctyp:"LCL 拼箱",cqty:"拼箱 LCL",vol:"12.5 CBM / 4,800 KGS",pkg:"",free:"最低计费 1 CBM"},
+  groups:[
+    G("一、起运港费用 Origin Charges",[
+      ["拼箱操作费CFS / CFS Charge","按体积计","CBM",1,"","CNY"],
+      ["送仓费 / Trucking to CFS","工厂至拼箱仓库","车",1,"","CNY"],
+      ["报关费 / Customs Declaration Fee","","票",1,"","CNY"],
+      ["文件费 / Documentation Fee","","单",1,"","CNY"],
+      ["VGM申报费 / VGM Filing Fee","","票",1,"","CNY"],
+      ["仓库操作费 / Warehouse Handling Fee","进仓卸货","CBM",1,"","CNY"],
+      ["木质包装熏蒸 / Wood Packaging Fumigation","如有木托","托",1,"","CNY",true]]),
+    G("二、海运费 Ocean Freight（按 W/M 计费）",[
+      ["海运基本运费 / Ocean Freight (Basic)","重量吨与尺码吨取大","W/M",1,"","USD"],
+      ["低硫燃油附加费LSS / Low Sulphur Surcharge","","CBM",1,"","USD"],
+      ["港口拥堵附加费PCS / Port Congestion Surcharge","如产生","CBM",1,"","USD",true],
+      ["最低收费 / Minimum Charge","不足最低量按最低收","票",1,"","USD",true]]),
+    G("三、目的港费用 Destination Charges",[
+      ["目的港CFS拼箱费 / Destination CFS Charge","","CBM",1,"","USD"],
+      ["目的港交货费DDC / Destination Delivery Charge","","CBM",1,"","USD"],
+      ["换单费 / D/O Fee","","单",1,"","USD"],
+      ["拆箱费 / Devanning Charge","","CBM",1,"","USD"],
+      ["清关服务费 / Customs Clearance Fee","不含关税","票",1,"","USD"],
+      ["内陆送货费 / Inland Delivery","按实际地址核算","票",1,"","USD",true],
+      ["仓储费 / Warehouse Storage","超免期实报实销","天",1,"","USD",true]])],
+  terms:"1. 本报价为拼箱（LCL）报价，海运费按 W/M（重量吨与尺码吨取大）计费，最低计费 1 CBM。\n2. 单件超长（>3M）、超重（>1000KGS/件）、超高需另行核价，本报价不适用。\n3. 报价不含目的国关税、增值税及任何政府征收费用。\n4. 目的港仓库免仓期以实际仓库规定为准，超期仓储费按实报实销。\n5. 木质包装须有 IPPC 标识，否则熏蒸费用及延误责任由发货方承担。\n6. 危险品、粉末、液体、磁检货物需提前申报，另行核价。\n7. 实际体积与重量以拼箱仓库入库理货数据为最终结算依据。"},
+
+AIR:{label:"空运 AIR",en:"AIR",cur:"USD",
+  trans:{mode:"空运 AIR",inco:"FOB",ctyp:"不适用 N/A",cqty:"不适用 N/A",vol:"计费重 860 KGS",pkg:"",time:"3-5 天（直飞）"},
+  groups:[
+    G("一、起运地费用 Origin Charges",[
+      ["提货费（工厂到机场） / Pick-up Charge","","车",1,"","CNY"],
+      ["报关费 / Customs Declaration Fee","","票",1,"","CNY"],
+      ["空运单费AWB / Air Waybill Fee","","单",1,"","CNY"],
+      ["机场地面操作费 / Airport Terminal Handling","","计费重KG",1,"","CNY"],
+      ["安检过机费 / Screening Fee","","计费重KG",1,"","CNY"],
+      ["打托组板费 / ULD Build-up Charge","如需","托",1,"","CNY",true],
+      ["木箱包装费 / Crating Fee","如需","件",1,"","CNY",true]]),
+    G("二、空运费及附加费 Air Freight & Surcharges",[
+      ["空运基本运费 / Air Freight (Basic)","计费重 = 实重与体积重（CBM×167）取大","计费重KG",1,"","USD"],
+      ["燃油附加费FSC / Fuel Surcharge","","计费重KG",1,"","USD"],
+      ["安全附加费SSC / Security Surcharge","","计费重KG",1,"","USD"],
+      ["危险品处理费 / DG Handling Fee (Air)","如属危险品","票",1,"","USD",true],
+      ["最低收费 / Minimum Charge","不足最低重量按最低收","票",1,"","USD",true]]),
+    G("三、目的地费用 Destination Charges",[
+      ["到货通知费 / Arrival Notice Fee","","单",1,"","USD"],
+      ["目的机场操作费 / Destination Airport THC","","计费重KG",1,"","USD"],
+      ["清关服务费 / Customs Clearance Fee","不含关税","票",1,"","USD"],
+      ["派送费 / Delivery Charge","按实际地址核算","票",1,"","USD",true],
+      ["机场仓储费 / Airport Storage Fee","超免期实报实销","天",1,"","USD",true]])],
+  terms:"1. 空运计费重量 = 实际毛重与体积重量（体积 CBM × 167）取大者，最终以航空公司实际过磅数据为准。\n2. 报价基于上述货量与航线，舱位与航班以航空公司实际确认为准，旺季舱位可能需加价。\n3. 燃油附加费（FSC）与安全附加费（SSC）随航空公司公告调整，调整后按新标准执行。\n4. 报价不含目的国关税、增值税及任何政府征收费用。\n5. 危险品、锂电池、液体、粉末、磁性货物须提供 MSDS 及鉴定书，另行核价。\n6. 机场免仓期以目的地机场规定为准，超期仓储费按实报实销。\n7. 超大超重货物（单件超板尺寸/重量）须提前申报，另行核价。"},
+
+RAIL:{label:"中欧班列 RAIL",en:"RAIL",cur:"USD",
+  trans:{mode:"中欧班列 RAIL",inco:"FOB",ctyp:"40HQ",cqty:"1",vol:"",pkg:"",time:"18-25 天（口岸至目的站）"},
+  groups:[
+    G("一、国内段费用 Domestic Charges",[
+      ["拖车费（工厂到装车站） / Trucking to Rail Terminal","","柜",1,"","CNY"],
+      ["报关费 / Customs Declaration Fee","","票",1,"","CNY"],
+      ["关封转关费 / Customs Transit Sealing Fee","如需转关","票",1,"","CNY",true],
+      ["场站操作费 / Terminal Handling (Rail Yard)","","柜",1,"","CNY"],
+      ["吊装装卸费 / Lifting Charge","","柜",1,"","CNY"],
+      ["铁路运单费 / SMGS Waybill Fee","","单",1,"","CNY"],
+      ["木质包装熏蒸IPPC / Wood Packaging Fumigation","如有木托","托",1,"","CNY",true]]),
+    G("二、铁路运费及附加费 Rail Freight & Surcharges",[
+      ["铁路基本运费 / Rail Freight (Basic)","国内站至目的站","40HQ",1,"","USD"],
+      ["铁路订舱费 / Rail Booking Fee","","柜",1,"","USD"],
+      ["换装费（宽轨换装） / Gauge Change Handling","阿拉山口 / 满洲里 / 二连浩特","柜",1,"","USD"],
+      ["边境口岸手续费 / Border Crossing Handling Fee","","柜",1,"","USD"],
+      ["铁路保险费（强制） / Rail Cargo Insurance","按货值计","票",1,"","USD"],
+      ["冬季保温加温柜费 / Winter Heating Container Fee","11月-次年3月","柜",1,"","USD",true]]),
+    G("三、目的站费用 Destination Charges",[
+      ["目的站清关T1 / Destination Clearance (T1)","","票",1,"","EUR"],
+      ["T1转关文件费 / T1 Transit Document Fee","","单",1,"","EUR"],
+      ["目的站装卸费 / Destination Loading Charge","","柜",1,"","EUR"],
+      ["欧洲段卡车派送 / European Trucking Delivery","按实际地址核算","柜",1,"","EUR",true],
+      ["目的站仓储费 / Destination Station Storage","超免期实报实销","天",1,"","EUR",true],
+      ["箱使滞留费 / Container Detention (Rail)","超免期实报实销","天",1,"","EUR",true]])],
+  terms:"1. 本报价为中欧班列整柜报价，班期以铁路平台实际放舱为准，运输时效为参考值不构成承诺。\n2. 铁路运输强制投保货物运输险，保费按申报货值计收，请如实申报。\n3. 冬季（11月至次年3月）走保温或加温柜的货物须提前申报，费用另计。\n4. 报价不含目的国关税、增值税及任何政府征收费用；T1 转关另需提供完整单证。\n5. 危险品、粉末、液体、食品类货物须提前申报并核实口岸准入，另行核价。\n6. 木质包装须有 IPPC 标识，货物须适箱加固，因加固不当造成的货损由发货方承担。\n7. 目的站免费堆存期以站场规定为准，超期堆存费与箱使费按实报实销。"},
+
+ONESTOP:{label:"全程物流 ONE-STOP",en:"ONE-STOP",cur:"USD",
+  trans:{mode:"门到门全程物流 DDP",inco:"DDP",ctyp:"LCL 拼箱",cqty:"拼箱 LCL",vol:"18 CBM / 3,200 KGS",pkg:"",time:"32-38 天（门到门）"},
+  groups:[
+    G("一、全程打包价 Door-to-Door All-in",[
+      ["门到门全包价 / Door-to-Door All-in Rate","含提货、报关、主运费、清关、派送","KG",1,"","USD"]]),
+    G("二、分段明细 Segment Breakdown（含于全包价内）",[
+      ["上门提货费 / Pick-up at Shipper","","车",1,"0","USD"],
+      ["出口报关及单证 / Export Clearance & Documents","","票",1,"0","USD"],
+      ["主运费（海空铁） / Main Freight","","票",1,"0","USD"],
+      ["目的国清关 / Import Customs Clearance","","票",1,"0","USD"],
+      ["尾程派送费 / Final Mile Delivery","","票",1,"0","USD"]]),
+    G("三、税金代缴 Duty & Tax",[
+      ["关税及税金代缴 / Duty & Tax Payment Service","按目的国税则实报实销","票",1,"","USD",true],
+      ["供应链垫资费 / Advance Payment Fee","按代垫金额比例","%",1,"","USD",true]]),
+    G("四、尾程增值服务 Value-added（按需选用）",[
+      ["亚马逊仓库派送 / Amazon FBA Delivery","含预约","票",1,"","USD",true],
+      ["预约进仓费 / Warehouse Appointment Fee","","次",1,"","USD",true],
+      ["贴标换标服务 / Labeling Service","","件",1,"","USD",true],
+      ["海外仓仓储费 / Overseas Warehouse Storage","","CBM",1,"","USD",true],
+      ["一件代发费 / Dropshipping Fulfillment","","件",1,"","USD",true],
+      ["住宅地址派送费 / Residential Delivery Fee","","票",1,"","USD",true],
+      ["尾板车叉车费 / Liftgate Fee","","次",1,"","USD",true],
+      ["超区附加费 / Extended Area Surcharge","","票",1,"","USD",true],
+      ["全程保险 / All-risk Insurance","货值 × 0.3%","票",1,"","USD",true]])],
+  terms:"1. 本报价为门到门（DDP）全程包干价，含起运地提货、出口报关、主运费、目的国清关与尾程派送。\n2. 全包价基于上述货量与货值，如实际重量体积、品名归类、货值申报与本单不符，费用需重新核算。\n3. 关税及进口环节税金按目的国税则据实产生，由我方代缴后凭凭据结算，非包干范围。\n4. 派送地址须为可正常卸货的商业地址；住宅地址、偏远地区、需尾板车或预约的另计附加费。\n5. 报价不含目的国海关查验、扣货处理、退运及销毁等异常费用，发生时按实报实销。\n6. 侵权、违禁、危险品、品牌授权不全货物不在承运范围，由此产生的一切后果由发货方承担。\n7. 时效为正常情况下的参考值，不含清关查验、天气、罢工等不可控因素造成的延误。"}
+};
+
+/* ================================================================
+   2. 工具函数
+   ================================================================ */
+function $(s){return document.querySelector(s);}
+function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function num(v){var n=parseFloat(String(v).replace(/[,\s，]/g,""));return isFinite(n)?n:null;}
+function fmt(n){return n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function getPath(o,p){return p.split(".").reduce(function(a,k){return a==null?a:a[k];},o);}
+function setPath(o,p,v){var ks=p.split("."),last=ks.pop(),t=ks.reduce(function(a,k){if(a[k]==null)a[k]={};return a[k];},o);t[last]=v;}
+function splitName(s){var i=String(s||"").indexOf(" / ");return i>0?[s.slice(0,i),s.slice(i+3)]:[s||"",""];}
+function today(d){d=d||new Date();var m=("0"+(d.getMonth()+1)).slice(-2),day=("0"+d.getDate()).slice(-2);return d.getFullYear()+"-"+m+"-"+day;}
+function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return today(d);}
+function dateCN(s){if(!s)return"";var p=String(s).split("-");return p.length===3?p[0]+"-"+p[1]+"-"+p[2]:s;}
+function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove("on");},1900);}
+function curInfo(code){for(var i=0;i<CUR.length;i++)if(CUR[i][0]===code)return CUR[i];var x=(S.extraCur||[]).filter(function(c){return c[0]===code;})[0];return x||[code,code,code];}
+
+/* 人民币中文大写 */
+function cnUpper(n){
+  var D="零壹贰叁肆伍陆柒捌玖".split(""),U=["","拾","佰","仟","万","拾","佰","仟","亿","拾","佰","仟","万亿"];
+  var neg=n<0;n=Math.abs(Math.round(n*100)/100);
+  var int=Math.floor(n),cents=Math.round((n-int)*100),s="";
+  if(int===0)s="零";
+  else{
+    var ds=String(int).split(""),len=ds.length,z=false;
+    for(var i=0;i<len;i++){
+      var d=+ds[i],pos=len-1-i;
+      if(d===0){z=true;if(pos===4||pos===8){s+=U[pos];z=false;}}
+      else{if(z&&s)s+="零";s+=D[d]+U[pos];z=false;}
+    }
+    s=s.replace(/零+/g,"零").replace(/^零+/,"").replace(/亿万/g,"亿").replace(/零$/,"");
+  }
+  var out=s+"元";
+  if(cents===0)out+="整";
+  else{var j=Math.floor(cents/10),f=cents%10;if(j)out+=D[j]+"角";if(f)out+=(j?"":"零")+D[f]+"分";}
+  return (neg?"负":"")+out;
+}
+/* 英文金额大写 */
+function enUpper(n,code){
+  var O=["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN"];
+  var T=["","","TWENTY","THIRTY","FORTY","FIFTY","SIXTY","SEVENTY","EIGHTY","NINETY"];
+  function tri(x){var r="";if(x>=100){r+=O[Math.floor(x/100)]+" HUNDRED";x%=100;if(x)r+=" AND ";}
+    if(x>=20){r+=T[Math.floor(x/10)];if(x%10)r+="-"+O[x%10];}else if(x>0)r+=O[x];return r;}
+  n=Math.round(Math.abs(n)*100)/100;
+  var int=Math.floor(n),cents=Math.round((n-int)*100),g=["","THOUSAND","MILLION","BILLION","TRILLION"],parts=[],i=0;
+  if(int===0)parts.push("ZERO");
+  while(int>0){var c=int%1000;if(c)parts.unshift(tri(c)+(g[i]?" "+g[i]:""));int=Math.floor(int/1000);i++;}
+  var name=CURNAME_EN[code]||(code+" ");
+  return "SAY "+name+" "+parts.join(" ")+(cents?" AND "+cents+"/100":"")+" ONLY";
+}
+
+/* ================================================================
+   3. 状态
+   ================================================================ */
+var TRANS_FIELDS=[
+ ["mode","运输方式","Mode"],["inco","贸易条款","Incoterms"],["carrier","承运人 / 船司","Carrier"],
+ ["pol","起运港 / 装货地","POL"],["pod","目的港 / 交货地","POD"],["ts","中转港","T/S Port"],
+ ["voy","船名航次 / 航班","Vessel & Voyage"],["etd","预计开航 ETD","ETD"],["eta","预计到港 ETA","ETA"],
+ ["time","航程时效","Transit Time"],["ctyp","箱型 Container Type","Container Type"],["cqty","箱量 Qty","Qty"],["cargo","品名","Commodity"],["vol","货量 Volume","Volume"],["pkg","件数包装 Packages","Packages"],
+ ["gw","毛重","G.W."],["cbm","体积","Measurement"],
+ ["pay","付款方式","Payment Terms"],["free","免箱期 / 免仓期","Free Time"],["route","航线服务","Service Route"]
+];
+
+function defState(){
+  return {
+    tpl:"FCL",sch:0,custom:JSON.parse(JSON.stringify(SCHEMES[5].c)),extraCur:[],
+    logo:{src:"",h:44},
+    co:{name:"航运派国际物流有限公司",nameEn:"Trans Pi International Logistics Co., Ltd.",addr:"广东省深圳市南山区科技园南区某大厦 20 层",tel:"+86 755-8888 6666",fax:"+86 755-8888 6688",email:"sales@transpi.com",web:"www.transpi.cn"},
+    q:{title:"货运报价单",titleEn:"FREIGHT QUOTATION",no:"QT"+today().replace(/-/g,"")+"-001",date:today(),valid:addDays(14),sales:"",salesTel:"",salesEmail:""},
+    cl:{name:"",contact:"",tel:"",email:"",ref:""},
+    trans:{},cur:"USD",groups:[],terms:"",
+    bank:{acc:"",name1:"",no1:"",swift1:"",name2:"",no2:"",cur2:"USD",swift2:""},
+    sign:{lt:"报价方 / Quoted By",rt:"客户确认 / Confirmed By",nameL:"",nameR:""},
+    stamp:{on:false,src:"",pos:"left",size:34,op:88,rot:-8,dx:0,dy:0},
+    opt:{idx:true,remark:true,unit:true,qty:true,cur:true,zebra:true,subtotal:true,words:true,
+         trans:true,sign:true,foot:true,en:true,guide:false,wm:false,bank:false,
+         wmText:"QUOTATION",footText:"本报价单由系统生成，如有疑问请联系上述业务联系人。 / Generated quotation, please contact us for any clarification."}
+  };
+}
+var S=defState();
+
+/* ================================================================
+   4. 面板构建
+   ================================================================ */
+function buildTplGrid(){
+  var h="";
+  Object.keys(TEMPLATES).forEach(function(k){
+    var t=TEMPLATES[k];
+    h+='<button class="tpl'+(S.tpl===k?" on":"")+'" data-tpl="'+k+'"><b>'+esc(t.label)+'</b><span>'+esc(t.en)+'</span></button>';
+  });
+  $("#tplGrid").innerHTML=h;
+}
+function buildSchGrid(){
+  var h="";
+  SCHEMES.forEach(function(s,i){
+    h+='<button class="sch'+(S.sch===i?" on":"")+'" data-sch="'+i+'"><b>'+esc(s.n)+'</b><div class="sw">'+
+       '<i style="background:'+s.c.primary+'"></i><i style="background:'+s.c.accent+'"></i>'+
+       '<i style="background:'+s.c.tbg+'"></i><i style="background:'+s.c.text+'"></i></div></button>';
+  });
+  $("#schGrid").innerHTML=h;
+  $("#ccBox").style.display=S.sch===5?"block":"none";
+  ["primary","accent","text","muted","tbg"].forEach(function(k){
+    var a=document.querySelector('[data-cc="'+k+'"]'),b=document.querySelector('[data-cct="'+k+'"]');
+    if(a)a.value=S.custom[k];if(b)b.value=S.custom[k];
+  });
+}
+function buildTransPanel(){
+  var h="";
+  TRANS_FIELDS.forEach(function(f){
+    if(f[0]==="ctyp"){
+      h+='<div class="fg"><label>'+esc(f[1])+' <span style="opacity:.6">'+esc(f[2])+'</span></label>'+
+         '<select class="inp" data-bind="trans.ctyp" data-nosync>'+containerOptions(S.trans.ctyp)+'</select></div>';
+      return;
+    }
+    h+='<div class="fg"><label>'+esc(f[1])+' <span style="opacity:.6">'+esc(f[2])+'</span></label><input class="inp" data-bind="trans.'+f[0]+'" placeholder="留空则不显示该行"></div>';
+  });
+  h+='<div class="hint">留空的字段不会出现在报价单上。</div>';
+  $("#transBody").innerHTML=h;
+  var cs=document.querySelector('[data-bind="trans.ctyp"]');
+  if(cs)cs.addEventListener("change",function(){
+    if(this.value==="__custom__"){
+      var v=prompt("请输入自定义箱型（如：40NOR）：","");
+      S.trans.ctyp=v?v.trim():"";
+      buildTransPanel();renderSheet();save();
+    }
+  });
+}
+function containerOptions(sel){
+  var list=CONTAINER_TYPES.slice();
+  if(sel&&list.indexOf(sel)<0)list.unshift(sel);
+  var h=list.map(function(u){return '<option value="'+esc(u)+'"'+(u===sel?' selected':'')+'>'+esc(u)+'</option>';}).join("");
+  h+='<option value="__custom__">✎ 自定义箱型…</option>';
+  return h;
+}
+function buildCurSelect(){
+  var all=CUR.concat(S.extraCur||[]),h="";
+  all.forEach(function(c){h+='<option value="'+esc(c[0])+'">'+esc(c[0])+" "+esc(c[1])+"</option>";});
+  $("#mainCur").innerHTML=h;$("#mainCur").value=S.cur;
+  var bc=$("#bankCur");
+  if(bc){
+    var bh=all.map(function(c){return '<option value="'+esc(c[0])+'"'+(c[0]===(S.bank.cur2||"USD")?' selected':'')+">"+esc(c[0])+" "+esc(c[1])+"</option>";}).join("");
+    bc.innerHTML=bh;
+  }
+}
+function curOptions(sel){
+  var all=CUR.concat(S.extraCur||[]),h='<option value="">同主币种</option>';
+  all.forEach(function(c){h+='<option value="'+esc(c[0])+'"'+(sel===c[0]?" selected":"")+">"+esc(c[0])+"</option>";});
+  return h;
+}
+function buildDatalists(){
+  var seen={},h="";
+  Object.keys(FEE_LIB).forEach(function(k){FEE_LIB[k].forEach(function(x){if(!seen[x]){seen[x]=1;h+='<option value="'+esc(x)+'">';}});});
+  $("#dlFee").innerHTML=h;
+  $("#dlUnit").innerHTML=UNITS.map(function(u){return '<option value="'+esc(u)+'">';}).join("");
+}
+
+/* ---- 费用编辑器 ---- */
+function unitControl(it){
+  var opts=UNITS.slice();
+  if(it.unit&&opts.indexOf(it.unit)<0)opts.unshift(it.unit);
+  if(it._custom){
+    var ti=document.createElement("input");ti.value=it.unit||"";ti.placeholder="自定义单位";ti.title="自定义单位（回车确认）";ti.style.textAlign="center";
+    ti.oninput=function(){it.unit=ti.value;renderSheet();save();};
+    return ti;
+  }
+  var sel=document.createElement("select");sel.title="选择计费单位";
+  opts.forEach(function(u){var o=document.createElement("option");o.value=u;o.textContent=u;if(u===it.unit)o.selected=true;sel.appendChild(o);});
+  var co=document.createElement("option");co.value="__custom__";co.textContent="✎ 自定义…";sel.appendChild(co);
+  sel.onchange=function(){
+    if(sel.value==="__custom__"){it._custom=true;var p=sel.parentNode;p.replaceChild(unitControl(it),sel);}
+    else{it.unit=sel.value;it._custom=false;renderSheet();save();}
+  };
+  return sel;
+}
+function buildFeeEditor(){
+  var wrap=$("#feeWrap");wrap.innerHTML="";
+  S.groups.forEach(function(g,gi){
+    var box=document.createElement("div");box.className="grp";
+    var hd=document.createElement("div");hd.className="grp-hd";
+    var gname=document.createElement("input");gname.value=g.name;gname.placeholder="分组名称";
+    gname.oninput=function(){g.name=gname.value;renderSheet();save();};
+    hd.appendChild(gname);
+    [["↑","up","上移分组"],["↓","down","下移分组"],["✕","del","删除分组"]].forEach(function(a){
+      var b=document.createElement("button");b.className="icobtn"+(a[1]==="del"?" dg":"");b.textContent=a[0];b.title=a[2];
+      b.onclick=function(){
+        if(a[1]==="up"&&gi>0){S.groups.splice(gi-1,0,S.groups.splice(gi,1)[0]);}
+        else if(a[1]==="down"&&gi<S.groups.length-1){S.groups.splice(gi+1,0,S.groups.splice(gi,1)[0]);}
+        else if(a[1]==="del"){if(!confirm("删除分组「"+g.name+"」及其所有费用项？"))return;S.groups.splice(gi,1);}
+        buildFeeEditor();renderSheet();save();
+      };hd.appendChild(b);
+    });
+    box.appendChild(hd);
+
+    var bd=document.createElement("div");bd.className="grp-bd";
+    g.items.forEach(function(it,ii){bd.appendChild(feeRow(g,it,gi,ii));});
+    box.appendChild(bd);
+
+    var ft=document.createElement("div");ft.className="grp-ft";
+    var b1=document.createElement("button");b1.className="addbtn";b1.textContent="＋ 空白费用项";
+    b1.onclick=function(){g.items.push({name:"",rk:"",unit:"票",qty:1,price:"",cur:"",off:false});buildFeeEditor();renderSheet();save();};
+    var b2=document.createElement("button");b2.className="addbtn";b2.textContent="☰ 从费用项目库选择";
+    b2.onclick=function(){openPicker(gi);};
+    ft.appendChild(b1);ft.appendChild(b2);box.appendChild(ft);
+    wrap.appendChild(box);
+  });
+}
+function feeRow(g,it,gi,ii){
+  var d=document.createElement("div");d.className="frow";
+  var l1=document.createElement("div");l1.className="fr1";
+  var nm=document.createElement("input");nm.value=it.name;nm.placeholder="费用项目名称（中文 / English）";nm.setAttribute("list","dlFee");
+  nm.oninput=function(){it.name=nm.value;renderSheet();save();};
+  l1.appendChild(nm);
+  [["↑","up"],["↓","down"],["✕","del"]].forEach(function(a){
+    var b=document.createElement("button");b.className="icobtn"+(a[1]==="del"?" dg":"");b.textContent=a[0];
+    b.onclick=function(){
+      if(a[1]==="up"&&ii>0)g.items.splice(ii-1,0,g.items.splice(ii,1)[0]);
+      else if(a[1]==="down"&&ii<g.items.length-1)g.items.splice(ii+1,0,g.items.splice(ii,1)[0]);
+      else if(a[1]==="del")g.items.splice(ii,1);
+      buildFeeEditor();renderSheet();save();
+    };l1.appendChild(b);
+  });
+  d.appendChild(l1);
+
+  var l2=document.createElement("div");l2.className="fr2";
+  var rk=document.createElement("input");rk.value=it.rk||"";rk.placeholder="说明 / 备注（如：含电子申报、按实报实销）";
+  rk.oninput=function(){it.rk=rk.value;renderSheet();save();};
+  l2.appendChild(rk);d.appendChild(l2);
+
+  var l3=document.createElement("div");l3.className="fr3";
+  var u=unitControl(it);
+  var q=document.createElement("input");q.value=it.qty;q.placeholder="数量";
+  q.oninput=function(){it.qty=q.value;renderSheet();save();};
+  var c=document.createElement("select");c.innerHTML=curOptions(it.cur);
+  c.onchange=function(){it.cur=c.value;renderSheet();save();};
+  var p=document.createElement("input");p.value=it.price;p.placeholder="单价（可填文字，如 实报实销）";p.style.textAlign="right";
+  p.oninput=function(){it.price=p.value;renderSheet();save();};
+  var tg=document.createElement("label");tg.className="tg";
+  var cb=document.createElement("input");cb.type="checkbox";cb.checked=!!it.off;cb.title="不计入合计（选装 / 实报实销项）";
+  cb.onchange=function(){it.off=cb.checked;renderSheet();save();};
+  tg.appendChild(cb);tg.appendChild(document.createTextNode("不计"));
+  l3.appendChild(u);l3.appendChild(q);l3.appendChild(c);l3.appendChild(p);l3.appendChild(tg);
+  d.appendChild(l3);
+  return d;
+}
+
+/* ---- 费用项目库选择器 ---- */
+var pickState={gi:0,cat:null,sel:{}};
+function openPicker(gi){
+  pickState.gi=gi;pickState.sel={};pickState.cat=Object.keys(FEE_LIB)[0];
+  var tplPref={FCL:"起运港·出口本地费用",LCL:"起运港·出口本地费用",AIR:"空运专项",RAIL:"铁路·中欧班列专项",ONESTOP:"全程物流·尾程派送"};
+  if(tplPref[S.tpl])pickState.cat=tplPref[S.tpl];
+  renderPicker();$("#pickMask").classList.remove("hide");
+}
+function renderPicker(){
+  var ch="";
+  Object.keys(FEE_LIB).forEach(function(k){
+    ch+='<div class="cat'+(pickState.cat===k?" on":"")+'" data-cat="'+esc(k)+'">'+esc(k)+' <em style="opacity:.6">('+FEE_LIB[k].length+')</em></div>';
+  });
+  $("#catCol").innerHTML=ch;
+  var ih="";
+  FEE_LIB[pickState.cat].forEach(function(x){
+    var p=splitName(x);
+    ih+='<label class="pit"><input type="checkbox" data-item="'+esc(x)+'"'+(pickState.sel[x]?" checked":"")+'><span>'+esc(p[0])+(p[1]?' <em>'+esc(p[1])+'</em>':'')+'</span></label>';
+  });
+  $("#itemCol").innerHTML=ih;
+  $("#pickInfo").textContent="已选 "+Object.keys(pickState.sel).length+" 项";
+}
+
+/* ================================================================
+   5. 报价单渲染
+   ================================================================ */
+function colors(){return S.sch===5?S.custom:SCHEMES[S.sch].c;}
+
+function renderSheet(){
+  var sh=$("#sheet"),c=colors(),o=S.opt;
+  sh.style.setProperty("--c-primary",c.primary);
+  sh.style.setProperty("--c-accent",c.accent);
+  sh.style.setProperty("--c-text",c.text);
+  sh.style.setProperty("--c-muted",c.muted);
+  sh.style.setProperty("--c-tbg",c.tbg);
+
+  var H="";
+  if(o.guide)H+='<div class="pageguide"></div>';
+  if(o.wm&&o.wmText)H+='<div class="wm">'+esc(o.wmText)+"</div>";
+
+  /* 页头 */
+  var right=[S.co.addr,[S.co.tel?"Tel: "+S.co.tel:"",S.co.fax?"Fax: "+S.co.fax:""].filter(Boolean).join("　"),
+             [S.co.email?"E-mail: "+S.co.email:"",S.co.web].filter(Boolean).join("　")].filter(Boolean).join("\n");
+  H+='<div class="qhead"><div class="qh-l">';
+  if(S.logo.src)H+='<img src="'+S.logo.src+'" style="height:'+S.logo.h+'px">';
+  if(S.co.name||S.co.nameEn)
+    H+='<div class="qh-name">'+esc(S.co.name)+(o.en&&S.co.nameEn?'<span class="en">'+esc(S.co.nameEn)+"</span>":"")+"</div>";
+  H+="</div>";
+  if(right)H+='<div class="qh-r">'+esc(right)+"</div>";
+  H+="</div>";
+
+  /* 标题 */
+  H+='<div class="qtitle"><b>'+esc(S.q.title)+"</b>"+(o.en&&S.q.titleEn?"<span>"+esc(S.q.titleEn)+"</span>":"")+"</div>";
+
+  /* 客户 / 单据 */
+  var lrows=[["客户名称 Client",S.cl.name],["联系人 Attn",S.cl.contact],["电话 Tel",S.cl.tel],["邮箱 E-mail",S.cl.email],["询价编号 Ref.",S.cl.ref]];
+  var rrows=[["报价单号 Quote No.",S.q.no],["报价日期 Date",dateCN(S.q.date)],["有效期至 Valid Until",dateCN(S.q.valid)],
+             ["业务联系人 Sales",S.q.sales],["联系方式 Contact",[S.q.salesTel,S.q.salesEmail].filter(Boolean).join(" / ")]];
+  function metaTab(title,rows){
+    var h='<div><div class="mtitle">'+esc(title.split("|")[0])+(o.en?"<span>"+esc(title.split("|")[1]||"")+"</span>":"")+'</div><table class="mtab">';
+    rows.forEach(function(x){
+      var k=x[0].split(" ");
+      h+='<tr><td class="k">'+esc(o.en?x[0]:k[0])+'</td><td class="v">'+esc(x[1]||"")+"</td></tr>";
+    });
+    return h+"</table></div>";
+  }
+  var ml=metaTab("致 / 客户信息|TO / CLIENT",lrows),mr=metaTab("报价信息|QUOTATION INFO",rrows);
+  if(ml||mr)H+='<div class="qmeta">'+(ml||"<div></div>")+(mr||"<div></div>")+"</div>";
+
+  /* 运输信息 */
+  if(o.trans){
+    var cells=TRANS_FIELDS.filter(function(f){return S.trans[f[0]];});
+    if(cells.length){
+      H+='<div class="blk"><div class="blk-h"><b>运输信息'+(o.en?'<span class="en" style="margin-left:6px">SHIPMENT INFORMATION</span>':"")+"</b></div>";
+      var pad=(3-cells.length%3)%3;
+      H+='<div class="sgrid">';
+      var full=["cargo","vol","pkg"];
+      cells.forEach(function(f){
+        var sp=full.indexOf(f[0])>=0?' style="grid-column:1/-1"':"";
+        H+='<div class="cell"'+sp+'><div class="k">'+esc(o.en?f[2]:f[1])+'</div><div class="v">'+esc(S.trans[f[0]])+"</div></div>";
+      });
+      for(var i=0;i<pad;i++)H+='<div class="cell"><div class="k"></div><div class="v"></div></div>';
+      H+="</div></div>";
+    }
+  }
+
+  /* 费用表 */
+  H+='<div class="blk" style="break-inside:auto"><div class="blk-h"><b>报价明细'+(o.en?'<span class="en" style="margin-left:6px">CHARGE DETAILS</span>':"")+
+     '</b><span class="en" style="margin-left:auto">主币种 '+esc(S.cur)+" · "+esc(curInfo(S.cur)[1])+"</span></div>";
+
+  var cols=[];
+  if(o.idx)cols.push(["#","No.",5]);
+  cols.push(["费用项目","ITEM",o.remark?29:44]);
+  if(o.remark)cols.push(["说明 / 备注","REMARK",22]);
+  if(o.unit)cols.push(["单位","UNIT",8]);
+  if(o.qty)cols.push(["数量","QTY",7]);
+  if(o.cur)cols.push(["币种","CUR",7]);
+  cols.push(["单价","UNIT PRICE",11]);
+  cols.push(["金额","AMOUNT",11]);
+  var sum=cols.reduce(function(a,x){return a+x[2];},0);
+  H+='<table class="fee"><colgroup>'+cols.map(function(x){return '<col style="width:'+(x[2]/sum*100).toFixed(3)+'%">';}).join("")+"</colgroup><thead><tr>";
+  cols.forEach(function(x,i){
+    var al=i>=cols.length-2?' style="text-align:right"':(x[0]==="单位"||x[0]==="数量"||x[0]==="币种"||x[0]==="#"?' style="text-align:center"':"");
+    H+="<th"+al+">"+esc(x[0])+(o.en?'<span class="en">'+esc(x[1])+"</span>":"")+"</th>";
+  });
+  H+="</tr></thead><tbody>";
+
+  var totals={},grand=0,n=0,zi=0;
+  S.groups.forEach(function(g){
+    var vis=g.items;
+    if(!vis.length&&!g.name)return;
+    if(g.name)H+='<tr class="grp-tr"><td colspan="'+cols.length+'">'+esc(g.name)+"</td></tr>";
+    var gsub={};
+    vis.forEach(function(it){
+      n++;zi++;
+      var cu=it.cur||S.cur,ci=curInfo(cu);
+      var q=num(it.qty),p=num(it.price),amt=null;
+      if(q!==null&&p!==null)amt=q*p;
+      if(amt!==null&&!it.off){totals[cu]=(totals[cu]||0)+amt;gsub[cu]=(gsub[cu]||0)+amt;}
+      var nm=splitName(it.name);
+      var tds="";
+      if(o.idx)tds+='<td class="mid">'+n+"</td>";
+      tds+="<td><b style=\"font-weight:700\">"+esc(nm[0])+"</b>"+(o.en&&nm[1]?'<span class="en">'+esc(nm[1])+"</span>":"")+"</td>";
+      if(o.remark)tds+='<td class="rk">'+esc(it.rk||"")+"</td>";
+      if(o.unit)tds+='<td class="mid">'+esc(it.unit||"")+"</td>";
+      if(o.qty)tds+='<td class="mid">'+esc(it.qty===""?"":it.qty)+"</td>";
+      if(o.cur)tds+='<td class="mid">'+esc(cu)+"</td>";
+      tds+='<td class="num">'+(p!==null?(o.cur?"":'<span class="amt-cur">'+esc(ci[2])+"</span>")+fmt(p):esc(it.price||""))+"</td>";
+      tds+='<td class="num">'+(amt!==null?"<b>"+(o.cur?"":'<span class="amt-cur">'+esc(ci[2])+"</span>")+fmt(amt)+"</b>":'<span style="color:var(--c-muted)">'+esc(amt===null&&p===null?(it.price||"—"):"—")+"</span>")+
+        (it.off?'<span class="en" style="display:block">选装 Optional</span>':"")+"</td>";
+      H+='<tr class="'+(o.zebra&&zi%2===0?"zebra ":"")+(it.off?"opt":"")+'">'+tds+"</tr>";
+    });
+    if(o.subtotal&&Object.keys(gsub).length){
+      var st=Object.keys(gsub).map(function(k){return k+" "+fmt(gsub[k]);}).join("　+　");
+      H+='<tr class="sub-tr"><td colspan="'+cols.length+'" style="text-align:right">小计 Subtotal：'+esc(st)+"</td></tr>";
+    }
+  });
+  H+="</tbody></table></div>";
+
+  /* 合计 */
+  var keys=Object.keys(totals);
+  H+='<div class="totalbox"><div class="tb" style="position:relative">';
+  if(keys.length===0){
+    H+='<div class="tb-row main"><span class="lbl">合计 TOTAL</span><span class="val">—</span></div>';
+  }else{
+    keys.filter(function(k){return k!==S.cur;}).forEach(function(k){
+      var cc=k==="CNY"?"tb-row cny":"tb-row";
+      H+='<div class="'+cc+'"><span class="lbl">'+esc(k)+" 小计 Subtotal</span><span class=\"val\">"+esc(curInfo(k)[2])+" "+fmt(totals[k])+"</span></div>";
+    });
+    var mainAmt=totals[S.cur]||0;
+    H+='<div class="tb-row main"><span class="lbl">'+esc(S.cur)+" 小计 Subtotal</span><span class=\"val\">"+esc(curInfo(S.cur)[2])+" "+fmt(mainAmt)+"</span></div>";
+    if(o.words){
+      var w=S.cur==="CNY"?("人民币大写：<b>"+esc(cnUpper(mainAmt))+"</b>"):esc(enUpper(mainAmt,S.cur));
+      H+='<div class="tb-words">'+w+(keys.length>1?"<br>多币种报价按币种分别结算，不做汇率折算。 / Multi-currency quotation, settled respectively.":"")+"</div>";
+    }
+  }
+  if(S.stamp.on&&S.stamp.src&&S.stamp.pos==="total")H+=stampTag("right:2mm;bottom:2mm;");
+  H+="</div></div>";
+
+  /* 条款 */
+  if(S.terms&&S.terms.trim()){
+    H+='<div class="blk" style="margin-top:6mm"><div class="blk-h"><b>备注与条款'+(o.en?'<span class="en" style="margin-left:6px">REMARKS & TERMS</span>':"")+
+       '</b></div><div class="terms">'+esc(S.terms)+"</div></div>";
+  }
+  /* 银行 */
+  if(o.bank&&(S.bank.acc||S.bank.name1||S.bank.no1||S.bank.swift1||S.bank.name2||S.bank.no2||S.bank.swift2)){
+    var bcur=S.bank.cur2||S.cur;
+    H+='<div class="blk"><div class="blk-h"><b>收款信息'+(o.en?'<span class="en" style="margin-left:6px">BANK DETAILS</span>':"")+'</b></div><div class="bank">'+
+       (S.bank.acc?"<div style=\"grid-column:1/-1\"><span>账户名称 Account</span>"+esc(S.bank.acc)+"</div>":"")+
+       (S.bank.name1||S.bank.no1||S.bank.swift1
+         ?"<div style=\"grid-column:1/-1;font-weight:700;color:var(--c-primary);margin-top:1mm\">人民币账户 CNY</div>"+
+           (S.bank.name1?"<div><span>开户银行 Bank</span>"+esc(S.bank.name1)+"</div>":"")+
+           (S.bank.no1?"<div><span>账号 A/C No.</span>"+esc(S.bank.no1)+"</div>":"")+
+           (S.bank.swift1?"<div><span>SWIFT / 行号</span>"+esc(S.bank.swift1)+"</div>":"")
+         :"")+
+       (S.bank.name2||S.bank.no2||S.bank.swift2
+         ?"<div style=\"grid-column:1/-1;font-weight:700;color:var(--c-primary);margin-top:1mm\">外币账户 "+esc(bcur)+"</div>"+
+           (S.bank.name2?"<div><span>开户银行 Bank</span>"+esc(S.bank.name2)+"</div>":"")+
+           (S.bank.no2?"<div><span>账号 A/C No.</span>"+esc(S.bank.no2)+"</div>":"")+
+           (S.bank.swift2?"<div><span>SWIFT / 行号</span>"+esc(S.bank.swift2)+"</div>":"")
+         :"")+
+       "</div></div>";
+  }
+
+  /* 签署 */
+  if(o.sign){
+    H+='<div class="qsign">';
+    H+='<div class="sc"><div class="sc-t">报价方 / Quoted By</div><div class="sc-l">'+
+       (S.co.name?"<div><i>公司 Company</i>"+esc(S.co.name)+"</div>":"")+
+       (S.q.sales?"<div><i>报价人 Quoted by</i>"+esc(S.q.sales)+"</div>":"")+
+       (S.sign.nameL?"<div><i>姓名 Name</i>"+esc(S.sign.nameL)+"</div>":"<div><i>姓名 Name</i><u></u></div>")+
+       "<div><i>签字 Signature</i><u></u></div><div><i>日期 Date</i><u>"+esc(dateCN(S.q.date))+"</u></div></div>"+
+       (S.stamp.on&&S.stamp.src&&S.stamp.pos==="left"?stampTag("right:6mm;bottom:0mm;"):"")+"</div>";
+    H+='<div class="sc"><div class="sc-t">客户确认 / Confirmed By</div><div class="sc-l">'+
+       "<div><i>公司 Company</i><u></u></div>"+
+       (S.sign.nameR?"<div><i>姓名 Name</i>"+esc(S.sign.nameR)+"</div>":"<div><i>姓名 Name</i><u></u></div>")+
+       "<div><i>签字 Signature</i><u></u></div><div><i>日期 Date</i><u></u></div></div>"+
+       (S.stamp.on&&S.stamp.src&&S.stamp.pos==="right"?stampTag("right:6mm;bottom:0mm;"):"")+"</div>";
+    H+="</div>";
+  }
+
+  /* 页脚 */
+  if(o.foot){
+    H+='<div class="qfoot"><div style="flex:1">'+esc(o.footText)+"</div><div style=\"text-align:right;white-space:nowrap\">"+
+       esc([S.co.name,S.co.tel].filter(Boolean).join(" · "))+"</div></div>";
+  }
+  sh.innerHTML=H;
+  if(window.applyZoom)applyZoom();
+}
+function stampTag(pos){
+  var s=S.stamp;
+  return '<img class="stamp" src="'+s.src+'" style="'+pos+'width:'+s.size+"mm;opacity:"+(s.op/100)+
+         ";transform:translate("+(s.dx||0)+"mm,"+(s.dy||0)+"mm) rotate("+(s.rot||0)+'deg)">';
+}
+
+/* ================================================================
+   6. 绑定与交互
+   ================================================================ */
+function syncPanel(){
+  $$("[data-bind]").forEach(function(el){
+    var v=getPath(S,el.dataset.bind);
+    if(el.type==="checkbox")el.checked=!!v;else el.value=v==null?"":v;
+  });
+  buildCurSelect();$("#stampBox").style.display=S.stamp.on?"block":"none";
+  var d=$("#logoDrop");
+  if(S.logo.src){d.classList.add("has");d.innerHTML='<img src="'+S.logo.src+'">';}
+  else{d.classList.remove("has");d.textContent="点击或拖拽上传 Logo";}
+  var sd=$("#stampDrop");
+  if(sd){if(S.stamp.src){sd.classList.add("has");sd.innerHTML='<img src="'+S.stamp.src+'" style="max-height:60px">';}
+    else{sd.classList.remove("has");sd.textContent="点击或拖拽上传电子章图片（建议透明底 PNG）";}}
+}
+document.addEventListener("input",function(e){
+  var el=e.target;if(!el.dataset||!el.dataset.bind)return;
+  var v=el.type==="checkbox"?el.checked:(el.type==="number"?(el.value===""?0:parseFloat(el.value)):el.value);
+  if(el.dataset.bind==="logo.h")v=parseFloat(el.value);
+  setPath(S,el.dataset.bind,v);
+  if(el.dataset.bind==="stamp.on")$("#stampBox").style.display=S.stamp.on?"block":"none";
+  renderSheet();save();
+});
+document.addEventListener("change",function(e){
+  var el=e.target;if(el.dataset&&el.dataset.bind&&!el.dataset.nosync&&el.tagName==="SELECT"){setPath(S,el.dataset.bind,el.value);renderSheet();save();}
+});
+
+/* 模板 */
+$("#tplGrid").addEventListener("click",function(e){
+  var b=e.target.closest("[data-tpl]");if(!b)return;
+  applyTemplate(b.dataset.tpl);
+});
+function applyTemplate(k){
+  var t=TEMPLATES[k];if(!t)return;
+  S.tpl=k;
+  S.groups=JSON.parse(JSON.stringify(t.groups));
+  S.terms=t.terms;S.cur=t.cur||"USD";
+  S.trans=JSON.parse(JSON.stringify(t.trans||{}));
+  buildTplGrid();buildTransPanel();buildFeeEditor();syncPanel();renderSheet();save();
+  toast("已套用模板：" + t.label);
+}
+
+/* 配色 */
+$("#schGrid").addEventListener("click",function(e){
+  var b=e.target.closest("[data-sch]");if(!b)return;
+  S.sch=parseInt(b.dataset.sch,10);buildSchGrid();renderSheet();save();
+});
+document.addEventListener("input",function(e){
+  var el=e.target;
+  if(el.dataset&&el.dataset.cc){S.custom[el.dataset.cc]=el.value;
+    var t=document.querySelector('[data-cct="'+el.dataset.cc+'"]');if(t)t.value=el.value;renderSheet();save();}
+  if(el.dataset&&el.dataset.cct&&/^#[0-9a-fA-F]{6}$/.test(el.value)){
+    S.custom[el.dataset.cct]=el.value;
+    var c=document.querySelector('[data-cc="'+el.dataset.cct+'"]');if(c)c.value=el.value;renderSheet();save();}
+});
+
+/* 图片上传 */
+function bindUpload(dropId,fileId,cb){
+  var d=$(dropId),f=$(fileId);
+  d.onclick=function(){f.click();};
+  d.ondragover=function(e){e.preventDefault();d.style.borderColor="#4285B4";};
+  d.ondragleave=function(){d.style.borderColor="";};
+  d.ondrop=function(e){e.preventDefault();d.style.borderColor="";if(e.dataTransfer.files[0])read(e.dataTransfer.files[0]);};
+  f.onchange=function(){if(f.files[0])read(f.files[0]);f.value="";};
+  function read(file){
+    if(!/^image\//.test(file.type)){toast("请选择图片文件");return;}
+    var r=new FileReader();r.onload=function(){cb(r.result);};r.readAsDataURL(file);
+  }
+}
+bindUpload("#logoDrop","#logoFile",function(src){S.logo.src=src;syncPanel();renderSheet();save();toast("Logo 已更新");});
+bindUpload("#stampDrop","#stampFile",function(src){S.stamp.src=src;S.stamp.on=true;syncPanel();renderSheet();save();toast("电子章已上传并启用");});
+$("#logoDel").onclick=function(){S.logo.src="";syncPanel();renderSheet();save();};
+$("#stampDel").onclick=function(){S.stamp.src="";syncPanel();renderSheet();save();};
+
+/* 币种 */
+$("#mainCur").onchange=function(){S.cur=this.value;renderSheet();save();};
+$("#curAdd").onclick=function(){
+  var v=$("#curNew").value.trim();if(!v)return;
+  var p=v.split(/\s+/),code=p[0].toUpperCase(),name=p.slice(1).join(" ")||code;
+  if(CUR.concat(S.extraCur).some(function(c){return c[0]===code;})){toast("该币种已存在");return;}
+  S.extraCur.push([code,name,code]);$("#curNew").value="";
+  buildCurSelect();buildFeeEditor();S.cur=code;$("#mainCur").value=code;renderSheet();save();
+  toast("已添加币种 "+code);
+};
+
+/* 分组 */
+$("#addGroup").onclick=function(){
+  S.groups.push({name:"新增费用分组 New Group",items:[{name:"",rk:"",unit:"票",qty:1,price:"",cur:"",off:false}]});
+  buildFeeEditor();renderSheet();save();
+};
+
+/* 选择器交互 */
+$("#catCol").addEventListener("click",function(e){
+  var c=e.target.closest("[data-cat]");if(!c)return;pickState.cat=c.dataset.cat;renderPicker();
+});
+$("#itemCol").addEventListener("change",function(e){
+  var i=e.target.closest("[data-item]");if(!i)return;
+  if(i.checked)pickState.sel[i.dataset.item]=1;else delete pickState.sel[i.dataset.item];
+  $("#pickInfo").textContent="已选 "+Object.keys(pickState.sel).length+" 项";
+});
+$("#pickClear").onclick=function(){pickState.sel={};renderPicker();};
+$("#pickOk").onclick=function(){
+  var ks=Object.keys(pickState.sel);
+  if(!ks.length){toast("请先勾选费用项目");return;}
+  var g=S.groups[pickState.gi];if(!g)return;
+  ks.forEach(function(nm){g.items.push({name:nm,rk:"",unit:guessUnit(nm),qty:1,price:"",cur:"",off:false});});
+  $("#pickMask").classList.add("hide");buildFeeEditor();renderSheet();save();toast("已加入 "+ks.length+" 项费用");
+};
+function guessUnit(nm){
+  if(/柜|箱型|THC|DTHC|铅封|拖车|吊装|换装|底盘|保温/.test(nm))return S.tpl==="LCL"?"CBM":"柜";
+  if(/CBM|拼箱|CFS|体积|仓储/.test(nm))return"CBM";
+  if(/KG|计费重|空运|燃油附加费FSC|安全附加费/.test(nm))return"计费重KG";
+  if(/滞|storage|Storage|天/.test(nm))return"天";
+  if(/证|单|提单|文件|AWB|D\/O|运单/.test(nm))return"单";
+  return"票";
+}
+$$("[data-close]").forEach(function(b){b.onclick=function(){$("#"+b.dataset.close).classList.add("hide");};});
+$$(".mask").forEach(function(m){m.addEventListener("click",function(e){if(e.target===m)m.classList.add("hide");});});
+
+/* 缩放 */
+function applyZoom(){
+  var v=$("#zoom").value,z=v/100,w=$("#zoomwrap");
+  w.style.transform="scale("+z+")";$("#zoomv").textContent=v+"%";
+  w.style.height=($("#sheet").offsetHeight*z)+"px";
+  localStorage.setItem("fq_zoom",v);
+}
+$("#zoom").oninput=applyZoom;
+
+/* 导出 PDF */
+$("#btnPdf").onclick=function(){
+  if(localStorage.getItem("fq_noask")==="1"){window.print();return;}
+  $("#pdfMask").classList.remove("hide");
+};
+$("#pdfGo").onclick=function(){
+  if($("#pdfNoAsk").checked)localStorage.setItem("fq_noask","1");
+  $("#pdfMask").classList.add("hide");setTimeout(function(){window.print();},220);
+};
+
+/* 配置存取 */
+function save(){try{localStorage.setItem("fq_state",JSON.stringify(S));}catch(e){}}
+function migrateBank(o){
+  if(o&&o.bank){
+    if(o.bank.name&&!o.bank.name1)o.bank.name1=o.bank.name;
+    if(o.bank.no&&!o.bank.no1)o.bank.no1=o.bank.no;
+    if(o.bank.swift&&!o.bank.swift1)o.bank.swift1=o.bank.swift;
+  }
+}
+/* 品牌英文统一为 Trans Pi：仅命中旧示例原值时替换，不影响用户自定义内容 */
+function migrateBrand(o){
+  if(o&&o.co){
+    if(o.co.email==="sales@shippingschool.com")o.co.email="sales@transpi.com";
+    if(o.co.web==="www.shippingschool.com"||o.co.web==="www.transpi.com")o.co.web="www.transpi.cn";
+    if(o.co.nameEn==="SHIPPING SCHOOL INT'L LOGISTICS CO., LTD.")o.co.nameEn="Trans Pi International Logistics Co., Ltd.";
+  }
+}
+function load(){
+  try{
+    var s=localStorage.getItem("fq_state");if(!s)return false;
+    var o=JSON.parse(s),d=defState();migrateBank(o);migrateBrand(o);
+    S=Object.assign(d,o);
+    ["co","q","cl","logo","opt","bank","sign","stamp","trans","custom"].forEach(function(k){S[k]=Object.assign(d[k]||{},o[k]||{});});
+    return true;
+  }catch(e){return false;}
+}
+$("#btnSave").onclick=function(){
+  var name=(S.q.no||"quotation")+".json";
+  var b=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1500);toast("配置已导出：" + name);
+};
+$("#btnLoad").onclick=function(){$("#fileJson").click();};
+$("#fileJson").onchange=function(){
+  var f=this.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var o=JSON.parse(r.result),d=defState();migrateBank(o);migrateBrand(o);
+      S=Object.assign(d,o);
+      ["co","q","cl","logo","opt","bank","sign","stamp","trans","custom"].forEach(function(k){S[k]=Object.assign(d[k]||{},o[k]||{});});
+      boot(true);toast("配置已导入");
+    }catch(e){toast("文件格式有误");}
+  };
+  r.readAsText(f);this.value="";
+};
+$("#btnReset").onclick=function(){
+  if(!confirm("重置所有内容并恢复默认模板？此操作不可撤销。"))return;
+  localStorage.removeItem("fq_state");S=defState();applyTemplate("FCL");boot(true);toast("已重置");
+};
+
+/* ================================================================
+   7. 启动
+   ================================================================ */
+function boot(skipLoad){
+  if(!skipLoad){
+    var ok=load();
+    if(!ok){S=defState();var t=TEMPLATES.FCL;
+      S.groups=JSON.parse(JSON.stringify(t.groups));S.terms=t.terms;S.cur=t.cur;S.trans=JSON.parse(JSON.stringify(t.trans));
+      S.co={name:"航运派国际物流有限公司",nameEn:"Trans Pi International Logistics Co., Ltd.",
+        addr:"广东省深圳市南山区科技园南区某大厦 20 层",tel:"+86 755-8888 6666",fax:"+86 755-8888 6688",
+        email:"sales@transpi.com",web:"www.transpi.cn"};
+      S.cl={name:"（客户公司名称）",contact:"",tel:"",email:"",ref:""};
+      S.q.sales="William";
+    }
+  }
+  buildTplGrid();buildSchGrid();buildTransPanel();buildDatalists();buildCurSelect();buildFeeEditor();syncPanel();renderSheet();
+  var z=localStorage.getItem("fq_zoom")||"88";$("#zoom").value=z;applyZoom();
+}
+boot();
+</script>
+</body>
+</html>
