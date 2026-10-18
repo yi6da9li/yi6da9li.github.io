@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>美国 IEEPA 关税：征收与退款时间线 | 航运派</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=clean-20261018" />
+  <link rel="stylesheet" href="article.css?v=ieepa-tariff-timeline-20261018" />
+  <style>
+    /* ===== 时间线组件（本页专用） ===== */
+    .timeline {
+      position: relative;
+      margin: 8px 0 24px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 187px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(212,175,55,0.05), rgba(212,175,55,0.32), rgba(212,175,55,0.05));
+    }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 30px;
+      padding-bottom: 26px;
+      position: relative;
+    }
+    .tl-date {
+      font-family: var(--font-en);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: var(--gold);
+      text-align: right;
+      padding-top: 1px;
+      white-space: nowrap;
+    }
+    .tl-content {
+      position: relative;
+      padding-left: 26px;
+    }
+    .tl-content::before {
+      content: "";
+      position: absolute;
+      left: -7px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px var(--navy);
+    }
+    .tl-tag {
+      display: inline-block;
+      font-family: var(--font-cn);
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 1;
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 9px;
+    }
+    .tl-text {
+      font-family: var(--font-cn);
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--text-gray-light);
+      margin: 0;
+    }
+    .tl-text strong { color: var(--white); font-weight: 500; }
+
+    /* 分类配色 */
+    .tl-tag--order  { color: #E9C766; background: rgba(212,175,55,0.14);  border: 1px solid rgba(212,175,55,0.35); }
+    .tl-tag--ruling { color: #8FBBF0; background: rgba(110,168,230,0.14); border: 1px solid rgba(110,168,230,0.35); }
+    .tl-tag--scotus { color: #F2A185; background: rgba(239,138,106,0.14); border: 1px solid rgba(239,138,106,0.35); }
+    .tl-tag--regime { color: #93D3B6; background: rgba(127,200,169,0.14); border: 1px solid rgba(127,200,169,0.35); }
+    .tl-tag--refund { color: #C3B0EA; background: rgba(179,157,219,0.14); border: 1px solid rgba(179,157,219,0.35); }
+    .tl-tag--impact { color: #9FD9E8; background: rgba(143,208,224,0.14); border: 1px solid rgba(143,208,224,0.35); }
+    .tl-tag--handle { color: #E9C766; background: rgba(212,175,55,0.14);  border: 1px solid rgba(212,175,55,0.35); }
+    .tl-tag--order ~ .tl-text,
+    .tl-item:has(.tl-tag--order) .tl-content::before  { }
+    .tl-item:has(.tl-tag--ruling) .tl-content::before { background: #8FBBF0; }
+    .tl-item:has(.tl-tag--scotus) .tl-content::before { background: #F2A185; }
+    .tl-item:has(.tl-tag--regime) .tl-content::before { background: #93D3B6; }
+    .tl-item:has(.tl-tag--refund) .tl-content::before { background: #C3B0EA; }
+    .tl-item:has(.tl-tag--impact) .tl-content::before { background: #9FD9E8; }
+    .tl-item:has(.tl-tag--handle) .tl-content::before { background: #E9C766; }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 7px; }
+      .tl-item {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding-left: 22px;
+      }
+      .tl-date { text-align: left; padding-top: 0; }
+      .tl-content { padding-left: 0; }
+      .tl-content::before { left: -22px; top: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+            <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
+      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+<div class="nav-links">
+        <a href="about.html">关于</a>
+        <a href="index.html#about">专栏</a>
+        <a href="index.html#tools">实用工具</a>
+        <a href="index.html#footer">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 文章主体 -->
+  <article class="article">
+    <div class="container article-inner">
+      <a class="article-back" href="index.html#about">← 返回 · 专栏</a>
+      <span class="eyebrow">专栏 · IEEPA 关税</span>
+      <h1 class="article-title">美国 IEEPA 关税：征收与退款时间线</h1>
+      <div class="article-meta">航运派威廉 · 资料整理</div>
+      <p class="article-lede">传递资讯，更传递价值。2025 年 2 月起，美国依据《国际紧急经济权力法》（IEEPA）对加拿大、墨西哥与中国加征关税，并在随后一年里经历行政命令、法院裁决、最高法院审理与大规模退款程序的多轮拉锯。本文按时间顺序梳理从「征收」到「退款」的完整脉络，帮助外贸与航运从业者快速把握关键节点。</p>
+
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-date">2025-02-01</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--order">行政命令</span>
+            <p class="tl-text">美国依据 IEEPA 对 CA、MX 和 CN 三国实施 IEEPA 关税（IEEPA fentanyl tariffs）。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2025-04-02</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--order">行政命令</span>
+            <p class="tl-text">解放日关税——根据 IEEPA 宣布新的互惠关税（reciprocal tariffs）。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2025-04-09</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--order">行政命令</span>
+            <p class="tl-text">互惠税率暂停 90 天。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2025-05-28</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--ruling">法院裁决</span>
+            <p class="tl-text">国际贸易法院（CIT）推翻 IEEPA 关税。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2025-08-07</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--order">行政命令</span>
+            <p class="tl-text">各国特定互惠税率（Country-specific reciprocal rates）恢复；贸易协定公布。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2025-08-29</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--ruling">法院裁决</span>
+            <p class="tl-text">联邦巡回法院维持原判（全体审理，7 比 4）：IEEPA 未授权征收关税。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2025-11-05</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--scotus">最高法院</span>
+            <p class="tl-text">最高法院听取口头辩论。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-01-08</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--ruling">法院裁决</span>
+            <p class="tl-text">如被要求，将需要退还 IEEPA 关税。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-02-20</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--ruling">法院裁决</span>
+            <p class="tl-text">最高法院以 6 比 3 裁定：IEEPA 未授权征收关税。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-02-20</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--regime">新关税制度</span>
+            <p class="tl-text">特朗普发布终止 IEEPA 关税的行政命令，并援引第 122 条。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-02-21</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--regime">新关税制度</span>
+            <p class="tl-text">特朗普宣布 15% 税率，但未发布正式公告。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-02-24</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--refund">后续 / 退款</span>
+            <p class="tl-text">IEEPA 关税停止；新的 10% 第 122 条款关税生效。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-03-04</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--refund">后续 / 退款</span>
+            <p class="tl-text">美国 CIT 会下令 CBP 立即为所有进口商启动退款程序。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-03-05 至 06</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--refund">后续 / 退款</span>
+            <p class="tl-text">CIT 维持原有命令；CBP 提议实施 45 天 CAPE 退款制度。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-03-27</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--impact">后续影响 / 退款</span>
+            <p class="tl-text">CIT 下令重新清算已最终清关的申报记录。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-04-20</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--impact">后续影响 / 退款</span>
+            <p class="tl-text">CAPE 第一阶段启动——IEEPA 退款申报开始。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-05-12</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--impact">后续影响 / 退款</span>
+            <p class="tl-text">首批 IEEPA 退款款项通过财政部开始支付给进口商。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-06-02</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--ruling">法院裁决</span>
+            <p class="tl-text">美国政府对 CIT 命令提出上诉；法官驳回 CBP 关于已最终清关申报记录的立场。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-06-23</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--impact">后续影响 / 退款</span>
+            <p class="tl-text">CBP 发布 CSMS，确认第二阶段部署将于 2026 年 6 月 29 日启动。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-06-29</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--impact">后续影响 / 退款</span>
+            <p class="tl-text">CAPE 第二阶段启动——现已接受核对申报。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-08-25</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--impact">后续影响 / 退款</span>
+            <p class="tl-text">CBP 确认第三阶段暂时推迟——截至 2026 年 8 月 21 日的最终统计数据。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-09-15</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--impact">后续影响 / 退款</span>
+            <p class="tl-text">CBP 提交进展报告——第三阶段将于 2026 年 10 月 6 日启动。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-10-06</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--handle">后续处理 / 退款</span>
+            <p class="tl-text">CAPE 第三阶段启动——7 月 30 日前提交 IOR 的 CIT 原告可提出申请。</p>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-date">2026-10-08</div>
+          <div class="tl-content">
+            <span class="tl-tag tl-tag--ruling">法院裁决</span>
+            <p class="tl-text">CIT 裁定集体诉讼——Freestyle World, Inc. 诉美国案，案号 26-123。</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="related">
+        <div class="related-title">看了这份时间线，你可能还会想看</div>
+        <a class="related-card" href="article-ieepa-cape-20261007.html">
+          <span class="related-cat">行业洞察分析</span>
+          <span class="related-name">IEEPA 退款 CAPE 系统最新进展 2026/10/07</span>
+        </a>
+        <a class="related-card" href="article-ieepa-tariff.html">
+          <span class="related-cat">行业洞察分析</span>
+          <span class="related-name">IEEPA 关税退款 集体诉讼资格取得重大进展</span>
+        </a>
+        <a class="related-card" href="index.html#about">
+          <span class="related-cat">专栏</span>
+          <span class="related-name">返回专栏首页</span>
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        本公众号专注全球航运、货代物流、全链路供应链资讯分享、同行交流。多数内容来自公开行业资讯、市场统计数据与产业实时动态，仅代表作者个人行业见解，不提供任何投资、交易及商业决策参考。国际贸易、航运行情、全球供应链变化极大，相关分析观点具备时效性与片面性，建议读者结合自身需求独立甄别，警惕各类市场风险。账号内容仅限行业学习交流，不开展互联网新闻采编发布业务。
+      </div>
+    </div>
+  </article>
+
+  <!-- 页脚 -->
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html">关于 William</a>
+        <a href="index.html#about">专栏订阅</a>
+        <a href="index.html#footer">商务合作</a>
+      </div>
+      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
