@@ -56,11 +56,19 @@ body {
   border-radius: 12px; padding: 20px; text-align: center;
 }
 .clock-card .city { color: var(--gold); font-size: 16px; font-weight: 700; }
+.clock-card .city-en { color: var(--text-gray); font-size: 12px; margin-top: 2px; }
 .clock-card .time {
   font-size: 30px; font-family: "SFMono-Regular", Consolas, monospace;
   margin: 8px 0 4px; letter-spacing: 1px;
 }
 .clock-card .date { color: var(--text-gray); font-size: 13px; }
+/* 大洲分组标题 */
+.continent-head {
+  color: var(--gold); font-size: 20px; font-weight: 700;
+  margin: 28px 0 14px; padding-bottom: 8px;
+  border-bottom: 1px solid #2a3a55;
+}
+.continent-head:first-child { margin-top: 0; }
 /* 船公司 */
 .carrier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .carrier-item {

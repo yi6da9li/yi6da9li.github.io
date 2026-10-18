@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>读完此文你也可以看懂和审核信用证 | 航运派</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=clean-20261018" />
+  <link rel="stylesheet" href="article.css?v=imo-article-20261001" />
+</head>
+<body>
+<!-- 导航栏 -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+            <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
+      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+<div class="nav-links">
+        <a href="about.html">关于</a>
+        <a href="index.html#about">专栏</a>
+        <a href="index.html#footer">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 文章主体 -->
+  <article class="article">
+    <div class="container article-inner">
+      <a class="article-back" href="article-knowledge-list.html">← 返回 · 航运知识体系</a>
+      <span class="eyebrow">航运知识体系</span>
+      <h1 class="article-title">读完此文你也可以看懂和审核信用证</h1>
+      <div class="article-meta">航运派威廉 · 2026-06-28</div>
+      <p class="article-lede">传递资讯，更传递价值。大家好，我是航运派威廉。上几天有小伙伴提起信用证审核，那么今天威廉就来写一篇信用证详解——从它是什么、有什么特征，到 MT700 报文每一个字段怎么读，再到最危险的「软条款」藏在哪些角落。读完这一篇，你也能上手审一份信用证。</p>
+
+      <h2>什么是信用证</h2>
+      <p>跟单信用证属于银行出具的金融工具，由开证银行根据买方（开证申请人）的申请开立；只要卖方（信用证受益人）提交符合要求的单据，用以佐证货物出运或已完成合同约定履约义务，开证行便承诺兑付货款。实务中一般遵循《跟单信用证统一惯例》（UCP 600）的相关规定，一般按照 SWIFT 的 MT700 格式制单。</p>
+
+      <h2>信用证的特征是什么</h2>
+      <ul>
+        <li><strong>独立自主属性：</strong>信用证具备独立于基础买卖合同的法律地位，开证行依据信用证承担的付款责任，不受买卖双方另行订立的其他协议约束。</li>
+        <li><strong>不可撤销属性：</strong>依据《UCP600》相关条款，若无特殊约定，全部信用证均默认为不可撤销信用证。</li>
+        <li><strong>单据交易属性：</strong>开证行仅针对单据开展审核处置工作，不涉及实际货物、服务本身。</li>
+        <li><strong>单单一致、单证一致原则：</strong>受益人提交的全套单据，须与信用证各项条款达到严格匹配标准。</li>
+      </ul>
+
+      <h2>《跟单信用证统一惯例》是什么</h2>
+      <p>《跟单信用证统一惯例》，英文全称 Uniform Customs and Practice for Documentary Credits，简称 UCP，是国际商会（ICC）制定、全球银行与贸易商通用的跟单信用证国际统一规则，是国际贸易结算最核心的惯例文件。现在主流版本是 UCP 600，从 2007 年 7 月 1 日生效。</p>
+
+      <h2>什么是 MT700</h2>
+      <p>SWIFT 第七类报文 MT700，专门用于跟单信用证的开立操作。该报文依托 SWIFT FIN 通讯网络，由开证行发送至通知行或保兑行，完整承载信用证生效全部条款内容，涵盖交易往来双方信息、结算币种与金额、信用证到期时限及交单地点、货物装运要求，同时列明受益人收款时需递交的全套单据明细。</p>
+      <p>MT700 报文具备与加盖银行签章的纸质信用证同等法律约束力。通知行接收并核验报文无误后，开证行将出具不可撤销付款承诺：只要受益人在信用证有效期内提交完全符合条款要求的单据，开证行必须履行付款责任。此项付款承诺独立于开证申请人，即便买方要求银行拒绝兑付，或是买方企业陷入破产清算，开证行依旧需对相符交单承担付款义务。</p>
+
+      <h2>信用证模板 和 MT700 字段详解</h2>
+      <p>SWIFT MT 700 — Issue of a Documentary Credit（信用证开证模板）。Sender（发报行）为开证行名称与 BIC 代码，Receiver（收报行）为通知行名称与 BIC 代码。下面按六个区块拆解关键字段。</p>
+
+      <h3>1. 基本信息与控制字段（Basic Info &amp; Control Fields）</h3>
+      <p><strong>27 Sequence of Total：</strong>项数总数。如无后续 MT 701 续页，填写 1/1。</p>
+      <p><strong>40A Form of Documentary Credit：</strong>跟单信用证形式。一般填写 IRREVOCABLE（不可撤销），意味着买方或开证行不得单方面取消或修改；也可能说明 IRREVOCABLE TRANSFERABLE（可否转让）。</p>
+      <p><strong>20 Documentary Credit Number：</strong>信用证号码。由开证行分配的唯一参考编号，所有修改或函件均需引用此编号。</p>
+      <p><strong>31C Date of Issue：</strong>开证日期，格式 YYMMDD。</p>
+      <p><strong>40E Applicable Rules：</strong>适用规则。填写 UCP LATEST，表示适用最新 UCP 600 规则。</p>
+      <p><strong>31D Date and Place of Expiry：</strong>到期日及地点，格式 YYMMDD 及地点。例如 260930 LOS ANGELES 表示 2026 年 9 月 30 日到期、单据须在此日前在洛杉矶提交；到期地点通常是受益人所在国或单据提交地。</p>
+
+      <h3>2. 关系人与金额（Parties &amp; Amount）</h3>
+      <p><strong>50 Applicant：</strong>开证申请人 / 买方，填写买方公司全称及地址、国家。</p>
+      <p><strong>59 Beneficiary：</strong>受益人 / 卖方，填写卖方公司全称及地址、国家。</p>
+      <p><strong>32B Currency Code, Amount：</strong>币种和金额，例如 USD 150000,00（特别注意 SWIFT 中逗号“,”代表小数点）。</p>
+      <p><strong>39A Percentage Credit Amount Tolerance：</strong>信用证金额上下浮动百分比，如 10/10 代表 +/-10%。若未指定容差，UCP 600 第 30 条对短装货物默认容差可能为 5%。</p>
+
+      <h3>3. 兑付与付款期限（Availability &amp; Payment Terms）</h3>
+      <p><strong>41a Available With... By...：</strong>指定银行及兑付方式。方式 A 即期：ANY BANK IN CHINA BY NEGOTIATION；方式 B 远期承兑：[SPECIFIC BANK] BY ACCEPTANCE；方式 C 延期付款：[SPECIFIC BANK] BY DEFERRED PAYMENT。</p>
+      <p><strong>42C Drafts at...：</strong>汇票远期期限，如 AT SIGHT 或 90 DAYS SIGHT（延期付款或无汇票信用证可留空）。</p>
+      <p><strong>42a Drawee：</strong>汇票付款人，通常为开证行。</p>
+      <p><strong>42P Negotiation/Deferred Payment Details：</strong>议付 / 延期付款详情，如 PAYABLE 90 DAYS AFTER BILL OF LADING DATE。</p>
+      <p><strong>42M Mixed Payment Details：</strong>混合付款详情。用于含多个付款阶段或方式的混合付款信用证，UCP 600 中并未明确定义。</p>
+
+      <h3>4. 运输信息（Shipment Information）</h3>
+      <p><strong>43P Partial Shipments：</strong>分批装运，ALLOWED 或 NOT ALLOWED。</p>
+      <p><strong>43T Transshipment：</strong>转运，ALLOWED 或 NOT ALLOWED。</p>
+      <p><strong>44A Place of Taking in Charge/Dispatch：</strong>收货 / 发运地点（多式联运启运地）。</p>
+      <p><strong>44E Port of Loading/Airport of Departure：</strong>装运港 / 出发机场。</p>
+      <p><strong>44F Port of Discharge/Airport of Destination：</strong>卸货港 / 目的地机场。</p>
+      <p><strong>44B Place of Final Destination：</strong>最终目的地。FOB/CIF/CFR 海运一般提供 44E 和 44F；内陆点到内陆点多式联运则提供 44A 和 44B。</p>
+      <p><strong>44C Latest Date of Shipment：</strong>最迟装运期，格式 YYMMDD。</p>
+      <p><strong>44D Shipment Period：</strong>装运具体期限 / 时间表，有时用于代替或补充 44C。</p>
+
+      <h3>5. 货物与单据条款（Goods &amp; Documents）</h3>
+      <p><strong>45A Description of Goods and/or Services：</strong>货物及服务描述，来自销售合同或形式发票，应足够详细以便识别货物（名称、规格、数量、价格条款等）。</p>
+      <p><strong>46A Documents Required：</strong>应提交的单据清单——这可能是最关键的部分。常见包括：签署商业发票、全套 3/3 正本清洁已装船海运提单、110% CIF 发票金额投保一切险加战争险的保险单、装箱单、权威机构出具的原产地证等。</p>
+      <p><strong>47A Additional Conditions：</strong>附加条件，列入单据清单之外的其他要求，如「所有单据必须为英文」「提单必须包含信用证号」「短装不接受」等。</p>
+
+      <h3>6. 其它控制及银行间信息（Other Instructions &amp; Inter-bank Info）</h3>
+      <p><strong>48 Period for Presentation：</strong>单据提交期限，通常为 DOCUMENTS MUST BE PRESENTED WITHIN 21 DAYS AFTER THE DATE OF SHIPMENT BUT WITHIN THE VALIDITY OF THE CREDIT。</p>
+      <p><strong>49 Confirmation Instructions：</strong>保兑指示，CONFIRM（请求加保兑）/ WITHOUT（无需保兑，多数信用证）/ MAY ADD（允许通知行酌情加保兑）。</p>
+      <p><strong>53a Reimbursing Bank：</strong>偿付行（可选）。如开证行直接偿付，此字段多留空。</p>
+      <p><strong>71B Charges：</strong>费用划分，如 ALL BANKING CHARGES OUTSIDE THE ISSUING BANK'S COUNTRY ARE FOR THE BENEFICIARY'S ACCOUNT。</p>
+      <p><strong>78 Instructions to the Paying/Accepting/Negotiating Bank：</strong>给付款 / 承兑 / 议付行的指令。</p>
+      <p><strong>57a 'Advise Through' Bank：</strong>第二通知行 / 预报行（可选）。</p>
+      <p><strong>72 Sender to Receiver Information：</strong>发行方到收行方信息，自由文本字段，非信用证条款本身。</p>
+
+      <h2>什么是信用证软条款</h2>
+      <p>信用证中的「软条款」（Soft Clauses / Trap Clauses），通俗来说，就是进口商（买方）在信用证中故意设置的隐蔽性陷阱或限制性条款。这些条款往往赋予了开证申请人（买方）或开证行单方面的主动权；如果开证申请人不配合，受益人（卖方）就几乎不可能提交完全符合信用证要求的单据。在「单单一致、单证一致」的严格规定下，只要单据有一丁点不符，银行就可以合法拒付——这就让信用证原本享有的「银行信用担保」变成了空中楼阁。</p>
+
+      <h2>信用证软条款容易发生在哪些字段</h2>
+
+      <h3>最高发：46A（Documents Required 所需单据）</h3>
+      <p>46A 是软条款重灾区，几乎半数软条款都在此字段，核心陷阱是单据需开证申请人 / 第三方出具、签字、确认，受益人无法自主获取。</p>
+      <ul>
+        <li><strong>客检证条款（最常见）：</strong>要求 Certificate of Inspection issued and signed by applicant（开证申请人出具并签署检验证书）。风险：客户不验货、不签字、拖延出具，直接缺单不符点拒付。</li>
+        <li><strong>客户签收单 / 收货证明：</strong>要求 Receipt of goods signed by applicant's representative。风险：货物到港后客户故意不签收，交单缺少该单据。</li>
+        <li><strong>开证行 / 申请人确认单据：</strong>要求 Commercial invoice must be countersigned by L/C applicant。风险：客户恶意拒绝会签，发票无效。</li>
+        <li><strong>第三方（客户指定机构）出具证书：</strong>指定境外未知检验机构、代理人出具品质证，机构受控于买方。</li>
+      </ul>
+
+      <h3>次高发：47A（Additional Conditions 附加条件）</h3>
+      <p>独立于单据之外的隐性约束条件，大量限制性、生效类软条款集中于此。</p>
+      <ul>
+        <li><strong>信用证生效类：</strong>This L/C shall only become operative after receipt from us of applicant's authorization（收到申请人授权后信用证才生效）。风险：客户迟迟不发授权，信用证等于废纸。</li>
+        <li><strong>付款前置确认：</strong>Payment will be effected only after applicant confirms acceptance of goods。风险：买方不确认则银行不付款，违背信用证独立抽象性。</li>
+        <li><strong>扣款 / 降价主动权：</strong>Applicant has right to deduct penalty at his discretion if quality discrepancy found。风险：买方单方面判定瑕疵并扣款。</li>
+        <li><strong>单据邮寄 / 通知软条款：</strong>全套正本单据先寄客户，客户拿到货后恶意拒收银行单据。</li>
+        <li><strong>船公司 / 船指定权：</strong>客户迟迟不指定船，错过交货期造成逾期不符点。</li>
+      </ul>
+
+      <h3>运输相关高发：44A / 44E / 44F / 44B / 44C / 44D</h3>
+      <ul>
+        <li><strong>44A：</strong>Loading port to be advised later by applicant（装运港事后通知）。风险：客户拖延通知装运港，无法安排出货。</li>
+        <li><strong>44B：</strong>Final destination warehouse address to be issued by applicant only（最终目的地仓库地址仅由买方指定）。</li>
+        <li><strong>44C：</strong>Shipment date subject to applicant's formal shipping instruction（装运日取决于买方装船指示）。风险：无客户装船指示不能发货，极易超装运期。</li>
+        <li><strong>44E / 44F：</strong>限定必须客户指定码头 / 仓库，否则提单不符。</li>
+      </ul>
+
+      <h3>兑付 / 付款条件：42C / 42A / 41A / 41D</h3>
+      <ul>
+        <li><strong>41A / 41D：</strong>Credit available with issuing bank only by payment after applicant's approval。仅能在开证行索款且需买方同意，剥夺议付行融资与善意持票人保护。</li>
+        <li><strong>42C：</strong>Draft payable X days after applicant's acceptance of goods。远期汇票起算点不是提单日期而是买方收货确认日，回款时间完全由客户掌控。</li>
+      </ul>
+
+      <h3>货物描述：45A（Description of Goods 货描）</h3>
+      <ul>
+        <li>货描细节需与申请人后续出具的订单修改完全一致，未收到修改前不能制单。</li>
+        <li>额外标注 unit price subject to final confirmation by buyer（单价由买方最终确认）。</li>
+        <li>要求提单、发票额外标注客户随机下发的内部订单编号，未收到编号无法制单。</li>
+      </ul>
+
+      <h3>其他零星高发字段</h3>
+      <ul>
+        <li><strong>59 Beneficiary：</strong>Any amendment to this L/C only valid if countersigned by applicant（改证需客户副签才生效）。</li>
+        <li><strong>71B Charges：</strong>买方不同意则所有费用由受益人承担。</li>
+        <li><strong>48 Period for Presentation：</strong>Presentation allowed only after applicant informs issuing bank of cargo arrival（货物到港通知后才能交单）。</li>
+      </ul>
+
+      <h2>遇到软条款怎么办</h2>
+      <p>遇到软条款唯一的做法：<strong>坚决要求改证（Amendment）。</strong>不要听信客户「这只是银行的格式要求」「我们合作这么久我不会坑你」「时间来不及先发货吧」之类的口头承诺。在信用证业务中，「单单一致、单证一致」，只要单据有不符，银行就可以合法拒付。</p>
+
+      <blockquote>
+        <p>信用证的方寸纸页，看似是枯燥的字段与格式，实则是国际贸易中信用碰撞的最高秩序。看懂结构是「见山是山」，识破软条款的虚实则是「见微知著」。这场关于「单证相符、单单一致」的严苛修行，本质上是外贸人用极致的精准去驯服不确定性。唯有洞悉其背后的逻辑法理，方能以规则之「不变」应市场之「万变」，在纵横交错的商贸长河中行稳致远。</p>
+      </blockquote>
+
+      <p>今天的分享就到这里，航运派威廉为大家带来最新，最快的航运信息以及货代实操。大伙儿有什么想看的内容也可以在文章下评论区留言。</p>
+      <p><strong>观市场热点，学实操干货，知行业风向，就看航运派。</strong></p>
+
+      <div class="related">
+        <div class="related-title">看了今天的文章，你可能还会喜欢</div>
+        <a class="related-card" href="article-dem-det.html">
+          <span class="related-cat">航运知识体系</span>
+          <span class="related-name">常见美线船公司目的港 DEM &amp; DET 收费标准</span>
+        </a>
+        <a class="related-card" href="article-knowledge-list.html">
+          <span class="related-cat">航运知识体系</span>
+          <span class="related-name">返回航运知识体系专栏列表</span>
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        本公众号专注全球航运、货代物流、全链路供应链资讯分享、同行交流。多数内容来自公开行业资讯、市场统计数据与产业实时动态，仅代表作者个人行业见解，不提供任何投资、交易及商业决策参考。国际贸易、航运行情、全球供应链变化极大，相关分析观点具备时效性与片面性，建议读者结合自身需求独立甄别，警惕各类市场风险。账号内容仅限行业学习交流，不开展互联网新闻采编发布业务。
+      </div>
+    </div>
+  </article>
+
+  <!-- 页脚 -->
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html">关于 William</a>
+        <a href="index.html#about">专栏订阅</a>
+        <a href="index.html#footer">商务合作</a>
+      </div>
+      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+    </div>
+  </footer>
+
+  
+
+</body>
+</html>
