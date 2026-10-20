@@ -146,12 +146,72 @@
   opacity: 0.55;
 }
 
+/* 品牌主张 · 正文 + 右侧二维码 */
+.brand-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 820px) minmax(240px, 300px);
+  gap: 56px;
+  justify-content: space-between;
+  align-items: start;
+}
+.brand-layout .about-prose {
+  max-width: none;
+}
+.brand-qr {
+  padding: 20px 20px 22px;
+  border: 1px solid rgba(212,175,55,0.30);
+  border-radius: 16px;
+  background:
+    radial-gradient(90% 120% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 62%),
+    var(--card-bg);
+  text-align: center;
+}
+.brand-qr-frame {
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.30);
+}
+.brand-qr-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+.brand-qr-title {
+  margin-top: 16px;
+  font-family: var(--font-cn);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+}
+.brand-qr-sub {
+  margin-top: 8px;
+  font-family: var(--font-cn);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-gray);
+}
+
 /* 导航当前项高亮 */
 .nav-links a.is-active {
   color: var(--gold);
 }
 
 /* 响应式 */
+@media (max-width: 960px) {
+  .brand-layout {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .brand-qr {
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+}
+
 @media (max-width: 768px) {
   .about-hero { padding: 64px 0 52px; }
   .about-hero-title { font-size: 36px; }
