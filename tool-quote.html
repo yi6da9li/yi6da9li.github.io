@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>货代报价单生成器 · 航运派 Trans Pi</title>
+<title data-i18n-title="title_tools_quote">货代报价单生成器 · 航运派 Trans Pi</title>
 <style>
 /* ============ 基础 ============ */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -324,12 +324,44 @@ table.fee tr{break-inside:avoid}
   .zoombox{color:#90a4bd}
   .tool-back{display:inline-flex;align-items:center;color:#90a4bd;text-decoration:none;font-size:12.5px;font-weight:500;padding:7px 11px;border:1px solid rgba(212,175,55,.3);border-radius:8px;transition:.15s;white-space:nowrap}
   .tool-back:hover{color:#D4AF37;border-color:#D4AF37}
+  /* ===== 页脚（与全站一致：深蓝日落底 + 金色品牌 + 版权说明浅灰居中）===== */
+  .container { max-width: 1440px; margin: 0 auto; padding-left: 80px; padding-right: 80px; }
+  .footer {
+    padding: 60px 0 40px;
+    background:
+      linear-gradient(to bottom, rgba(6,11,20,0.35), rgba(6,11,20,0.72)),
+      url('assets/footer-sunset.jpg') center/cover no-repeat;
+  }
+  .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 32px; }
+  .footer-brand { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .footer-logo { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-weight: 700; font-size: 28px; color: #FFFFFF; }
+  .footer-logo-en { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-weight: 600; font-size: 22px; letter-spacing: 1px; color: #D4AF37; line-height: 1; padding-left: 14px; border-left: 1px solid rgba(212,175,55,0.35); margin-left: 4px; }
+  .footer-tagline { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size: 14px; color: #cccccc; }
+  .footer-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.08); }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size: 13px; color: #888888; text-decoration: none; transition: color .25s ease; }
+  .footer-links a:hover { color: #D4AF37; }
+  .footer-copy { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size: 12px; color: #555555; }
+  .footer-legal { width: 100%; max-width: 800px; margin: 0 auto; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.07); text-align: center; }
+  .footer-legal .footer-copy { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size: 12.5px; color: #cccccc; margin: 0 0 12px; }
+  .footer-legal-text { font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size: 12px; line-height: 1.85; color: #cccccc; margin: 0 0 8px; }
+  .footer-legal-text:last-child { margin-bottom: 0; }
+  @media (max-width: 768px) { .container { padding-left: 24px; padding-right: 24px; } }
+  @media (max-width: 667px) { .container { padding-left: 16px; padding-right: 16px; } }
 </style>
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
 
 <div class="topbar no-print">
-  <a class="tool-back" href="index.html">← 返回首页</a><div class="brand"><span class="dot"></span>货代报价单生成器<small>FREIGHT QUOTATION BUILDER</small></div>
+  <div class="tool-topline">
+    <a class="tool-back" href="index.html" data-i18n="back_home">← 返回首页</a>
+    <div class="lang-switch" role="group" aria-label="Language / 语言">
+      <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div><div class="brand"><span class="dot"></span><span data-i18n="toolh_quote">货代报价单生成器</span><small>FREIGHT QUOTATION BUILDER</small></div>
   <div class="tb-spacer"></div>
   <div class="zoombox">预览缩放<input type="range" id="zoom" min="50" max="130" value="88"><b id="zoomv">88%</b></div>
   <button class="btn btn-primary" id="btnSave">保存配置</button>
@@ -1501,5 +1533,26 @@ function boot(skipLoad){
 }
 boot();
 </script>
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

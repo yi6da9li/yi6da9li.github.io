@@ -6,24 +6,32 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>行业洞察分析 | 航运派 · Trans Pi</title>
+  <title data-i18n-title="title_insight">行业洞察分析 | 航运派 · Trans Pi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=clean-20261018" />
   <link rel="stylesheet" href="article.css?v=port-w37-article-20261001" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
 <!-- 导航栏 -->
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" /><span data-i18n="brand_nav">航运派</span></div>
+<div class="nav-actions">
             <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
-      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
-<div class="nav-links">
-        <a href="about.html">关于</a>
-        <a href="index.html#about">专栏</a>
-        <a href="index.html#footer">联系</a>
+        <div class="lang-switch" role="group" aria-label="Language / 语言">
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+        <div class="nav-links">
+        <a href="about.html" data-i18n="nav_about">关于</a>
+        <a href="index.html#about" data-i18n="nav_column">专栏</a>
+        <a href="index.html#footer" data-i18n="nav_contact">联系</a>
+      </div>
       </div>
     </div>
   </nav>
@@ -31,10 +39,10 @@
   <!-- 文章列表 -->
   <section class="article-list">
     <div class="container article-list-inner">
-      <a class="article-list-back" href="index.html#about">← 返回首页</a>
+      <a class="article-list-back" href="index.html#about" data-i18n="back_home">← 返回首页</a>
       <span class="eyebrow">INSIGHT</span>
-      <h1 class="article-list-title">行业洞察分析</h1>
-      <p class="article-list-desc">追踪运价波动、港口动态与政策变化，提供具有前瞻性的市场解读。每周一期美加线港口汇总，给你最即时的行业脉搏。</p>
+      <h1 class="article-list-title" data-i18n="insight_title">行业洞察分析</h1>
+      <p class="article-list-desc" data-i18n="insight_desc">追踪运价波动、港口动态与政策变化，提供具有前瞻性的市场解读。每周一期美加线港口汇总，给你最即时的行业脉搏。</p>
 
       <a class="article-item" href="article-port-w43.html">
         <div class="article-item-cat">港口周报 · Week 43</div>
@@ -50,19 +58,6 @@
         <div class="article-item-meta">航运派威廉 · 2026-10-10 · 行业洞察分析</div>
       </a>
 
-      <a class="article-item" href="article-ieepa-tariff.html">
-        <div class="article-item-cat">政策解读 · IEEPA 关税退款</div>
-        <div class="article-item-title">IEEPA 关税退款 集体诉讼资格取得重大进展</div>
-        <div class="article-item-excerpt">美国国际贸易法院于 2026-10-08 在 Freestyle World, Inc. 诉美国政府案中批准集体诉讼资格，数万家未单独起诉的进口商被自动纳入集体保护范围，无需自行起诉即可共享 IEEPA 关税退款成果。本文详解案件背景、法院关键分析、里程碑意义与后续日程。</div>
-        <div class="article-item-meta">航运派威廉 · 2026-10-09 · 行业洞察分析</div>
-      </a>
-
-      <a class="article-item" href="article-ieepa-cape-20261007.html">
-        <div class="article-item-cat">政策解读 · IEEPA 关税退款</div>
-        <div class="article-item-title">IEEPA 退款 CAPE 系统最新进展 2026/10/07</div>
-        <div class="article-item-excerpt">CBP 的 Brandon Lord 于 10 月 6 日向 CIT 的 Eaton 法官做最新陈述。截至 10 月 2 日，CAPE 系统累计收到 297,887 份申报、209,262 份通过初校，已处理约 1,366 亿美元潜在及已核准退款；并正式部署“第三阶段”，专用于处理诉讼原告获法院下令重新清关的最终报关单。</div>
-        <div class="article-item-meta">航运派威廉 · 2026-10-07 · 行业洞察分析</div>
-      </a>
 
       <a class="article-item" href="article-port-w41.html">
         <div class="article-item-cat">港口周报 · Week 41</div>
@@ -106,12 +101,6 @@
         <div class="article-item-meta">航运派威廉 · 2026-09-18 · 行业洞察分析</div>
       </a>
 
-      <a class="article-item" href="article-ieepa-cape-phase3.html">
-        <div class="article-item-cat">政策解读 · IEEPA 关税退款</div>
-        <div class="article-item-title">IEEPA 退款 CAPE 第三阶段定档了</div>
-        <div class="article-item-excerpt">9 月 15 日 CBP 的 Brandon Lord 向 CIT 的 Eaton 法官确认 CAPE 第三阶段 2026-10-06 部署；仅受理 7 月 30 日前提交有效 IOR 编号原告的终局清算重清报关单；复盘三周退款进度与卡在 ACH 的 13 亿美元。</div>
-        <div class="article-item-meta">航运派威廉 · 2026-09-16 · 行业洞察分析</div>
-      </a>
 
       <a class="article-item" href="article-cbp-tcss-2026.html">
         <div class="article-item-cat">政策解读 · 美国海关风向</div>
@@ -148,12 +137,6 @@
         <div class="article-item-meta">航运派威廉 · 2026-08-30 · 行业洞察分析</div>
       </a>
 
-      <a class="article-item" href="article-ieepa-cape-20260828.html">
-        <div class="article-item-cat">政策解读 · IEEPA 关税退款</div>
-        <div class="article-item-title">IEEPA 退款 CAPE 已完成约 1066 亿美元退税</div>
-        <div class="article-item-excerpt">8 月 28 日 CBP 的 Brandon Lord 向 CIT 的 Eaton 法官做最新陈述（数据截至 8 月 21 日）：累计收到 272,029 份 CAPE 申报、191,494 份通过文件校验；2,640 万张报关单获准进入 CAPE 通道，其中 1,876 万张完成清算且未征 IEEPA 关税；约 1,066 亿美元退款（含关税及利息）已核准并提交财政部拨付。同时确认第三阶段延期以开发新增校验规则，22,170 笔约 17 亿美元因缺 ACH 信息卡在 CBP 账上。</div>
-        <div class="article-item-meta">航运派威廉 · 2026-08-28 · 行业洞察分析</div>
-      </a>
 
       <a class="article-item" href="article-cbp-ior-2026-16911.html">
         <div class="article-item-cat">政策解读 · CBP IOR 通报</div>
@@ -197,17 +180,21 @@
   <footer class="footer" id="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo">航运派</span>
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
         <span class="footer-logo-en">Trans Pi</span>
       </div>
-      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
       <div class="footer-divider"></div>
       <div class="footer-links">
-        <a href="about.html">关于 William</a>
-        <a href="index.html#about">专栏订阅</a>
-        <a href="index.html#footer">商务合作</a>
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
       </div>
-      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+            <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
     </div>
   </footer>
 

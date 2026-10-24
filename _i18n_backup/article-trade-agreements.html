@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>贸易协定专题 | 航运派</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=clean-20261018" />
+  <link rel="stylesheet" href="article.css?v=trade-agree-20261021" />
+  <style>
+    /* ===== 贸易协定专题（本页专用，复用欧盟专题组件） ===== */
+    .reg-list { margin: 0 0 8px; }
+    .reg-card {
+      border: 1px solid rgba(89,97,115,0.4);
+      border-radius: 16px;
+      background: var(--card-bg);
+      padding: 30px 32px;
+      margin-bottom: 28px;
+    }
+    .reg-card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px 18px;
+      flex-wrap: wrap;
+    }
+    .reg-card-title {
+      font-family: var(--font-cn);
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.4;
+      color: var(--white);
+      margin: 0;
+    }
+    .reg-collected {
+      font-family: var(--font-cn);
+      font-size: 12.5px;
+      color: var(--text-gray);
+      white-space: nowrap;
+    }
+    .reg-collected b { color: var(--gold); font-weight: 500; }
+    .reg-subtitle {
+      font-family: var(--font-en);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: .5px;
+      color: var(--gold);
+      margin: 6px 0 18px;
+    }
+    .reg-row {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 10px 16px;
+      padding: 12px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .reg-k {
+      font-family: var(--font-cn);
+      font-size: 14px;
+      color: var(--gold);
+    }
+    .reg-k--head {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .reg-v {
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-gray-light);
+    }
+    .reg-block {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border-radius: 12px;
+      background: rgba(212,175,55,0.05);
+      border: 1px solid rgba(212,175,55,0.16);
+    }
+    .reg-points { list-style: none; margin: 0; padding: 0; }
+    .reg-points li {
+      position: relative;
+      padding-left: 20px;
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-gray-light);
+      margin-bottom: 8px;
+    }
+    .reg-points li::before {
+      content: "";
+      position: absolute;
+      left: 4px; top: 12px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+    .reg-note {
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.95;
+      color: var(--text-gray-light);
+      margin: 0;
+    }
+    .reg-note strong { color: var(--white); font-weight: 500; }
+    .reg-source {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .reg-source a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-cn);
+      font-size: 13px;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(212,175,55,0.4);
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: background .25s ease;
+      word-break: break-word;
+    }
+    .reg-source a:hover { background: rgba(212,175,55,0.12); }
+
+    @media (max-width: 768px) {
+      .reg-card { padding: 22px 20px; }
+      .reg-row { grid-template-columns: 1fr; gap: 4px; }
+      .reg-card-title { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+            <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
+      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+<div class="nav-links">
+        <a href="about.html">关于</a>
+        <a href="index.html#about">专栏</a>
+        <a href="index.html#tools">实用工具</a>
+        <a href="index.html#footer">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 文章主体 -->
+  <article class="article">
+    <div class="container article-inner">
+      <a class="article-back" href="index.html#about">← 返回 · 专栏</a>
+      <span class="eyebrow">专栏 · 贸易协定</span>
+      <h1 class="article-title">全球三大贸易协定专题：关税减让与原产地规则</h1>
+      <div class="article-meta">航运派威廉 · 资料整理</div>
+      <p class="article-lede">RCEP、USMCA、CPTPP 是当下影响全球货流与供应链走向的三大有代表性自由贸易协定。本专题分别梳理它们的<strong>关税减让安排</strong>与<strong>原产地规则</strong>要点，<strong>每条均挂载官方原文源，本网站仅做结构化摘要与中文简单解读，所有内容均以官方原文为准。</strong>协定文本与减让表更新频繁，请以各缔约方官方最新版本为准。</p>
+
+      <div class="reg-list">
+
+        <!-- 1. RCEP -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">1. RCEP 区域全面经济伙伴关系协定</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Regional Comprehensive Economic Partnership · 2020-11-15 签署 / 2022-01-01 生效</p>
+
+          <div class="reg-row">
+            <div class="reg-k">依据</div>
+            <div class="reg-v">《区域全面经济伙伴关系协定》（RCEP）文本，含 20 章及 4 个市场准入承诺附件；保存人：东盟秘书处</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">成员与范围</div>
+            <div class="reg-v">15 个成员：东盟十国 + 中国、日本、韩国、澳大利亚、新西兰；全球规模最大自贸区（约占全球 GDP 30%、世界人口约 1/3）</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>关税减让：区域内 90% 以上货物贸易最终将实现零关税；降税分「立即零关税」「过渡期降为零（10 年内）」「部分降税」「例外产品」四类。</li>
+              <li>减让模式分两种：8 国采用「统一减让」（对同一产品适用相同安排），7 国采用「国别减让」（对不同伙伴适用不同安排）。</li>
+              <li>原产地规则：特定原产地规则（PSR）以<strong>区域价值成分 RVC 40%</strong>为主，辅以税则归类改变（CC / CTH / CTSH）与化学反应标准，多标准可选择性适用。</li>
+              <li>累积规则：任一成员的原产材料均视为出口方原产材料，跨区域供应链更易凑足 40% 增值门槛；支持「背对背原产地证明」便利中转分拆。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">RCEP 是当前全球覆盖人口与经济规模最大的自由贸易协定，将东亚与东南亚整合为一个统一的关税与市场框架。其宏观意义在于：通过 90% 以上货物最终零关税与区域累积规则，显著降低成员国间的贸易成本，推动区域内中间品贸易与产业链深度嵌套，使「东盟 + 中日韩澳新」形成更紧密的区域生产网络；配套的统一原产地规则与背对背证书机制，也为区域内供应链重组与贸易流向再平衡提供了制度基础。
+
+当前成员国（共 15 个）：东盟十国（文莱、柬埔寨、印度尼西亚、老挝、马来西亚、缅甸、菲律宾、新加坡、泰国、越南），以及中国、日本、韩国、澳大利亚、新西兰。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://www.mti.gov.sg/trade-international-economic-relations/agreements/free-trade-agreements-fta/rcep/" target="_blank" rel="noopener">RCEP 法律文本（章节 PDF · 含第 3 章原产地、附件 3A）↗</a>
+              <a href="https://asean.org/rcep/" target="_blank" rel="noopener">东盟 RCEP 专题（保存人：东盟秘书处）↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. USMCA -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">2. USMCA 美墨加协定</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">United States–Mexico–Canada Agreement · 2020-07-01 生效（取代 NAFTA）</p>
+
+          <div class="reg-row">
+            <div class="reg-k">依据</div>
+            <div class="reg-v">《美墨加协定》（USMCA）文本，共 34 章 + 附件（美/墨/加关税减让表）+ 双边附函（side letters）</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">成员与范围</div>
+            <div class="reg-v">3 个成员：美国、墨西哥、加拿大；2020-07-01 生效，全面取代 NAFTA</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>关税减让：延续 NAFTA 已实现的<strong>基本零关税</strong>市场准入，多数货物本就免税，重点在规则而非税率。</li>
+              <li>原产地规则（一般货物）：区域价值成分 RVC 不低于 60%（交易价值法）或 50%（净成本法），并通常需配合税则归类改变（CTC）。</li>
+              <li>汽车专项（最严）：乘用车与轻卡 RVC 由 NAFTA 的 62.5% 提高至 <strong>75%</strong>，2023-07-01 前分阶段完成；重卡 2027 年起至 70%。</li>
+              <li>劳工价值成分（LVC）：乘用车 40% / 轻卡 45% 的整车价值须来自时薪 ≥ 16 美元产线的工人；钢材与铝材 <strong>70%</strong>须采购自北美。</li>
+              <li>核心零部件规则：发动机、变速箱等 7 类核心件须各自满足 RVC 75%；取消 NAFTA「视为原产」的宽松认定。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">USMCA 是北美地区的一体化贸易框架，取代了运行二十余年的 NAFTA，重塑了美、墨、加三国的生产分工与贸易秩序。其宏观意义在于：以更高的区域价值成分门槛（汽车 75%）以及劳工价值成分、钢铝本地化要求，将供应链进一步锁定在北美区域内部，客观上推动制造业近岸布局与区域化重组；同时以现代化的原产地自主声明替代固定证书，提升了贸易便利化程度，也为高标准的劳工、环境与数字贸易规则提供了模板。
+
+当前成员国（共 3 个）：美国、墨西哥、加拿大。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://ustr.gov/trade-agreements/free-trade-agreements/united-states-mexico-canada-agreement/agreement-between" target="_blank" rel="noopener">USMCA 协定全文（USTR · 含第 4 章原产地、关税减让表）↗</a>
+              <a href="https://www.cbp.gov/trade/priority-issues/trade-agreements/free-trade-agreements/USMCA" target="_blank" rel="noopener">美国海关 USMCA 专题（含第 4 章原产地规则）↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. CPTPP -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">3. CPTPP 全面与进步跨太平洋伙伴关系协定</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Comprehensive and Progressive TPP · 2018-03-08 签署 / 2018-12-30 生效</p>
+
+          <div class="reg-row">
+            <div class="reg-k">依据</div>
+            <div class="reg-v">《全面与进步跨太平洋伙伴关系协定》（CPTPP）文本，共 30 章（并入 TPP 并暂停部分条款）；保存人：新西兰政府</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">成员与范围</div>
+            <div class="reg-v">原始 11 国：澳、文莱、加、智、日、马来、墨、新、秘、新（新加坡）、越；英国 2024-12-15 起陆续生效（2026 年已在多数成员间生效），现共 12 国。美国 2017 年退出，非缔约方</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>关税减让：原始成员间<strong>几乎全部关税最终取消</strong>（95% 以上立即降零，其余分阶段）；英国加入后其对 CPTPP 出口的 99% 货物可享免关税。</li>
+              <li>原产地规则：第 3 章「原产地规则与程序」，产品特定规则见附件 3-D；常用判定为税则归类改变（CTC）与区域价值成分（RVC，按产品多为 35% / 40% / 45%）。</li>
+              <li>累积规则：<strong>完全累积（full cumulation）</strong>——任一成员的材料与加工均可计入原产资格，比 RCEP 的累积更宽松。</li>
+              <li>便利机制：容差（de minimis）、中间材料、以及<strong>无固定格式的原产地声明</strong>（仅需满足最小数据要素）。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">CPTPP 是当前门槛最高的跨太平洋高标准自贸圈，覆盖亚洲、美洲与大洋洲，并随英国加入延伸至欧洲。其宏观意义在于：以近乎全免税与完全累积规则，降低跨太平洋供应链的关税与合规成本，强化成员间的贸易创造效应；其规则文本（知识产权、国有企业、数字贸易、劳工与环境）被视为新一代贸易协定的范本，对全球经贸规则走向具有引领效应，也构成了对更多经济体加入的高标准门槛。
+
+当前成员国（共 12 个）：澳大利亚、文莱、加拿大、智利、日本、马来西亚、墨西哥、新西兰、秘鲁、新加坡、越南，以及自 2024 年底起陆续加入的英国。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://www.mfat.govt.nz/en/trade/free-trade-agreements/free-trade-agreements-in-force/cptpp/comprehensive-and-progressive-agreement-for-trans-pacific-partnership-text-and-resources/" target="_blank" rel="noopener">CPTPP 协定全文（新西兰 MFAT · 含第 3 章原产地、附件 3-D、第 2 章关税减让表）↗</a>
+              <a href="https://www.gov.uk/government/publications/cptpp-full-agreement-text" target="_blank" rel="noopener">英国政府 CPTPP 全文（含英国加入议定书说明）↗</a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="disclaimer" style="border-color: rgba(212,175,55,0.4);">
+        <strong style="color: var(--gold);">来源与版权说明：</strong>本专题为结构化速查摘要，仅对官方协定文本做要点提炼与中文解读，<strong>不转载任何协定全文</strong>。所有条款以各缔约方官方公布的协定文本、关税减让表与原产地规则附件为准；点击各条「官方原文源」按钮可直达对应官方页面。协定文本与减让表更新频繁，请以官方最新版本为准。
+      </div>
+
+      <div class="related">
+        <div class="related-title">看了这份专题，你可能还会想看</div>
+        <a class="related-card" href="article-eu-customs-regulations.html">
+          <span class="related-cat">专栏 · 欧盟海关</span>
+          <span class="related-name">欧盟海关与关税类法规专题</span>
+        </a>
+        <a class="related-card" href="article-ieepa-tariff-timeline.html">
+          <span class="related-cat">专栏 · 美国关税</span>
+          <span class="related-name">美国 IEEPA 关税：征收与退款时间线</span>
+        </a>
+        <a class="related-card" href="index.html#about">
+          <span class="related-cat">专栏</span>
+          <span class="related-name">返回专栏首页</span>
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        本站所列网址均为外部链接，其指向与页面内容不由本站实际控制；网址来源于公开网络信息整理。<br>
+        本站收录上述网址时，已对其可访问性作初步核验，但无法保证其内容的实时准确性与合规性。<br>
+        如后续相关网站内容出现违规或链接失效，建议直接联系其网站管理员处理，本站对此不承担任何责任。<br>
+        本站与各平台、机构无隶属或合作关系，仅作信息导航整理之用。<br>
+        部分平台需注册账号或提供相应业务凭证后方可使用，具体功能与适用范围以各官方最新公告为准。<br>
+        本页内容最近更新于：2026-10-22
+      </div>
+    </div>
+  </article>
+
+  <!-- 页脚 -->
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html">关于 William</a>
+        <a href="index.html#about">专栏订阅</a>
+        <a href="index.html#footer">商务合作</a>
+      </div>
+            <div class="footer-legal">
+        <p class="footer-copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

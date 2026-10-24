@@ -3,15 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>常见船公司查询链接 · 航运派 Trans Pi</title>
-  <link rel="stylesheet" href="tool.css?v=transpi-tools-20261001" />
+  <title data-i18n-title="title_tools_carriers">常见船公司查询链接 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=carriers-disclaimer-20261022" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
   <div class="tool-page">
-    <a class="tool-back" href="index.html">← 返回 航运派 Trans Pi</a>
-    <h1 class="tool-h1">常见船公司查询链接</h1>
-    <p class="tool-sub">主流班轮公司官网直达，查船期、运价、提单与 track & trace 一站搞定。点击卡片在新标签打开。</p>
+    <div class="tool-topline">
+      <a class="tool-back" href="index.html" data-i18n="back_site">← 返回 航运派 Trans Pi</a>
+      <div class="lang-switch" role="group" aria-label="Language / 语言">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <h1 class="tool-h1" data-i18n="toolh_carriers">常见船公司查询链接</h1>
+    <p class="tool-sub" data-i18n="toolsub_carriers">主流班轮公司官网直达，查船期、运价、提单与 track & trace 一站搞定。点击卡片在新标签打开。</p>
     <div class="carrier-grid" id="carriers"></div>
+  </div>
+
+  <div class="tool-disclaimer">
+    本站所列网址均为外部链接，其指向与页面内容不由本站实际控制；网址来源于公开网络信息整理。<br>
+    本站收录上述网址时，已对其可访问性作初步核验，但无法保证其内容的实时准确性与合规性。<br>
+    如后续相关网站内容出现违规或链接失效，建议直接联系其网站管理员处理，本站对此不承担任何责任。<br>
+    本站与各平台、机构无隶属或合作关系，仅作信息导航整理之用。<br>
+    部分平台需注册账号或提供相应业务凭证后方可使用，具体功能与适用范围以各官方最新公告为准。<br>
+    本页内容最近更新于：2026-10-22
   </div>
 
   <script>
@@ -51,5 +68,26 @@
       wrap.appendChild(a);
     });
   </script>
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

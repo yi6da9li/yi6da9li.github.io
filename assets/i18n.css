@@ -1,0 +1,70 @@
+/* ===== 航运派 Trans Pi · 中英界面切换 =====
+   依赖：assets/i18n.js
+   说明：仅切换「界面骨架」文字（导航/页脚/板块标题/导语/按钮）；
+        文章正文、书目条目、工具内部界面按需求保留中文。 */
+
+/* 语言切换按钮（胶囊双态） */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 999px;
+  background: rgba(11, 18, 33, 0.55);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.lang-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  color: #B3B3B3;
+  font-family: 'Inter Tight', 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color .2s ease, background .2s ease;
+  white-space: nowrap;
+}
+.lang-btn:hover { color: #D4AF37; }
+.lang-btn.is-active {
+  background: #D4AF37;
+  color: #0B1221;
+}
+.lang-btn:focus-visible { outline: 2px solid rgba(212,175,55,.6); outline-offset: 2px; }
+
+/* 导航右侧动作区：语言切换 + 汉堡 + 链接 */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* 工具页顶行：返回链接 + 语言切换 */
+.tool-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* 英文版页脚品牌只保留 Trans Pi，避免「Trans Pi | Trans Pi」重复 */
+html[data-lang="en"] .footer-logo-en { display: none; }
+
+@media (max-width: 768px) {
+  .nav-actions { gap: 12px; }
+  .lang-btn { padding: 6px 8px; font-size: 11.5px; }
+  .tool-topline { gap: 10px; }
+}
+
+/* Slogan 中英双语：中文需回退到中文字体，避免与英文混排跳字 */
+.slogan-text {
+  font-family: 'Inter Tight', 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+}

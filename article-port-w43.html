@@ -12,18 +12,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=clean-20261018" />
   <link rel="stylesheet" href="article.css?v=port-w43-article-20261018" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
 <!-- 导航栏 -->
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" /><span data-i18n="brand_nav">航运派</span></div>
+<div class="nav-actions">
             <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
-      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
-<div class="nav-links">
-        <a href="about.html">关于</a>
-        <a href="index.html#about">专栏</a>
-        <a href="index.html#footer">联系</a>
+        <div class="lang-switch" role="group" aria-label="Language / 语言">
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+        <div class="nav-links">
+        <a href="about.html" data-i18n="nav_about">关于</a>
+        <a href="index.html#about" data-i18n="nav_column">专栏</a>
+        <a href="index.html#footer" data-i18n="nav_contact">联系</a>
+      </div>
       </div>
     </div>
   </nav>
@@ -31,8 +39,8 @@
   <!-- 文章主体 -->
   <article class="article">
     <div class="container article-inner">
-      <a class="article-back" href="article-insight-list.html">← 返回 · 行业洞察分析</a>
-      <span class="eyebrow">行业洞察分析</span>
+      <a class="article-back" href="article-insight-list.html" data-i18n="back_insight">← 返回 · 行业洞察分析</a>
+      <span class="eyebrow" data-i18n="eyebrow_insight">行业洞察分析</span>
       <h1 class="article-title">美加线港口情况 UPDATE 2026 Week 43</h1>
       <div class="article-meta">航运派威廉 · 2026-10-17</div>
       <p class="article-lede">传递资讯，更传递价值。大家好，我是航运派威廉。每周一期美加线港口汇总在周末准时相见。</p>
@@ -201,17 +209,21 @@
   <footer class="footer" id="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo">航运派</span>
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
         <span class="footer-logo-en">Trans Pi</span>
       </div>
-      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
       <div class="footer-divider"></div>
       <div class="footer-links">
-        <a href="about.html">关于 William</a>
-        <a href="index.html#about">专栏订阅</a>
-        <a href="index.html#footer">商务合作</a>
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
       </div>
-      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+            <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
     </div>
   </footer>
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>航运术语表 · 中英对照 · 航运派 Trans Pi</title>
-  <link rel="stylesheet" href="tool.css?v=transpi-glossary-20261001" />
+  <title data-i18n-title="title_glossary">航运术语表 · 中英对照 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=transpi-tools-20261022" />
   <style>
     .glossary-toolbar {
       position: sticky; top: 0; z-index: 20;
@@ -55,12 +55,20 @@
     mark { background: rgba(212,175,55,.35); color: #fff; border-radius: 3px; padding: 0 2px; }
     .glossary-foot { color: var(--text-gray); font-size: 12px; margin-top: 36px; text-align: center; }
   </style>
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
   <div class="tool-page">
-    <a class="tool-back" href="index.html#tools">← 返回 · 实用工具</a>
-    <h1 class="tool-h1">航运术语表 · 中英对照</h1>
-    <p class="tool-sub">支持中英文实时搜索，可通过下方字母索引快速定位术语。输入英文缩写、中文名称或释义关键词即可实时筛选。</p>
+    <div class="tool-topline">
+      <a class="tool-back" href="index.html#tools" data-i18n="back_tools">← 返回 · 实用工具</a>
+      <div class="lang-switch" role="group" aria-label="Language / 语言">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <h1 class="tool-h1" data-i18n="toolh_glossary">航运术语表 · 中英对照</h1>
+    <p class="tool-sub" data-i18n="toolsub_glossary">支持中英文实时搜索，可通过下方字母索引快速定位术语。输入英文缩写、中文名称或释义关键词即可实时筛选。</p>
 
     <div class="glossary-toolbar">
       <div class="glossary-search">
@@ -964,5 +972,26 @@
     qEl.addEventListener('input', function(){ renderAll(this.value); });
     renderAll('');
   </script>
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

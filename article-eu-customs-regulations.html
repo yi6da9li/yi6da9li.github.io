@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>欧盟海关与关税类法规专题 | 航运派</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=clean-20261018" />
+  <link rel="stylesheet" href="article.css?v=eu-customs-reg-20261021" />
+  <style>
+    /* ===== 欧盟海关法规专题（本页专用） ===== */
+    .reg-list { margin: 0 0 8px; }
+    .reg-card {
+      border: 1px solid rgba(89,97,115,0.4);
+      border-radius: 16px;
+      background: var(--card-bg);
+      padding: 30px 32px;
+      margin-bottom: 28px;
+    }
+    .reg-card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px 18px;
+      flex-wrap: wrap;
+    }
+    .reg-card-title {
+      font-family: var(--font-cn);
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.4;
+      color: var(--white);
+      margin: 0;
+    }
+    .reg-collected {
+      font-family: var(--font-cn);
+      font-size: 12.5px;
+      color: var(--text-gray);
+      white-space: nowrap;
+    }
+    .reg-collected b { color: var(--gold); font-weight: 500; }
+    .reg-subtitle {
+      font-family: var(--font-en);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: .5px;
+      color: var(--gold);
+      margin: 6px 0 18px;
+    }
+    .reg-row {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 10px 16px;
+      padding: 12px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .reg-k {
+      font-family: var(--font-cn);
+      font-size: 14px;
+      color: var(--gold);
+    }
+    .reg-k--head {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .reg-v {
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-gray-light);
+    }
+    .reg-block {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border-radius: 12px;
+      background: rgba(212,175,55,0.05);
+      border: 1px solid rgba(212,175,55,0.16);
+    }
+    .reg-points { list-style: none; margin: 0; padding: 0; }
+    .reg-points li {
+      position: relative;
+      padding-left: 20px;
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-gray-light);
+      margin-bottom: 8px;
+    }
+    .reg-points li::before {
+      content: "";
+      position: absolute;
+      left: 4px; top: 12px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+    .reg-note {
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.95;
+      color: var(--text-gray-light);
+      margin: 0;
+    }
+    .reg-note strong { color: var(--white); font-weight: 500; }
+    .reg-source {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .reg-source a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-cn);
+      font-size: 13px;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(212,175,55,0.4);
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: background .25s ease;
+      word-break: break-word;
+    }
+    .reg-source a:hover { background: rgba(212,175,55,0.12); }
+
+    @media (max-width: 768px) {
+      .reg-card { padding: 22px 20px; }
+      .reg-row { grid-template-columns: 1fr; gap: 4px; }
+      .reg-card-title { font-size: 19px; }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" /><span data-i18n="brand_nav">航运派</span></div>
+<div class="nav-actions">
+            <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
+        <div class="lang-switch" role="group" aria-label="Language / 语言">
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+        <div class="nav-links">
+        <a href="about.html" data-i18n="nav_about">关于</a>
+        <a href="index.html#about" data-i18n="nav_column">专栏</a>
+        <a href="index.html#tools" data-i18n="nav_tools">实用工具</a>
+        <a href="index.html#footer" data-i18n="nav_contact">联系</a>
+      </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 文章主体 -->
+  <article class="article">
+    <div class="container article-inner">
+      <a class="article-back" href="index.html#about" data-i18n="back_column">← 返回 · 专栏</a>
+      <span class="eyebrow" data-i18n="eyebrow_eu">专栏 · 欧盟海关与关税</span>
+      <h1 class="article-title">欧盟海关与关税类法规专题</h1>
+      <div class="article-meta">航运派威廉 · 资料整理</div>
+      <p class="article-lede">欧盟海关与关税规则是向欧洲进出口货物不可绕开的上位法。本专题按「现行有效 → 2026 改革 → 电商新政 → AEO 认证」四条主线梳理，<strong>每条均挂载官方原文源，本网站仅做结构化摘要与中文简单解读，所有内容均以官方原文为准。</strong>法规更新频繁，请以欧盟官方最新版本为准。</p>
+
+      <div class="reg-list">
+
+        <!-- 1. UCC -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">1. 欧盟海关法典 UCC（现行有效）</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Union Customs Code · Regulation (EU) No 952/2013</p>
+
+          <div class="reg-row">
+            <div class="reg-k">依据</div>
+            <div class="reg-v">Regulation (EU) No 952/2013（R）；实施条例 Implementing Regulation (EU) 2015/2447</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">适用场景</div>
+            <div class="reg-v">所有进口欧盟货物报关的总纲，含 ENS 安全申报、AEO、通关程序</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>性质：欧盟海关制度的基石性法规（Union Customs Code，UCC）。</li>
+              <li>构成：主体法规 952/2013 + 授权 / 实施条例 2015/2447 共同构成完整规则体系。</li>
+              <li>覆盖：报关、关税计征、海关程序、AEO、海关监管与后续稽查全链条。</li>
+              <li>关键机制：ENS 入境摘要申报（装船前安全预申报）、统一的海关程序与编码。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">UCC 是向欧盟进口货物的「总规矩」，把申报、缴税、查验、放行等流程标准化，是货代与报关行日常操作必须遵循的上位法。<strong>ENS（入境摘要申报）</strong>要求在货物装船前向目的港海关发送安全数据；<strong>AEO</strong> 资质则能换来查验率下降与通关便利。读懂 UCC，基本就掌握了欧盟清关的底层逻辑。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013R0952" target="_blank" rel="noopener">法典原文 · 952/2013 ↗</a>
+              <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32015R2447" target="_blank" rel="noopener">实施条例 · 2015/2447 ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. 新欧盟海关法典 -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">2. 新欧盟海关法典（2026 年改革）</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">New Union Customs Code Reform · Regulation (EU) 2026/2108</p>
+
+          <div class="reg-row">
+            <div class="reg-k">依据</div>
+            <div class="reg-v">Regulation (EU) 2026/2108（R）</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">适用场景</div>
+            <div class="reg-v">2026-09-16 议会通过、2026-09-19 公报发布、2026-09-20 生效；设欧盟海关总署（EUCA，驻法国里尔）与海关数据中枢（Data Hub）</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>性质：对现行 UCC 的重大改革版本（新欧盟海关法典）。</li>
+              <li>时间线：2026-09-16 欧洲议会通过 → 09-19 官方公报发布 → 09-20 生效。</li>
+              <li>新机构：设立欧盟海关总署 EUCA（驻法国里尔），强化欧盟层面统一执法。</li>
+              <li>新机制：建设海关数据中枢 Data Hub，集中打通各成员国分散的海关数据。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">这是欧盟海关体系近十年来最大的结构性改革。新设的 <strong>EUCA</strong> 将强化欧盟层面的统一执法，<strong>Data Hub</strong> 则把分散在各成员国的海关数据集中打通，目标是「智慧海关 + 数据驱动监管」。对货代而言，意味着申报数据标准更统一，但合规审查会更集中、更严格——提前做好数据合规比以往更重要。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R2108" target="_blank" rel="noopener">新法典原文 · 2026/2108 ↗</a>
+              <a href="https://taxation-customs.ec.europa.eu/customs/eu-customs-reform_en" target="_blank" rel="noopener">欧委会改革专题页 ↗</a>
+              <a href="https://cyprus.representation.ec.europa.eu/news/eu-customs-reform-marks-new-era-customs-europe-2026-09-22_en" target="_blank" rel="noopener">生效通告 ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. 电商低值包裹新政 -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">3. 电商低值包裹新政</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Low-value Consignment / E-commerce · Regulation (EU) 2026/382 & 2026/1022</p>
+
+          <div class="reg-row">
+            <div class="reg-k">依据</div>
+            <div class="reg-v">Regulation (EU) 2026/382（R）及授权条例 (EU) 2026/1022</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">适用场景</div>
+            <div class="reg-v">150 欧元免税门槛已取消；2026-07-01 至 2028-07-01 按每件 3 欧元征临时关税；欧盟统一包裹手续费 2026-11 起征收</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>变化一：取消 150 欧元以下低值进口商品的免税门槛（de minimis）。</li>
+              <li>过渡期：2026-07-01 至 2028-07-01，对每件低值商品征收 3 欧元临时关税。</li>
+              <li>新收费：欧盟统一包裹手续费自 2026-11 起征收。</li>
+              <li>配套：授权条例 2026/1022 细化执行规则与申报要求。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">过去 150 欧元以下包裹免征关税，是跨境小包（尤其中国电商）的重要红利窗口；新政直接取消该门槛，并先以「每件 3 欧元」的简易税过渡两年，再由统一的<strong>包裹手续费</strong>接管。对跨境电商卖家与承运商，单件履约成本上升、合规申报前置，需要重新核算小包商业模式的经济性。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0382" target="_blank" rel="noopener">条例原文 · 2026/382 ↗</a>
+              <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1022" target="_blank" rel="noopener">授权条例 · 2026/1022 ↗</a>
+              <a href="https://taxation-customs.ec.europa.eu/customs/eu-customs-reform_en" target="_blank" rel="noopener">改革专题页（含 3 欧元关税指引）↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. AEO / Trust & Check -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">4. AEO 经认证经营者 / Trust &amp; Check</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Authorised Economic Operator · UCC Article 38–41</p>
+
+          <div class="reg-row">
+            <div class="reg-k">依据</div>
+            <div class="reg-v">UCC 第 38–41 条；新改革增设 Trust &amp; Check 类别</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">适用场景</div>
+            <div class="reg-v">AEO 资质降低查验率、简化通关；货代与报关行的核心资质</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>定义：Authorised Economic Operator，经海关认证的「靠谱企业」。</li>
+              <li>法律依据：UCC 第 38–41 条。</li>
+              <li>价值：降低查验率、简化通关程序、跨境互认（多国 AEO 互认安排）。</li>
+              <li>新增：2026 改革在 AEO 之上增设 Trust &amp; Check 新类别（更高信任级别）。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">AEO 是海关发给企业的「信用金牌」——通过安全与合规认证后，货物查验更少、通关更快，且多国互认。对货代与报关行，AEO 几乎是从业核心资质。2026 改革新设的 <strong>Trust &amp; Check</strong> 类别，相当于在 AEO 之上再开一档「最高信任」通道，符合条件的企业可享近乎自主管控的便利，是头部物流企业的新赛道。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32013R0952" target="_blank" rel="noopener">法规原文（UCC 第 38–41 条）↗</a>
+              <a href="https://taxation-customs.ec.europa.eu/customs/eu-customs-reform_en" target="_blank" rel="noopener">改革说明（Trust &amp; Check）↗</a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="disclaimer" style="border-color: rgba(212,175,55,0.4);">
+        <strong style="color: var(--gold);">来源与版权说明：</strong>本专题为结构化速查摘要，仅对官方法规做要点提炼与中文解读，<strong>不转载任何法规全文</strong>。所有条款以欧盟官方公报（EUR-Lex）与欧委会官网公布的原文为准；点击各条「官方原文源」按钮可直达对应法规。法规更新频繁，请以官方最新版本为准。
+      </div>
+
+      <div class="related">
+        <div class="related-title">看了这份专题，你可能还会想看</div>
+        <a class="related-card" href="article-ieepa-tariff-timeline.html">
+          <span class="related-cat">专栏 · 美国关税</span>
+          <span class="related-name">美国 IEEPA 关税：征收与退款时间线</span>
+        </a>
+        <a class="related-card" href="index.html#about">
+          <span class="related-cat">专栏</span>
+          <span class="related-name">返回专栏首页</span>
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        本站所列网址均为外部链接，其指向与页面内容不由本站实际控制；网址来源于公开网络信息整理。<br>
+        本站收录上述网址时，已对其可访问性作初步核验，但无法保证其内容的实时准确性与合规性。<br>
+        如后续相关网站内容出现违规或链接失效，建议直接联系其网站管理员处理，本站对此不承担任何责任。<br>
+        本站与各平台、机构无隶属或合作关系，仅作信息导航整理之用。<br>
+        部分平台需注册账号或提供相应业务凭证后方可使用，具体功能与适用范围以各官方最新公告为准。<br>
+        本页内容最近更新于：2026-10-22
+      </div>
+    </div>
+  </article>
+
+  <!-- 页脚 -->
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
+      </div>
+            <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

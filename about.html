@@ -6,26 +6,35 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>关于航运派 · William | 国际航运物流专家</title>
+  <title data-i18n-title="title_about">关于航运派 · William | 国际航运物流专家</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=clean-20261018" />
   <link rel="stylesheet" href="about-page.css?v=brand-qr-20261020" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
 
   <!-- 导航栏 -->
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" /><span data-i18n="brand_nav">航运派</span></div>
+<div class="nav-actions">
             <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
-      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
-<div class="nav-links">
-        <a href="about.html" class="is-active">关于</a>
-        <a href="index.html#about">专栏</a>
-        <a href="index.html#tools">实用工具</a>
-        <a href="index.html#footer">联系</a>
+        <div class="lang-switch" role="group" aria-label="Language / 语言">
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+        <div class="nav-links">
+        <a href="about.html" class="is-active" data-i18n="nav_about">关于</a>
+        <a href="index.html#about" data-i18n="nav_column">专栏</a>
+        <a href="index.html#books" data-i18n="nav_books">潮汐漫读</a>
+        <a href="index.html#tools" data-i18n="nav_tools">实用工具</a>
+        <a href="index.html#footer" data-i18n="nav_contact">联系</a>
+      </div>
       </div>
     </div>
   </nav>
@@ -34,9 +43,9 @@
   <header class="about-hero">
     <div class="container">
       <span class="eyebrow">ABOUT</span>
-      <h1 class="about-hero-title">航运派 · William</h1>
+      <h1 class="about-hero-title" data-i18n="about_hero_title">航运派 · William</h1>
       <p class="about-hero-en">Trans Pi · Across Air, Land &amp; Sea</p>
-      <p class="about-hero-sub">传递资讯，更传递价值</p>
+      <p class="about-hero-sub" data-i18n="about_hero_sub">随潮汐展卷，于书页远航</p>
     </div>
   </header>
 
@@ -45,14 +54,14 @@
     <div class="container about-block-inner">
       <div class="about-block-head">
         <span class="eyebrow">BRAND</span>
-        <h2 class="section-title">航运派 · 品牌主张</h2>
+        <h2 class="section-title" data-i18n="about_brand_title">航运派 · 品牌主张</h2>
       </div>
 
       <!-- π 精神图腾 -->
       <div class="brand-pi">
         <div class="brand-pi-symbol">π</div>
         <div class="brand-pi-digits">3.14159 26535 89793 23846 26433 83279 50288 41971 69399 37510 …</div>
-        <div class="brand-pi-caption">无限的可能性 · 永恒的探索</div>
+        <div class="brand-pi-caption" data-i18n="about_pi_caption">无限的可能性 · 永恒的探索</div>
       </div>
 
       <div class="brand-layout">
@@ -67,8 +76,8 @@
           <div class="brand-qr-frame">
             <img src="assets/qrcode-gh.jpg" alt="航运派 微信公众号二维码" width="258" height="258" loading="lazy" />
           </div>
-          <p class="brand-qr-title">微信扫码 · 关注「航运派」</p>
-          <p class="brand-qr-sub">公众号同步更新<br />航运洞察与实操笔记</p>
+          <p class="brand-qr-title" data-i18n="about_qr_title">微信扫码 · 关注「航运派」</p>
+          <p class="brand-qr-sub" data-i18n-html="about_qr_sub">公众号同步更新<br />航运洞察与实操笔记</p>
         </aside>
       </div>
     </div>
@@ -79,7 +88,7 @@
     <div class="container about-block-inner">
       <div class="about-block-head">
         <span class="eyebrow">EXPERT</span>
-        <h2 class="section-title">William · 专家简介</h2>
+        <h2 class="section-title" data-i18n="about_expert_title">William · 专家简介</h2>
       </div>
       <div class="about-prose">
         <p>William 是国际航运物流领域资深从业者，长期深耕各航线，覆盖从订舱、海运、清关到端到端履约的全流程实操。十余年间，他服务过数十家外贸与货代客户，沉淀出一套系统的航运知识体系。</p>
@@ -88,15 +97,15 @@
       <div class="about-highlights">
         <div class="about-highlight">
           <div class="about-highlight-num">15+</div>
-          <div class="about-highlight-label">年行业深耕</div>
+          <div class="about-highlight-label" data-i18n="metric_years">年行业深耕</div>
         </div>
         <div class="about-highlight">
           <div class="about-highlight-num">90+</div>
-          <div class="about-highlight-label">服务客户数</div>
+          <div class="about-highlight-label" data-i18n="metric_clients">服务客户数</div>
         </div>
         <div class="about-highlight">
           <div class="about-highlight-num">500+</div>
-          <div class="about-highlight-label">专业文章</div>
+          <div class="about-highlight-label" data-i18n="metric_articles">专业文章</div>
         </div>
       </div>
     </div>
@@ -106,17 +115,21 @@
   <footer class="footer" id="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo">航运派</span>
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
         <span class="footer-logo-en">Trans Pi</span>
       </div>
-      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
       <div class="footer-divider"></div>
       <div class="footer-links">
-        <a href="about.html">关于 William</a>
-        <a href="index.html#about">专栏订阅</a>
-        <a href="index.html#footer">商务合作</a>
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
       </div>
-      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+            <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
     </div>
   </footer>
 

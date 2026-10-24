@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n-title="title_tools_units">单位换算 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=transpi-tools-20261022" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
+</head>
+<body>
+  <div class="tool-page">
+    <div class="tool-topline">
+      <a class="tool-back" href="index.html" data-i18n="back_site">← 返回 航运派 Trans Pi</a>
+      <div class="lang-switch" role="group" aria-label="Language / 语言">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <h1 class="tool-h1" data-i18n="toolh_units">单位换算</h1>
+    <p class="tool-sub" data-i18n="toolsub_units">货代与物流报价里最常用的单位换算：重量、体积、长度、温度一键互转。输入任意一侧数值，另一侧实时得出结果，支持单位交换。所有换算基于国际通用换算系数。</p>
+
+    <div class="conv-tabs" id="convTabs"></div>
+
+    <div class="tool-panel">
+      <div class="conv-row">
+        <div class="field conv-field">
+          <label id="lblFromVal">数值</label>
+          <input id="fromVal" type="number" inputmode="decimal" placeholder="输入数值" autocomplete="off" />
+        </div>
+        <div class="field conv-field">
+          <label>从单位</label>
+          <select id="fromUnit"></select>
+        </div>
+      </div>
+
+      <div class="conv-mid">
+        <button class="tool-btn conv-swap" id="swapBtn" type="button" title="交换单位">⇄ 交换单位</button>
+      </div>
+
+      <div class="conv-row">
+        <div class="field conv-field">
+          <label id="lblToVal">换算结果</label>
+          <input id="toVal" type="number" inputmode="decimal" placeholder="结果" autocomplete="off" />
+        </div>
+        <div class="field conv-field">
+          <label>到单位</label>
+          <select id="toUnit"></select>
+        </div>
+      </div>
+
+      <div class="tool-note" id="convNote"></div>
+    </div>
+
+    <p class="tool-note">提示：立方米即 CBM（Cubic Meter），立方英尺即 CBF（Cubic Feet）。温度换算为非线性公式（℉ = ℃ × 9/5 + 32），其余均为线性系数换算。本工具仅供速算参考，正式报关与计费请以官方计量为准。</p>
+  </div>
+
+  <script>
+    // 换算数据：每个分类含若干单位，factor 为「该单位 → 基准单位」的乘数（温度除外，单独处理）
+    var cats = {
+      weight: {
+        name: '重量',
+        baseLabel: '基准单位：千克 kg',
+        units: {
+          kg:  { label: '千克 kg',     f: 1 },
+          lb:  { label: '磅 lb',       f: 0.45359237 },
+          t:   { label: '公吨 t',      f: 1000 },
+          oz:  { label: '盎司 oz',     f: 0.028349523125 }
+        }
+      },
+      volume: {
+        name: '体积',
+        baseLabel: '基准单位：立方米 m³',
+        units: {
+          m3:  { label: '立方米 m³ (CBM)', f: 1 },
+          ft3: { label: '立方英尺 ft³ (CBF)', f: 0.0283168466 },
+          l:   { label: '升 L',         f: 0.001 },
+          gal: { label: '美加仑 gal',   f: 0.003785411784 }
+        }
+      },
+      length: {
+        name: '长度',
+        baseLabel: '基准单位：米 m',
+        units: {
+          m:   { label: '米 m',     f: 1 },
+          cm:  { label: '厘米 cm',  f: 0.01 },
+          in:  { label: '英寸 in',  f: 0.0254 },
+          ft:  { label: '英尺 ft',  f: 0.3048 }
+        }
+      },
+      temp: {
+        name: '温度',
+        special: true,
+        baseLabel: '摄氏度 ℃ / 华氏度 ℉',
+        units: {
+          c: { label: '摄氏度 ℃' },
+          f: { label: '华氏度 ℉' }
+        }
+      }
+    };
+
+    var catKeys = ['weight', 'volume', 'length', 'temp'];
+    var current = 'weight';
+    var activeField = 'from'; // 记录当前正在编辑的是哪一侧
+
+    var tabsEl = document.getElementById('convTabs');
+    var fromVal = document.getElementById('fromVal');
+    var toVal = document.getElementById('toVal');
+    var fromUnit = document.getElementById('fromUnit');
+    var toUnit = document.getElementById('toUnit');
+    var noteEl = document.getElementById('convNote');
+    var swapBtn = document.getElementById('swapBtn');
+
+    // 构建分类标签
+    catKeys.forEach(function (k) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'conv-tab' + (k === current ? ' active' : '');
+      b.textContent = cats[k].name;
+      b.setAttribute('data-cat', k);
+      b.addEventListener('click', function () { switchCat(k); });
+      tabsEl.appendChild(b);
+    });
+
+    function fillUnits() {
+      var units = cats[current].units;
+      var keys = Object.keys(units);
+      fromUnit.innerHTML = '';
+      toUnit.innerHTML = '';
+      keys.forEach(function (key) {
+        var o1 = document.createElement('option');
+        o1.value = key; o1.textContent = units[key].label;
+        fromUnit.appendChild(o1);
+        var o2 = document.createElement('option');
+        o2.value = key; o2.textContent = units[key].label;
+        toUnit.appendChild(o2);
+      });
+      // 默认从、到取前两个不同单位
+      fromUnit.value = keys[0];
+      toUnit.value = keys[Math.min(1, keys.length - 1)];
+    }
+
+    function switchCat(k) {
+      current = k;
+      activeField = 'from';
+      Array.prototype.forEach.call(tabsEl.children, function (b) {
+        b.className = 'conv-tab' + (b.getAttribute('data-cat') === k ? ' active' : '');
+      });
+      fillUnits();
+      fromVal.value = '';
+      toVal.value = '';
+      convert();
+    }
+
+    function trim(x) {
+      if (!isFinite(x)) return '';
+      return String(parseFloat(x.toPrecision(10)));
+    }
+
+    function convert() {
+      var cat = cats[current];
+      if (cat.special) {
+        var fc = cat.units[fromUnit.value], tc = cat.units[toUnit.value];
+        noteEl.textContent = '换算关系：℉ = ℃ × 9/5 + 32；℃ = (℉ − 32) × 5/9';
+        var v, base;
+        if (activeField === 'from') {
+          v = parseFloat(fromVal.value);
+          if (isNaN(v)) { toVal.value = ''; return; }
+          base = fromUnit.value === 'c' ? v : (v - 32) * 5 / 9; // 基准为 ℃
+          toVal.value = trim(fromUnit.value === 'c' ? base * 9 / 5 + 32 : base);
+        } else {
+          v = parseFloat(toVal.value);
+          if (isNaN(v)) { fromVal.value = ''; return; }
+          base = toUnit.value === 'c' ? v : (v - 32) * 5 / 9;
+          fromVal.value = trim(toUnit.value === 'c' ? base * 9 / 5 + 32 : base);
+        }
+        return;
+      }
+      // 线性系数换算
+      var fu = cat.units[fromUnit.value].f;
+      var tu = cat.units[toUnit.value].f;
+      noteEl.textContent = cat.baseLabel + '。1 ' + cat.units[fromUnit.value].label.split(' ')[0] +
+        ' = ' + trim(fu / tu) + ' ' + cat.units[toUnit.value].label.split(' ')[0];
+      var v2, base2;
+      if (activeField === 'from') {
+        v2 = parseFloat(fromVal.value);
+        if (isNaN(v2)) { toVal.value = ''; return; }
+        base2 = v2 * fu;
+        toVal.value = trim(base2 / tu);
+      } else {
+        v2 = parseFloat(toVal.value);
+        if (isNaN(v2)) { fromVal.value = ''; return; }
+        base2 = v2 * tu;
+        fromVal.value = trim(base2 / fu);
+      }
+    }
+
+    fromVal.addEventListener('input', function () { activeField = 'from'; convert(); });
+    toVal.addEventListener('input', function () { activeField = 'to'; convert(); });
+    fromUnit.addEventListener('change', function () { convert(); });
+    toUnit.addEventListener('change', function () { convert(); });
+
+    swapBtn.addEventListener('click', function () {
+      var fu = fromUnit.value, tu = toUnit.value;
+      fromUnit.value = tu;
+      toUnit.value = fu;
+      convert();
+    });
+
+    // 初始化
+    fillUnits();
+    convert();
+  </script>
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

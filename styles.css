@@ -285,12 +285,14 @@ img, svg, video, iframe { max-width: 100%; height: auto; }
 }
 
 .expertise-grid {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+  justify-content: center;
 }
 .expertise-card {
-  width: 400px;
+  width: 100%;
+  min-width: 0;
   padding: 28px;
   display: flex;
   flex-direction: column;
@@ -580,6 +582,29 @@ img, svg, video, iframe { max-width: 100%; height: auto; }
   font-size: 12px;
   color: #555555;
 }
+/* 页脚版权与法律说明 */
+.footer-legal {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  text-align: center;
+}
+.footer-legal .footer-copy {
+  font-family: var(--font-cn);
+  font-size: 12.5px;
+  color: #cccccc;
+  margin: 0 0 12px;
+}
+.footer-legal-text {
+  font-family: var(--font-cn);
+  font-size: 12px;
+  line-height: 1.85;
+  color: #cccccc;
+  margin: 0 0 8px;
+}
+.footer-legal-text:last-child { margin-bottom: 0; }
 
 /* ===== 响应式（窄屏降级，保持 PC 还原优先）===== */
 @media (max-width: 1200px) {
@@ -627,8 +652,8 @@ img, svg, video, iframe { max-width: 100%; height: auto; }
   .hero-slogan { display: none; }
 
   /* 核心领域 / 数据说话：固定宽度改自适应 */
-  .expertise-grid { flex-wrap: wrap; }
-  .expertise-card { width: 100%; max-width: 420px; }
+  .expertise-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .expertise-card { width: 100%; }
   .metrics-grid { flex-wrap: wrap; }
   .metric-card { width: calc(50% - 12px); }
 
@@ -644,5 +669,185 @@ img, svg, video, iframe { max-width: 100%; height: auto; }
   .hero-title { font-size: 40px; line-height: 52px; }
   .metric-card { width: 100%; }
   .section-title { font-size: 26px; }
+  .expertise-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== 航运书单（板块） ===== */
+.book-cover {
+  position: relative;
+  flex: 0 0 78px;
+  width: 78px;
+  height: 108px;
+  border-radius: 5px;
+  border: 1px solid rgba(212,175,55,0.55);
+  background: linear-gradient(160deg, #E8CB6E 0%, #C9A02F 52%, #9C741A 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 8px 18px rgba(0,0,0,0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 10px;
+  font-family: var(--font-en);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: .02em;
+  color: #0B1221;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.28);
+}
+.book-cover::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 9px;
+  bottom: 9px;
+  width: 2px;
+  border-radius: 2px;
+  background: rgba(11,18,33,0.26);
+}
+
+.books {
+  position: relative;
+  padding: 80px 0 70px;
+  background:
+    radial-gradient(ellipse 62% 52% at 50% 0%, rgba(212,175,55,0.07), transparent 72%),
+    url("assets/tide-reading-bg.jpg") center 54% / cover no-repeat,
+    var(--navy);
+  overflow: hidden;
+}
+/* 背景图上的深色叠层：上深—中部渐亮—下深，保证标题与卡片文字始终清晰 */
+.books::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(11,18,33,0.66) 0%, rgba(11,18,33,0.26) 42%, rgba(11,18,33,0.84) 100%),
+    radial-gradient(ellipse 46% 34% at 50% 24%, rgba(11,18,33,0.42), transparent 72%);
+}
+/* 左右二次压暗：中间（舷窗透光处）最亮，形成“窗光”感 */
+.books::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(11,18,33,0.42) 0%, rgba(11,18,33,0.08) 36%, rgba(11,18,33,0.08) 64%, rgba(11,18,33,0.42) 100%);
+}
+.books .books-inner { position: relative; z-index: 1; }
+.books-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  text-align: center;
+}
+.books-desc {
+  font-family: var(--font-cn);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-gray);
+  max-width: 720px;
+}
+.books-subtitle {
+  font-family: var(--font-en);
+  font-size: 15px;
+  letter-spacing: .05em;
+  color: var(--gold);
+  opacity: .85;
+}
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.book-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid rgba(89,97,115,0.35);
+  border-radius: 14px;
+  background: var(--card-bg);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+.book-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(212,175,55,0.18);
+}
+.book-card .book-cover {
+  flex: 0 0 66px;
+  width: 66px;
+  height: 92px;
+  font-size: 10px;
+  padding: 6px;
+}
+.book-card-body { flex: 1; min-width: 0; }
+.book-card-cat {
+  font-family: var(--font-en);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.book-card-title {
+  font-family: var(--font-cn);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.book-card-author {
+  font-family: var(--font-cn);
+  font-size: 12px;
+  color: var(--text-gray);
+  margin-bottom: 8px;
+}
+.book-card-desc {
+  font-family: var(--font-cn);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-gray);
+}
+/* 英文书名排版：主书名 + 英文副题 + 英文作者，摘要仍为中文 */
+.book-card .book-title-en {
+  font-family: var(--font-en);
+  font-size: 17px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+.book-card-title-sub {
+  font-family: var(--font-en);
+  font-size: 11.5px;
+  line-height: 1.5;
+  letter-spacing: .01em;
+  color: var(--text-gray);
+  opacity: .92;
+  margin: -1px 0 8px;
+}
+.book-card .book-card-author {
+  font-family: 'Inter Tight', 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  letter-spacing: .01em;
+}
+.books-more {
+  max-width: 1160px;
+  margin: 34px auto 0;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .books { padding: 60px 0 50px; background-position: center 60%; }
+  .books::before { background: linear-gradient(180deg, rgba(11,18,33,0.80) 0%, rgba(11,18,33,0.46) 42%, rgba(11,18,33,0.90) 100%); }
+  .books::after { background: linear-gradient(90deg, rgba(11,18,33,0.50) 0%, rgba(11,18,33,0.12) 30%, rgba(11,18,33,0.12) 70%, rgba(11,18,33,0.50) 100%); }
+  .books-subtitle { font-size: 14px; letter-spacing: .03em; max-width: 78vw; }
+  .books-grid { grid-template-columns: 1fr; }
 }
 

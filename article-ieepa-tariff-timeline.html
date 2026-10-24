@@ -107,20 +107,28 @@
       .tl-content::before { left: -22px; top: 6px; }
     }
   </style>
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
 
   <!-- 导航栏 -->
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" /><span data-i18n="brand_nav">航运派</span></div>
+<div class="nav-actions">
             <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
-      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
-<div class="nav-links">
-        <a href="about.html">关于</a>
-        <a href="index.html#about">专栏</a>
-        <a href="index.html#tools">实用工具</a>
-        <a href="index.html#footer">联系</a>
+        <div class="lang-switch" role="group" aria-label="Language / 语言">
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+        <div class="nav-links">
+        <a href="about.html" data-i18n="nav_about">关于</a>
+        <a href="index.html#about" data-i18n="nav_column">专栏</a>
+        <a href="index.html#tools" data-i18n="nav_tools">实用工具</a>
+        <a href="index.html#footer" data-i18n="nav_contact">联系</a>
+      </div>
       </div>
     </div>
   </nav>
@@ -128,8 +136,8 @@
   <!-- 文章主体 -->
   <article class="article">
     <div class="container article-inner">
-      <a class="article-back" href="index.html#about">← 返回 · 专栏</a>
-      <span class="eyebrow">专栏 · IEEPA 关税</span>
+      <a class="article-back" href="index.html#about" data-i18n="back_column">← 返回 · 专栏</a>
+      <span class="eyebrow" data-i18n="eyebrow_ieepa">专栏 · IEEPA 关税</span>
       <h1 class="article-title">美国 IEEPA 关税：征收与退款时间线</h1>
       <div class="article-meta">航运派威廉 · 资料整理</div>
       <p class="article-lede">传递资讯，更传递价值。2025 年 2 月起，美国依据《国际紧急经济权力法》（IEEPA）对加拿大、墨西哥与中国加征关税，并在随后一年里经历行政命令、法院裁决、最高法院审理与大规模退款程序的多轮拉锯。本文按时间顺序梳理从「征收」到「退款」的完整脉络，帮助外贸与航运从业者快速把握关键节点。</p>
@@ -332,13 +340,13 @@
 
       <div class="related">
         <div class="related-title">看了这份时间线，你可能还会想看</div>
-        <a class="related-card" href="article-ieepa-cape-20261007.html">
+        <a class="related-card" href="article-trade-agreements.html">
           <span class="related-cat">行业洞察分析</span>
-          <span class="related-name">IEEPA 退款 CAPE 系统最新进展 2026/10/07</span>
+          <span class="related-name">全球三大贸易协定专题：关税减让与原产地规则</span>
         </a>
-        <a class="related-card" href="article-ieepa-tariff.html">
-          <span class="related-cat">行业洞察分析</span>
-          <span class="related-name">IEEPA 关税退款 集体诉讼资格取得重大进展</span>
+        <a class="related-card" href="article-eu-customs-regulations.html">
+          <span class="related-cat">政策解读</span>
+          <span class="related-name">欧盟海关与关税类法规专题</span>
         </a>
         <a class="related-card" href="index.html#about">
           <span class="related-cat">专栏</span>
@@ -347,7 +355,7 @@
       </div>
 
       <div class="disclaimer">
-        本公众号专注全球航运、货代物流、全链路供应链资讯分享、同行交流。多数内容来自公开行业资讯、市场统计数据与产业实时动态，仅代表作者个人行业见解，不提供任何投资、交易及商业决策参考。国际贸易、航运行情、全球供应链变化极大，相关分析观点具备时效性与片面性，建议读者结合自身需求独立甄别，警惕各类市场风险。账号内容仅限行业学习交流，不开展互联网新闻采编发布业务。
+        内容来自公开行业资讯、市场统计数据与产业实时动态，仅代表作者个人行业见解，不提供任何投资、交易及商业决策参考。国际贸易、航运行情、全球供应链变化极大，相关分析观点具备时效性与片面性，建议读者结合自身需求独立甄别，警惕各类市场风险。
       </div>
     </div>
   </article>
@@ -356,17 +364,21 @@
   <footer class="footer" id="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo">航运派</span>
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
         <span class="footer-logo-en">Trans Pi</span>
       </div>
-      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
       <div class="footer-divider"></div>
       <div class="footer-links">
-        <a href="about.html">关于 William</a>
-        <a href="index.html#about">专栏订阅</a>
-        <a href="index.html#footer">商务合作</a>
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
       </div>
-      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+            <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
     </div>
   </footer>
 

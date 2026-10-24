@@ -182,10 +182,38 @@
 
 /* ===== 文章列表页 ===== */
 .article-list {
+  position: relative;
+  overflow: hidden;
   padding: 64px 0 80px;
   background: var(--navy);
   min-height: 60vh;
 }
+/* 顶部背景图带：向下渐隐，只装饰头部，不干扰正文阅读 */
+.article-list::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 620px;
+  background: url("assets/tide-reading-bg.jpg") center 40% / cover no-repeat;
+  opacity: .52;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,.45) 58%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,.45) 58%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+}
+/* 头部可读性叠层 */
+.article-list::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 620px;
+  background: linear-gradient(180deg, rgba(11,18,33,0.86) 0%, rgba(11,18,33,0.72) 46%, rgba(11,18,33,0) 100%);
+  pointer-events: none;
+}
+.article-list-inner { position: relative; z-index: 1; }
 .article-list-inner {
   max-width: 880px;
   margin: 0 auto;
@@ -210,12 +238,36 @@
   color: var(--white);
   margin-bottom: 12px;
 }
+/* 书单页英文书名：主书名用英文字体，副题另起一行 */
+.article-item-title.book-title-en {
+  font-family: var(--font-en);
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+.book-title-sub {
+  font-family: var(--font-en);
+  font-size: 13px;
+  line-height: 1.55;
+  letter-spacing: .01em;
+  color: var(--text-gray);
+  opacity: .92;
+  margin: -2px 0 10px;
+}
 .article-list-desc {
   font-family: var(--font-cn);
   font-size: 16px;
   color: var(--text-gray);
   margin-bottom: 48px;
   max-width: 680px;
+}
+.article-list-subtitle {
+  font-family: var(--font-en);
+  font-size: 16px;
+  letter-spacing: .05em;
+  color: var(--gold);
+  opacity: .85;
+  margin: -4px 0 18px;
 }
 
 .article-item {
@@ -267,5 +319,38 @@
   .article-title { font-size: 28px; }
   .article h2 { font-size: 22px; }
   .article-list-title { font-size: 28px; }
+  .article-list-subtitle { font-size: 14px; letter-spacing: .02em; line-height: 1.6; max-width: 78vw; }
+  .article-list::before { height: 460px; opacity: .46; }
+  .article-list::after { height: 460px; }
   .article-item { padding: 20px 22px; }
+}
+
+/* ===== 航运书单 · 列表项 ===== */
+.book-item {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  padding: 26px 30px;
+  border: 1px solid rgba(89,97,115,0.35);
+  border-radius: 14px;
+  background: var(--card-bg);
+  margin-bottom: 20px;
+  scroll-margin-top: 96px;
+  transition: border-color .25s ease;
+}
+.book-item:hover { border-color: rgba(212,175,55,0.7); }
+.book-body { flex: 1; min-width: 0; }
+.book-author {
+  font-family: 'Inter Tight', 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: .01em;
+  color: var(--text-gray);
+  margin-bottom: 10px;
+}
+.book-item .article-item-cat { margin-bottom: 8px; }
+.book-item .article-item-title { margin-bottom: 6px; }
+.book-item .article-item-excerpt { margin-bottom: 0; }
+
+@media (max-width: 768px) {
+  .book-item { flex-direction: column; gap: 16px; padding: 20px 18px; }
 }

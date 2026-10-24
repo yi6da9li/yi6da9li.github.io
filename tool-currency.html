@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n-title="title_tools_fx">实时汇率换算 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=fx-20261024" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
+</head>
+<body>
+  <div class="tool-page">
+    <div class="tool-topline">
+      <a class="tool-back" href="index.html" data-i18n="back_site">← 返回 航运派 Trans Pi</a>
+      <div class="lang-switch" role="group" aria-label="Language / 语言">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <h1 class="tool-h1" data-i18n="toolh_fx">实时汇率换算</h1>
+    <p class="tool-sub" data-i18n="toolsub_fx">航运报价、海运费结算与跨境付款常用的多币种一键互转。汇率来自 exchangerate-api.com 公开接口（以美元为基准，每日更新真实市场参考价），输入任意一侧金额，另一侧实时得出结果，支持双向换算与一键交换。</p>
+
+    <div class="tool-panel fx-panel">
+      <div class="fx-row">
+        <div class="field fx-field">
+          <label id="lblFrom">金额</label>
+          <input id="fxAmount" type="number" inputmode="decimal" placeholder="输入金额" value="1" autocomplete="off" />
+        </div>
+        <div class="field fx-field">
+          <label>从货币</label>
+          <select id="fxFrom"></select>
+        </div>
+      </div>
+
+      <div class="conv-mid">
+        <button class="tool-btn conv-swap" id="fxSwap" type="button" title="交换货币">⇄ 交换货币</button>
+      </div>
+
+      <div class="fx-row">
+        <div class="field fx-field">
+          <label id="lblTo">换算结果</label>
+          <input id="fxResult" type="number" inputmode="decimal" placeholder="结果" autocomplete="off" />
+        </div>
+        <div class="field fx-field">
+          <label>到货币</label>
+          <select id="fxTo"></select>
+        </div>
+      </div>
+
+      <div class="fx-rate" id="fxRateLine">— 正在获取实时汇率 —</div>
+      <div class="fx-status" id="fxStatus">数据加载中…</div>
+    </div>
+
+    <p class="tool-note">提示：本工具为<strong>参考用途</strong>，汇率随市场波动，每日更新一次，可能与银行实际结售汇牌价存在差异；正式报关、运费结算与外汇交易请以金融机构官方牌价为准。所列货币中，新台币（TWD）指中国台湾地区流通货币。</p>
+  </div>
+
+  <script>
+    var currencies = [
+      { code: 'USD', name: '美元 USD' },
+      { code: 'CNY', name: '人民币 CNY' },
+      { code: 'EUR', name: '欧元 EUR' },
+      { code: 'HKD', name: '港币 HKD' },
+      { code: 'JPY', name: '日元 JPY' },
+      { code: 'GBP', name: '英镑 GBP' },
+      { code: 'SGD', name: '新加坡元 SGD' },
+      { code: 'KRW', name: '韩元 KRW' },
+      { code: 'AUD', name: '澳元 AUD' },
+      { code: 'CAD', name: '加元 CAD' },
+      { code: 'CHF', name: '瑞士法郎 CHF' },
+      { code: 'TWD', name: '新台币（中国台湾） TWD' },
+      { code: 'THB', name: '泰铢 THB' },
+      { code: 'MYR', name: '马来西亚林吉特 MYR' },
+      { code: 'INR', name: '印度卢比 INR' },
+      { code: 'VND', name: '越南盾 VND' },
+      { code: 'AED', name: '阿联酋迪拉姆 AED' },
+      { code: 'NZD', name: '新西兰元 NZD' },
+      { code: 'RUB', name: '俄罗斯卢布 RUB' }
+    ];
+
+    var rates = null;
+    var active = 'from';
+
+    var amountEl = document.getElementById('fxAmount');
+    var resultEl = document.getElementById('fxResult');
+    var fromEl = document.getElementById('fxFrom');
+    var toEl = document.getElementById('fxTo');
+    var rateLine = document.getElementById('fxRateLine');
+    var statusEl = document.getElementById('fxStatus');
+    var swapBtn = document.getElementById('fxSwap');
+
+    // 构建货币下拉
+    currencies.forEach(function (c) {
+      var o1 = document.createElement('option');
+      o1.value = c.code; o1.textContent = c.name;
+      fromEl.appendChild(o1);
+      var o2 = document.createElement('option');
+      o2.value = c.code; o2.textContent = c.name;
+      toEl.appendChild(o2);
+    });
+    fromEl.value = 'USD';
+    toEl.value = 'CNY';
+
+    function trim(x) {
+      if (!isFinite(x)) return '';
+      // 大额货币保留更多小数，小额货币适当精简
+      return String(parseFloat(x.toPrecision(10)));
+    }
+
+    function fmtTime(d) {
+      function p(n) { return (n < 10 ? '0' : '') + n; }
+      return d.getUTCFullYear() + '-' + p(d.getUTCMonth() + 1) + '-' + p(d.getUTCDate()) +
+        ' ' + p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ' UTC';
+    }
+
+    function loadRates() {
+      statusEl.textContent = '正在获取实时汇率…';
+      fetch('https://open.er-api.com/v6/latest/USD')
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.result === 'success' && d.rates) {
+            rates = d.rates;
+            var t = new Date(d.time_last_update_unix * 1000);
+            statusEl.textContent = '实时参考汇率 · 数据来源 exchangerate-api.com · 更新于 ' + fmtTime(t);
+            convert();
+          } else {
+            fail();
+          }
+        })
+        .catch(function () { fail(); });
+    }
+
+    function fail() {
+      rateLine.textContent = '— 汇率不可用 —';
+      statusEl.textContent = '⚠ 暂时无法获取实时汇率（可能网络受限或接口繁忙）。请检查网络后刷新页面重试。';
+    }
+
+    function convert() {
+      if (!rates) return;
+      var f = fromEl.value, t = toEl.value;
+      var rf = rates[f], rt = rates[t];
+      if (!rf || !rt) {
+        rateLine.textContent = '— 该货币暂不支持 —';
+        return;
+      }
+      rateLine.textContent = '1 ' + f + ' = ' + trim(rt / rf) + ' ' + t +
+        '　|　1 ' + t + ' = ' + trim(rf / rt) + ' ' + f;
+      var v;
+      if (active === 'from') {
+        v = parseFloat(amountEl.value);
+        if (isNaN(v)) { resultEl.value = ''; return; }
+        resultEl.value = trim(v * rt / rf);
+      } else {
+        v = parseFloat(resultEl.value);
+        if (isNaN(v)) { amountEl.value = ''; return; }
+        amountEl.value = trim(v * rf / rt);
+      }
+    }
+
+    amountEl.addEventListener('input', function () { active = 'from'; convert(); });
+    resultEl.addEventListener('input', function () { active = 'to'; convert(); });
+    fromEl.addEventListener('change', function () { convert(); });
+    toEl.addEventListener('change', function () { convert(); });
+
+    swapBtn.addEventListener('click', function () {
+      var tmp = fromEl.value;
+      fromEl.value = toEl.value;
+      toEl.value = tmp;
+      convert();
+    });
+
+    loadRates();
+  </script>
+
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

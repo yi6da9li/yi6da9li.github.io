@@ -12,18 +12,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=clean-20261018" />
   <link rel="stylesheet" href="article.css?v=imo-article-20261001" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
 <!-- 导航栏 -->
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" /><span data-i18n="brand_nav">航运派</span></div>
+<div class="nav-actions">
             <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
-      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
-<div class="nav-links">
-        <a href="about.html">关于</a>
-        <a href="index.html#about">专栏</a>
-        <a href="index.html#footer">联系</a>
+        <div class="lang-switch" role="group" aria-label="Language / 语言">
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+        <div class="nav-links">
+        <a href="about.html" data-i18n="nav_about">关于</a>
+        <a href="index.html#about" data-i18n="nav_column">专栏</a>
+        <a href="index.html#footer" data-i18n="nav_contact">联系</a>
+      </div>
       </div>
     </div>
   </nav>
@@ -31,8 +39,8 @@
   <!-- 文章主体 -->
   <article class="article">
     <div class="container article-inner">
-      <a class="article-back" href="article-knowledge-list.html">← 返回 · 航运知识体系</a>
-      <span class="eyebrow">航运知识体系</span>
+      <a class="article-back" href="article-knowledge-list.html" data-i18n="back_knowledge">← 返回 · 航运知识库</a>
+      <span class="eyebrow" data-i18n="eyebrow_knowledge">航运知识库</span>
       <h1 class="article-title">IMO 号最后一位是道数学题：3 分钟学会给一条船验明正身</h1>
       <div class="article-meta">航运派威廉 · 2026-09-05</div>
       <p class="article-lede">传递资讯，更传递价值。大家好，我是航运派威廉。一条船，船名可以改，船东可以换，船旗可以重新登记。一条船今天叫这个名字，明天卖给另一家，换个船名接着跑；但有一个七位数字，从它第一次下水，到几十年后被拖去拆船厂，一辈子不变。这个数字，就是 IMO 号。业内叫它"船的身份证号"。可大多数人没注意到的是，这串号码的最后一位，其实是一道你自己动手就能验算的数学题。今天这篇，我们把这几个数字彻底讲透。</p>
@@ -97,17 +105,21 @@
   <footer class="footer" id="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo">航运派</span>
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
         <span class="footer-logo-en">Trans Pi</span>
       </div>
-      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
       <div class="footer-divider"></div>
       <div class="footer-links">
-        <a href="about.html">关于 William</a>
-        <a href="index.html#about">专栏订阅</a>
-        <a href="index.html#footer">商务合作</a>
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="index.html#footer" data-i18n="foot_coop">商务合作</a>
       </div>
-      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+            <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
     </div>
   </footer>
 

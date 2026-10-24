@@ -6,11 +6,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>航运派 · William | 国际航运物流专家</title>
+  <title data-i18n-title="title_index">航运派 · William | 国际航运物流专家</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=clean-20261018" />
+  <link rel="stylesheet" href="styles.css?v=tidebooks3-20261024" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
 </head>
 <body>
 
@@ -23,14 +25,21 @@
   <!-- 导航栏 -->
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" /><span data-i18n="brand_nav">航运派</span></div>
+<div class="nav-actions">
             <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
-      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
-<div class="nav-links">
-        <a href="about.html">关于</a>
-        <a href="#about">专栏</a>
-        <a href="#tools">实用工具</a>
-        <a href="#footer">联系</a>
+        <div class="lang-switch" role="group" aria-label="Language / 语言">
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+        <div class="nav-links">
+        <a href="about.html" data-i18n="nav_about">关于</a>
+        <a href="#about" data-i18n="nav_column">专栏</a>
+        <a href="#books" data-i18n="nav_books">潮汐漫读</a>
+        <a href="#tools" data-i18n="nav_tools">实用工具</a>
+        <a href="#footer" data-i18n="nav_contact">联系</a>
+      </div>
       </div>
     </div>
   </nav>
@@ -45,18 +54,17 @@
       <div class="hero-content">
         <div class="hero-tag">
           <span class="hero-dot"></span>
-          <span>国际航运物流专家</span>
+          <span data-i18n="hero_tag">国际航运物流专家</span>
         </div>
         <h1 class="hero-title">William</h1>
-        <p class="hero-sub">深耕货代物流各条航线领域<br />以专业深度构建航运知识体系</p>
+        <p class="hero-sub" data-i18n-html="hero_sub">深耕货代物流领域<br />以专业深度构建航运知识体系</p>
         <div class="hero-cta">
-          <a href="#about" class="btn btn-primary">了解我的专栏</a>
-          <a href="#footer" class="btn btn-secondary">联系合作</a>
+          <a href="#about" class="btn btn-primary" data-i18n="hero_cta1">了解我的专栏</a>
+          <a href="#footer" class="btn btn-secondary" data-i18n="hero_cta2">联系合作</a>
         </div>
       </div>
       <div class="hero-slogan">
-        <span class="slogan-text">More than information,</span>
-        <span class="slogan-text">we deliver value.</span>
+        <span class="slogan-text" data-i18n-html="slogan">传递资讯，更传递价值</span>
       </div>
     </div>
   </header>
@@ -67,24 +75,24 @@
       <div class="about-header">
         <div class="about-titleblock">
           <span class="eyebrow">ABOUT</span>
-          <h2 class="section-title">专业背景与核心领域</h2>
-          <p class="about-desc">聚焦各航线的深度研究与实操经验沉淀</p>
+          <h2 class="section-title" data-i18n="about_title">专业背景与核心领域</h2>
+          <p class="about-desc" data-i18n="about_desc">聚焦各航线的深度研究与实操经验沉淀</p>
         </div>
       </div>
       <div class="expertise-grid">
         <a class="expertise-card" href="article-knowledge-list.html">
           <div class="card-icon">
-            <img src="assets/card-icon-knowledge.png" alt="航运知识体系" width="44" height="44" />
+            <img src="assets/card-icon-knowledge.png" alt="航运知识库" width="44" height="44" />
           </div>
-          <h3 class="card-title">航运知识体系</h3>
-          <p class="card-desc">系统性梳理航运物流知识框架，打造可复用的方法论与最佳实践</p>
+          <h3 class="card-title" data-i18n="card_knowledge">航运知识库</h3>
+          <p class="card-desc" data-i18n="card_knowledge_d">系统性梳理航运物流知识框架，打造可复用的方法论与最佳实践</p>
         </a>
         <a class="expertise-card" href="article-insight-list.html">
           <div class="card-icon">
             <img src="assets/card-icon-insight.png" alt="行业洞察分析" width="44" height="44" />
           </div>
-          <h3 class="card-title">行业洞察分析</h3>
-          <p class="card-desc">追踪运价波动、港口动态与政策变化，提供具有前瞻性的市场解读</p>
+          <h3 class="card-title" data-i18n="card_insight">行业洞察分析</h3>
+          <p class="card-desc" data-i18n="card_insight_d">追踪运价波动、港口动态与政策变化，提供具有前瞻性的市场解读</p>
         </a>
         <a class="expertise-card" href="article-ieepa-tariff-timeline.html">
           <div class="card-icon">
@@ -96,8 +104,42 @@
               <path d="M22 21v4l3 2" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </div>
-          <h3 class="card-title">美国 IEEPA 关税时间线</h3>
-          <p class="card-desc">2025–2026 年 IEEPA 关税从开征、法院裁决、最高法院审理到 CAPE 大规模退款的完整时间脉络，一键读懂关键节点</p>
+          <h3 class="card-title" data-i18n="card_ieepa">美国 IEEPA 关税时间线</h3>
+          <p class="card-desc" data-i18n="card_ieepa_d">2025–2026 年 IEEPA 关税从开征、法院裁决、最高法院审理到 CAPE 大规模退款的完整时间脉络，一键读懂关键节点</p>
+        </a>
+        <a class="expertise-card" href="article-eu-customs-regulations.html">
+          <div class="card-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <path d="M22 11l8 3v7c0 6-3.5 9.5-8 11-4.5-1.5-8-5-8-11v-7z" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round" />
+              <path d="M18.5 22l2.5 2.5 4.5-5" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="card-title" data-i18n="card_eu">欧盟海关与关税法规</h3>
+          <p class="card-desc" data-i18n="card_eu_d">UCC 法典、2026 海关改革、电商低值包裹新政与 AEO 认证——官方原文源 + 结构化速查，合规要点一图读懂</p>
+        </a>
+        <a class="expertise-card" href="article-trade-agreements.html">
+          <div class="card-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <path d="M14 19h13l-3-3M14 19l3 3" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M30 27H17l3-3M17 27l3 3" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="card-title" data-i18n="card_trade">贸易协定专题</h3>
+          <p class="card-desc" data-i18n="card_trade_d">RCEP、USMCA、CPTPP 三大协定的关税减让与原产地规则要点，官方原文源 + 结构化速查，一页读懂优惠关税怎么拿</p>
+        </a>
+
+        <a class="expertise-card" href="article-us-dot-hazmat.html">
+          <div class="card-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <path d="M22 8l11 4v9c0 7-4.6 12.3-11 15-6.4-2.7-11-8-11-15V12l11-4z" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round" />
+              <path d="M22 18v8M18 22h8" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3 class="card-title" data-i18n="card_hazmat">美国 DOT 危险品法规</h3>
+          <p class="card-desc" data-i18n="card_hazmat_d">PHMSA 危险品运输法规（HMR / 49 CFR）的框架、9 大类分类、危险信息传递与锂电池专项，官方原文源 + 结构化速查</p>
         </a>
       </div>
     </div>
@@ -111,8 +153,8 @@
     <div class="container tools-inner">
       <div class="tools-header">
         <span class="eyebrow">TOOLS</span>
-        <h2 class="section-title">实用工具</h2>
-        <p class="tools-desc">为航运从业者与 AI 爱好者整理的即开即用工具：世界时区对照、主流船公司直达、货代报价单生成器与航运术语表中英对照</p>
+        <h2 class="section-title" data-i18n="tools_title">实用工具</h2>
+        <p class="tools-desc" data-i18n="tools_desc">为航运从业者与 AI 爱好者整理的即开即用工具：世界时区对照、主流船公司直达、中国沿海主要港口业务操作 / 查询平台导航、货代报价单生成器、航运术语表中英对照、常用单位换算与实时汇率换算</p>
       </div>
       <div class="tools-grid">
         <a class="tool-card" href="tool-quote.html">
@@ -124,8 +166,8 @@
               <path d="M19 22h6M22 19v9M19.5 24.4h5M19.5 26.6h5" stroke="#D4AF37" stroke-width="1.8" stroke-linecap="round" />
             </svg>
           </div>
-          <h3 class="tool-title">货代报价单生成器</h3>
-          <p class="tool-desc">海运整柜 / 拼箱、空运、铁路与全程物流报价一键生成，支持多币种、Logo、条款与导出 PDF，专业又省时</p>
+          <h3 class="tool-title" data-i18n="tool_quote">货代报价单生成器</h3>
+          <p class="tool-desc" data-i18n="tool_quote_d">海运整柜 / 拼箱、空运、铁路与全程物流报价一键生成，支持多币种、Logo、条款与导出 PDF，专业又省时</p>
         </a>
         <a class="tool-card" href="tool-worldtime.html">
           <div class="tool-icon">
@@ -136,8 +178,8 @@
               <path d="M13 22h-2M33 22h-2M22 13v-2M22 33v-2" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
             </svg>
           </div>
-          <h3 class="tool-title">世界时间</h3>
-          <p class="tool-desc">上海、新加坡、鹿特丹、洛杉矶等核心航运城市实时本地时间对照，跨时区沟通不再算错点</p>
+          <h3 class="tool-title" data-i18n="tool_worldtime">世界时间</h3>
+          <p class="tool-desc" data-i18n="tool_worldtime_d">上海、新加坡、鹿特丹、洛杉矶等核心航运城市实时本地时间对照，跨时区沟通不再算错点</p>
         </a>
         <a class="tool-card" href="tool-carriers.html">
           <div class="tool-icon">
@@ -148,8 +190,19 @@
               <path d="M22 14v4M20 16h4" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
             </svg>
           </div>
-          <h3 class="tool-title">常见船公司查询链接</h3>
-          <p class="tool-desc">Maersk、MSC、CMA CGM、中远海运、长荣等主流船公司官网直达，查船期、运价与提单一站搞定</p>
+          <h3 class="tool-title" data-i18n="tool_carriers">常见船公司查询链接</h3>
+          <p class="tool-desc" data-i18n="tool_carriers_d">Maersk、MSC、CMA CGM、中远海运、长荣等主流船公司官网直达，查船期、运价与提单一站搞定</p>
+        </a>
+        <a class="tool-card" href="tool-china-ports.html">
+          <div class="tool-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <path d="M22 12c-4.4 0-8 3.6-8 8 0 5.5 8 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round" />
+              <circle cx="22" cy="20" r="3" stroke="#D4AF37" stroke-width="2" />
+            </svg>
+          </div>
+          <h3 class="tool-title" data-i18n="tool_ports">中国沿海港口平台导航</h3>
+          <p class="tool-desc" data-i18n="tool_ports_d">环渤海、长三角、东南沿海、珠三角主要港口官方业务操作与查询平台一站直达：电子放箱、VGM、提货单、船期箱货查询、报关申报</p>
         </a>
         <a class="tool-card" href="glossary.html">
           <div class="tool-icon">
@@ -159,10 +212,88 @@
               <path d="M22 14v18" stroke="#D4AF37" stroke-width="2" />
             </svg>
           </div>
-          <h3 class="tool-title">航运术语表 · 中英对照</h3>
-          <p class="tool-desc">805 条航运核心术语中英文对照与释义，支持英文缩写、中文名称或释义关键词实时搜索，A–Z 字母索引快速定位，阅读本专栏文章时的随手速查工具</p>
+          <h3 class="tool-title" data-i18n="tool_glossary">航运术语表 · 中英对照</h3>
+          <p class="tool-desc" data-i18n="tool_glossary_d">805 条航运核心术语中英文对照与释义，支持英文缩写、中文名称或释义关键词实时搜索，A–Z 字母索引快速定位，阅读本专栏文章时的随手速查工具</p>
         </a>
-        
+        <a class="tool-card" href="tool-unit-converter.html">
+          <div class="tool-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <path d="M13 18h18M29 18l-4-3M29 18l-4 3" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M31 26H13M15 26l4-3M15 26l4 3" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="tool-title" data-i18n="tool_units">单位换算</h3>
+          <p class="tool-desc" data-i18n="tool_units_d">货代物流常用单位一键互转：重量 kg↔lb、体积 CBM↔CBF、长度 英寸↔厘米、温度 ℃↔℉，输入即出结果、可交换单位</p>
+        </a>
+        <a class="tool-card" href="tool-currency.html">
+          <div class="tool-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <path d="M14 18h16M28 18l-4-3M28 18l-4 3" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M30 26H14M14 26l4-3M14 26l4 3" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="tool-title" data-i18n="tool_fx">实时汇率换算</h3>
+          <p class="tool-desc" data-i18n="tool_fx_d">美元、人民币、欧元、港币、日元等 19 种货币一键互转，汇率来自公开接口的真实市场参考价，输入即出结果、可双向换算与交换</p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 潮汐漫读 -->
+  <section class="books" id="books">
+    <div class="container books-inner">
+      <div class="books-header">
+        <span class="eyebrow">READING LIST</span>
+        <h2 class="section-title" data-i18n="books_title">潮汐漫读</h2>
+        <p class="books-subtitle" data-i18n="books_subtitle">随潮汐展卷，于书页远航</p>
+        <p class="books-desc" data-i18n="books_desc">潮汐漫读，是属于航运人的书单自留地。这里既有集装箱革命、全球海运图景、航运先驱传记等行业经典，也收纳人文、历史与科幻佳作。不必只读海图与单证，在潮起潮落间慢读，于文字里看见更辽阔的世界。</p>
+      </div>
+      <div class="books-grid">
+        <a class="book-card" href="books.html#the-box">
+          <div class="book-cover">The Box</div>
+          <div class="book-card-body">
+            <div class="book-card-cat">集装箱运输 · 经济史</div>
+            <div class="book-card-title book-title-en">The Box</div>
+            <div class="book-card-title-sub">How the Shipping Container Made the World Smaller and the World Economy Bigger</div>
+            <div class="book-card-author">Marc Levinson</div>
+            <p class="book-card-desc">被公认为集装箱航运的「圣经」：一个铁盒子如何压垮运输成本、催生全球化，并把沉寂的码头变成自动化枢纽。</p>
+          </div>
+        </a>
+        <a class="book-card" href="books.html#ninety-percent-of-everything">
+          <div class="book-cover">90%</div>
+          <div class="book-card-body">
+            <div class="book-card-cat">航运产业 · 纪实</div>
+            <div class="book-card-title book-title-en">Ninety Percent of Everything</div>
+            <div class="book-card-title-sub">Inside Shipping, the Invisible Industry That Puts Clothes on Your Back, Gas in Your Car, and Food on Your Plate</div>
+            <div class="book-card-author">Rose George</div>
+            <p class="book-card-desc">沉浸式新闻报道：登上一艘现代集装箱船，揭开支撑现代世界的隐形产业帷幕——从海盗与船员到深海运输的环境现实。</p>
+          </div>
+        </a>
+        <a class="book-card" href="books.html#port-newark">
+          <div class="book-cover">Port<br />Newark</div>
+          <div class="book-card-body">
+            <div class="book-card-cat">港口史 · 集装箱化</div>
+            <div class="book-card-title book-title-en">Port Newark and the Origins of Container Shipping</div>
+            <div class="book-card-author">Angus Kress Gillespie · Michael Aaron Rockland</div>
+            <p class="book-card-desc">深入集装箱化「零号现场」：新泽西为让首批多式联运系统落地，在地方、政治与产业层面展开的博弈。</p>
+          </div>
+        </a>
+        <a class="book-card" href="books.html#maersk-moller">
+          <div class="book-cover">Maersk</div>
+          <div class="book-card-body">
+            <div class="book-card-cat">企业家传记 · 航运巨头</div>
+            <div class="book-card-title book-title-en">Maersk Mc-Kinney Møller</div>
+            <div class="book-card-title-sub">The Danish Shipping Magnate</div>
+            <div class="book-card-author">Thomas Larsen · Finn Mortensen</div>
+            <p class="book-card-desc">授权传记：他如何带领马士基进入集装箱时代，以极敏锐的纪律与长期愿景管理一个全球航运帝国。</p>
+          </div>
+        </a>
+      </div>
+      <div class="books-more">
+        <a href="books.html" class="btn btn-secondary" data-i18n="books_more">查看全部书目 →</a>
       </div>
     </div>
   </section>
@@ -172,24 +303,24 @@
     <div class="container metrics-inner">
       <div class="metrics-header">
         <span class="eyebrow">CREDENTIALS</span>
-        <h2 class="section-title">数据说话</h2>
+        <h2 class="section-title" data-i18n="metrics_title">数据说话</h2>
       </div>
       <div class="metrics-grid">
         <div class="metric-card metric-card--gold">
           <div class="metric-num">15+</div>
-          <div class="metric-label">年行业深耕</div>
+          <div class="metric-label" data-i18n="metric_years">年行业深耕</div>
         </div>
         <div class="metric-card">
           <div class="metric-num">90+</div>
-          <div class="metric-label">服务客户数</div>
+          <div class="metric-label" data-i18n="metric_clients">服务客户数</div>
         </div>
         <div class="metric-card">
           <div class="metric-num">500+</div>
-          <div class="metric-label">专业文章</div>
+          <div class="metric-label" data-i18n="metric_articles">专业文章</div>
         </div>
         <div class="metric-card">
           <div class="metric-num">98%</div>
-          <div class="metric-label">客户满意度</div>
+          <div class="metric-label" data-i18n="metric_satisfaction">客户满意度</div>
         </div>
       </div>
     </div>
@@ -200,7 +331,7 @@
     <div class="container gallery-inner">
       <div class="gallery-header">
         <span class="eyebrow">PORTFOLIO</span>
-        <h2 class="section-title">航运现场 · 实景记录</h2>
+        <h2 class="section-title" data-i18n="gallery_title">航运现场 · 实景记录</h2>
       </div>
       <div class="gallery-grid">
         <div class="gallery-col">
@@ -221,21 +352,25 @@
   <footer class="footer" id="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo">航运派</span>
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
         <span class="footer-logo-en">Trans Pi</span>
       </div>
-      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
       <div class="footer-divider"></div>
       <div class="footer-qr">
         <img class="footer-qr-img" src="assets/qrcode-gh.jpg" alt="航运派 微信公众号二维码" width="132" height="132" />
-        <p class="footer-qr-text">微信扫码 · 关注「航运派」公众号</p>
+        <p class="footer-qr-text" data-i18n="foot_qr">微信扫码 · 关注「航运派」公众号</p>
       </div>
       <div class="footer-links">
-        <a href="about.html">关于 William</a>
-        <a href="#about">专栏订阅</a>
-        <a href="#footer">商务合作</a>
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="#footer" data-i18n="foot_coop">商务合作</a>
       </div>
-      <p class="footer-copy">© 2026 航运派 · Trans Pi. All rights reserved.</p>
+            <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
     </div>
   </footer>
 

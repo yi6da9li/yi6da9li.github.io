@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>美国 DOT/PHMSA 危险品运输法规 | 航运派</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=clean-20261018" />
+  <link rel="stylesheet" href="article.css?v=us-hazmat-20261021" />
+  <style>
+    /* ===== 美国 DOT 危险品专题（本页专用，复用欧盟/贸易协定专题组件） ===== */
+    .reg-list { margin: 0 0 8px; }
+    .reg-card {
+      border: 1px solid rgba(89,97,115,0.4);
+      border-radius: 16px;
+      background: var(--card-bg);
+      padding: 30px 32px;
+      margin-bottom: 28px;
+    }
+    .reg-card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px 18px;
+      flex-wrap: wrap;
+    }
+    .reg-card-title {
+      font-family: var(--font-cn);
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.4;
+      color: var(--white);
+      margin: 0;
+    }
+    .reg-collected {
+      font-family: var(--font-cn);
+      font-size: 12.5px;
+      color: var(--text-gray);
+      white-space: nowrap;
+    }
+    .reg-collected b { color: var(--gold); font-weight: 500; }
+    .reg-subtitle {
+      font-family: var(--font-en);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: .5px;
+      color: var(--gold);
+      margin: 6px 0 18px;
+    }
+    .reg-row {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 10px 16px;
+      padding: 12px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .reg-k {
+      font-family: var(--font-cn);
+      font-size: 14px;
+      color: var(--gold);
+    }
+    .reg-k--head {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .reg-v {
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-gray-light);
+    }
+    .reg-block {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border-radius: 12px;
+      background: rgba(212,175,55,0.05);
+      border: 1px solid rgba(212,175,55,0.16);
+    }
+    .reg-points { list-style: none; margin: 0; padding: 0; }
+    .reg-points li {
+      position: relative;
+      padding-left: 20px;
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-gray-light);
+      margin-bottom: 8px;
+    }
+    .reg-points li::before {
+      content: "";
+      position: absolute;
+      left: 4px; top: 12px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+    .reg-note {
+      font-family: var(--font-cn);
+      font-size: 15px;
+      line-height: 1.95;
+      color: var(--text-gray-light);
+      margin: 0;
+    }
+    .reg-note strong { color: var(--white); font-weight: 500; }
+    .reg-source {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .reg-source a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-cn);
+      font-size: 13px;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(212,175,55,0.4);
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: background .25s ease;
+      word-break: break-word;
+    }
+    .reg-source a:hover { background: rgba(212,175,55,0.12); }
+
+    @media (max-width: 768px) {
+      .reg-card { padding: 22px 20px; }
+      .reg-row { grid-template-columns: 1fr; gap: 4px; }
+      .reg-card-title { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand"><img src="assets/logo-square.png" alt="航运派" class="nav-logo" />航运派</div>
+            <input type="checkbox" id="navToggle" class="nav-toggle-cb" />
+      <label for="navToggle" class="nav-toggle" aria-label="展开导航菜单"><span></span><span></span><span></span></label>
+<div class="nav-links">
+        <a href="about.html">关于</a>
+        <a href="index.html#about">专栏</a>
+        <a href="index.html#tools">实用工具</a>
+        <a href="index.html#footer">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 文章主体 -->
+  <article class="article">
+    <div class="container article-inner">
+      <a class="article-back" href="index.html#about">← 返回 · 专栏</a>
+      <span class="eyebrow">专栏 · 危险品法规</span>
+      <h1 class="article-title">美国 DOT/PHMSA 危险品运输法规专题</h1>
+      <div class="article-meta">航运派威廉 · 资料整理</div>
+      <p class="article-lede">危险品（hazmat）运输在美国由<strong>美国运输部（DOT）下属管道与危险品安全管理局（PHMSA）</strong>统一监管，其规则即《危险品运输法规》（HMR，载于 49 CFR 第 171–185 部分）。本专题分别梳理其<strong>法规框架、危险品分类、危险信息传递与合规义务、锂电池专项，以及北美应急救援指南（ERG）</strong>要点，<strong>每条均挂载官方原文源，本网站仅做结构化摘要与中文简单解读，所有内容均以官方原文为准。</strong>规则更新频繁，请以 PHMSA 与联邦公报最新版本为准。</p>
+
+      <div class="reg-list">
+
+        <!-- 1. 法规框架 -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">1. 法规框架：HMR 与 HMTA 授权</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Hazardous Materials Regulations · 49 CFR Parts 171–185</p>
+
+          <div class="reg-row">
+            <div class="reg-k">监管主体</div>
+            <div class="reg-v">美国运输部（DOT）；具体由<strong>管道与危险品安全管理局（PHMSA）</strong>制定并执行，覆盖航空、公路、铁路、水运全模式，以及管道之外的危险品运输安全与安保</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">法律授权</div>
+            <div class="reg-v">《危险品运输法》（Hazardous Materials Transportation Act, HMTA），编入 49 U.S.C. 5101 及后续条款，是 DOT 制定 HMR 的上位法依据</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">法规载体</div>
+            <div class="reg-v">《危险品运输法规》（HMR）以 49 CFR 第 171–185 部分为核心（整体框架载于第 100–185 部分）；分「通用规定、危险品表与信息传递、托运人要求、各运输模式、包装规范」等板块</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>核心章节：第 171 部分（通用规定与定义）、第 172 部分（危险品表 §172.101、标记/标签/标牌/单证、培训 §172.700+、安保计划）、第 173 部分（托运人通用要求与包装）、第 174–177 部分（铁路/航空/水运/公路运输）、第 178–180 部分（包装规范与持续维护）。</li>
+              <li>适用范围：凡在商业中运输、或为此准备/提供危险品的任何人（托运人、承运人、包装制造商等）均须遵守——含州际、州内及涉外运输。</li>
+              <li>基本义务（49 CFR 171.2）：危险品必须正确<strong>分类、说明、包装、标记、贴标、填制单证</strong>并处于可运输状态，相关主体须按 Part 107 注册（如适用）。</li>
+              <li>与国际接轨：通过定期「协调规则制定」（HM 系列）将 HMR 与联合国《规章范本》、IMO《IMDG 规则》、ICAO《技术细则》对齐。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">HMR 是美国境内危险品运输的<strong>统一底层规则</strong>，把原本分散在各运输模式中的安全要求整合成一套跨模式的法典，其宏观意义在于为美国国内与进出美国的危险品流提供一致的合规基准，降低多模式、多环节运输中的事故与安保风险。它并不替代 IMO/ICAO 等国际规则，而是通过周期性协调（如 HM-215Q）保持国内规则与国际主流标准的同步，从而减少跨境贸易的重复合规成本。对全球供应链而言，美国作为最大经济体之一，其 HMR 的宽严与更新节奏会直接影响化工、电池、医疗等高危品类的运输通道与成本。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://www.phmsa.dot.gov/hazmat" target="_blank" rel="noopener">PHMSA 危险品安全办公室（官方主页）↗</a>
+              <a href="https://pipelinesafety.dot.gov/standards-rulemaking/hazmat/hazardous-materials-regulations" target="_blank" rel="noopener">HMR 法规说明页（PHMSA）↗</a>
+              <a href="https://www.ecfr.gov/current/title-49" target="_blank" rel="noopener">e-CFR 第 49 编（HMR 实时文本）↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. 9 大类危险品 -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">2. 危险品分类：9 大类与包装组</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Hazard Classification · 49 CFR Part 172（§172.101 危险品表）</p>
+
+          <div class="reg-row">
+            <div class="reg-k">分类原则</div>
+            <div class="reg-v">以危险品<strong>主导风险</strong>归入 9 大类；部分物质兼具主次风险。分类是后续包装选择、标记、标签、单证与限量的前提</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">包装组</div>
+            <div class="reg-v">在分类基础上按危险程度细分为三个包装组：<strong>PG I（高）</strong>、<strong>PG II（中）</strong>、<strong>PG III（低）</strong>；包装性能要求随危险度递增</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li><strong>第 1 类 爆炸品</strong>（Explosives）。</li>
+              <li><strong>第 2 类 气体</strong>：2.1 易燃气体、2.2 非易燃无毒气体、2.3 毒性气体。</li>
+              <li><strong>第 3 类 易燃液体</strong>（Flammable liquids）。</li>
+              <li><strong>第 4 类 易燃固体</strong>：4.1 易燃固体、4.2 易自燃物质、4.3 遇水放出易燃气体物质。</li>
+              <li><strong>第 5 类 氧化性与有机过氧化物</strong>：5.1 氧化性物质、5.2 有机过氧化物。</li>
+              <li><strong>第 6 类 毒性与感染性物质</strong>：6.1 毒性物质、6.2 感染性物质。</li>
+              <li><strong>第 7 类 放射性物质</strong>（Radioactive material）。</li>
+              <li><strong>第 8 类 腐蚀性物质</strong>（Corrosives）。</li>
+              <li><strong>第 9 类 杂项危险品</strong>（Miscellaneous）：含锂电池、磁性物质、对环境有害物质、救生设备等。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">9 大类体系源自联合国《关于危险货物运输的建议书·规章范本》，是<strong>全球危险品运输的通用语言</strong>。美国 HMR 采用同一分类逻辑，使在美国境内运输的危险品能与 IMO/ICAO/ADR 等国际规则在「类别—品名—包装组」上对应，便于跨国联运与单证互认。其宏观意义在于：以统一的危险识别框架替代各国各异的零散标准，显著降低货物在全球供应链中因「归类不一致」导致的误运、误装与事故风险，也构成后续所有安全管控（包装、隔离、应急）的基础。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-I/subchapter-C/part-172" target="_blank" rel="noopener">e-CFR 第 172 部分（危险品表与分类）↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. 危险信息传递与合规义务 -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">3. 危险信息传递与合规义务</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Hazard Communication & Compliance · 49 CFR Part 172 / 107</p>
+
+          <div class="reg-row">
+            <div class="reg-k">四大环节</div>
+            <div class="reg-v">危险品表（§172.101 查品名/类别/包装组/特殊规定）、运输单证、标记与标签、车辆/集装箱标牌（placarding）与应急信息</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">人员与注册</div>
+            <div class="reg-v">危险品从业人员须接受通用认知、职能专项、安全三类培训（§172.700+，每 3 年复训）；相关主体须按 Part 107 注册；高危情形须制定安保计划</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li><strong>运输单证（Shipping Papers）</strong>：须列明 proper shipping name、类别、UN 编号、包装组、数量等，随货流转供应急查阅。</li>
+              <li><strong>标记与标签</strong>：包装须标注 UN 编号、正确运输名称（如适用），并按类别粘贴菱形标签（≥100mm 方形-on-point）。</li>
+              <li><strong>标牌（Placards）</strong>：公路/铁路/水运的大型容器与运输单元须按类别张贴标牌，便于途中与事故现场识别。</li>
+              <li><strong>应急信息</strong>：须随附应急响应信息（含 24 小时应急电话）。</li>
+              <li><strong>培训与注册</strong>：从业人员培训 + 三年复训；Part 107 注册；安保计划（§172.800）。</li>
+              <li><strong>有限数量 / 例外数量</strong>：低风险小量包装有简化标记路径（limited quantity / excepted quantity）。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">「危险信息传递」是危险品安全链条的<strong>信息中枢</strong>：无论包装多完备，若品类、UN 编号、标签与单证在任一环节失真，后续的搬运、仓储、应急与事故处置都将失序。其宏观意义在于，以标准化、可跨语言识别的「标签—单证—标牌」体系，让危险品在跨国、跨主体、跨模式的流转中始终「可被识别、可被追溯、可被应急」。这也解释了为何各国规则（HMR、IMDG、ICAO、ADR）在信息传递上高度趋同——它本质上是为全人类的运输安全与应急响应建立一套通用接口。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-I/subchapter-C/part-172" target="_blank" rel="noopener">e-CFR 第 172 部分（信息传递与培训）↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. 锂电池专项 -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">4. 锂电池专项运输规则</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Lithium Batteries · 49 CFR §173.185（Class 9）</p>
+
+          <div class="reg-row">
+            <div class="reg-k">归类</div>
+            <div class="reg-v">锂电池属<strong>第 9 类杂项危险品</strong>，受 HMR 约束；须满足 UN《试验和标准手册》第 III 部分 38.3 测试方可运输</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">UN 编号</div>
+            <div class="reg-v">UN3090 锂金属电池（独立）；UN3091 锂金属电池（装在设备内/与设备包装在一起）；UN3480 锂离子电池（独立）；UN3481 锂离子电池（装在设备内/与设备包装在一起）</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li>核心条款：49 CFR §173.185（锂电池运输要求），依电池类型、是否装在设备内、运输模式（尤其航空）适用不同限量与包装指令。</li>
+              <li>主要风险：热失控（thermal runaway）可引发链式放热与燃烧，航空场景后果尤为严重，故航空限制最严。</li>
+              <li>协调规则 <strong>HM-215Q</strong>：2024-04-10 发布、2025-04-10 强制生效，将 HMR 与最新 UN/IMDG/ICAO 对齐；取消锂电池标记上的电话号要求、取消设备内纽扣电池的检测摘要文件要求。</li>
+              <li>后续规则 <strong>HM-215R</strong>：2026-02 作为拟议规则（NPRM）发布，尚未生效，意在进一步与更新的国际文本（UN Rev.、IMDG 42-24、ICAO 2025–2026）协调。</li>
+              <li>处置/回收：废弃、损坏、召回（DDR）锂电池起火风险更高，须做好端子防短路并按专门要求备运。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">锂电池是当下<strong>增长最快也最棘手</strong>的危险品类别。其宏观意义在于：新能源与便携电子设备普及使海量锂电池进入物流网络，而热失控风险使「一颗电池」足以威胁整架飞机或整柜货物，倒逼全球规则持续收紧与协调。美国 HMR 通过 UN 编号细分（独立电池 vs 设备内电池）、按运输模式分级限量、并与 IMO/ICAO 同步更新（HM-215Q/R），体现的正是「在高能量密度产品全球化流通与安全底线之间寻求平衡」的治理思路。对全球供应链而言，锂电池规则的一致与否，直接决定跨境电商、电子设备与电动车产业链的运输效率与合规成本。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://www.phmsa.dot.gov/safe-travel/batteries" target="_blank" rel="noopener">PHMSA 锂电池运输专题页（官方）↗</a>
+              <a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-I/subchapter-C/part-173" target="_blank" rel="noopener">e-CFR 第 173 部分（含 §173.185）↗</a>
+              <a href="https://www.federalregister.gov/agencies/pipeline-and-hazardous-materials-safety-administration" target="_blank" rel="noopener">联邦公报 PHMSA 机构页（规则发布）↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. 北美应急救援指南 ERG -->
+        <section class="reg-card">
+          <div class="reg-card-head">
+            <h2 class="reg-card-title">5. 北美应急救援指南（ERG）</h2>
+            <span class="reg-collected">本页内容最近更新于：<b>2026-10-21</b></span>
+          </div>
+          <p class="reg-subtitle">Emergency Response Guidebook · 2024 Edition</p>
+
+          <div class="reg-row">
+            <div class="reg-k">编制主体</div>
+            <div class="reg-v">由<strong>美国运输部（PHMSA）、加拿大交通部（Transport Canada）、墨西哥基础设施通信交通部（SICT，原 SCT）</strong>联合编制，阿根廷应急化学品信息中心（CIQUIME）提供协助；是北美三国通用的危险品运输事故应急响应手册</div>
+          </div>
+          <div class="reg-row">
+            <div class="reg-k">适用对象</div>
+            <div class="reg-v">面向消防员、警察、急救人员等「首批抵达」运输事故现场的应急响应者；用于公路、铁路、管道运输事故<strong>初期处置</strong>；航空器、船舶或固定设施事故可参考，但可能不完全适用</div>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">结构化摘要（速查）</span>
+            <ul class="reg-points">
+              <li><strong>定位</strong>：事故现场「初期（initial phase）」快速识别危险物质、确定初始隔离与防护距离、采取初步应急行动的操作手册；<strong>不替代</strong>专业培训、知识与判断，也不含理化物性数据。</li>
+              <li><strong>版本周期</strong>：每四年更新一版，最新为 <strong>ERG 2024</strong>（2024 年 4 月发布）；历史版本可回溯至 2020、2016 等。</li>
+              <li><strong>结构（彩色分区）</strong>：白页（通用信息、如何使用、标牌识别表）→ 黄页（按 UN 编号查物质）→ 蓝页（按危险品名查物质）→ 橙页（按物质给出「指南页」应急程序）→ 绿页（初始隔离与防护距离表）。</li>
+              <li><strong>配套形式</strong>：官方提供 PDF、网页版、移动 App，以及法语（GMU2024）、西班牙语（GRE2024）版本；美方已免费分发逾 1800 万册至应急响应社区。</li>
+              <li><strong>与 HMR 衔接</strong>：ERG 与 HMR 危险品表（§172.101）共用同一 <strong>UN 编号体系</strong>，事故现场可凭运输单证或标牌上的 UN 编号直接索引到处置指南。</li>
+            </ul>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">中文简单解读</span>
+            <p class="reg-note">ERG 是危险品运输安全治理体系中「<strong>最后一公里</strong>」的应急工具——法规（HMR/IMDG/ICAO）规定了运输前如何分类、包装、标识与申报，而 ERG 解决的是「一旦事故发生，现场如何在黄金初期正确响应」的问题。其宏观意义在于，以北美三国联合编制、统一以 UN 编号为索引的便携手册，把分散的应急响应知识标准化、现场化，显著降低跨境运输事故中因误判危险、隔离不当造成的二次伤亡与扩散。它体现了危险品治理「防」与「救」的闭环：前端合规定义了事故概率的下限，后端 ERG 提升了事故中的处置质量，二者共用一套危险品识别语言，构成完整的公共安全防护网。对全球供应链而言，ERG 所代表的「事故初期标准化响应」思路，已被阿根廷、巴西、哥伦比亚等国借鉴采纳，成为全球危险品应急文化的共同参照。</p>
+          </div>
+
+          <div class="reg-block">
+            <span class="reg-k reg-k--head">官方原文源</span>
+            <div class="reg-source">
+              <a href="https://www.phmsa.dot.gov/training/hazmat/erg/emergency-response-guidebook-erg" target="_blank" rel="noopener">PHMSA ERG 官方主页（PDF/网页版/App/多语）↗</a>
+              <a href="https://tc.canada.ca/en/dangerous-goods/canutec/emergency-response-guidebook" target="_blank" rel="noopener">加拿大交通部 ERG 2024 页面（Web/PDF 多语）↗</a>
+              <a href="https://rosap.ntl.bts.gov/view/dot/74109" target="_blank" rel="noopener">美国国家运输图书馆 ERG 2024（官方 PDF 存档）↗</a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="disclaimer" style="border-color: rgba(212,175,55,0.4);">
+        <strong style="color: var(--gold);">来源与版权说明：</strong>本专题为结构化速查摘要，仅对官方危险品运输法规做要点提炼与中文解读，<strong>不转载任何法规全文</strong>。所有条款以 PHMSA、美国联邦公报（Federal Register）及 e-CFR 公布的法规文本为准；点击各条「官方原文源」按钮可直达对应官方页面。危险品运输规则更新频繁（含 HM 系列协调规则制定），请以官方最新版本为准。
+      </div>
+
+      <div class="related">
+        <div class="related-title">看了这份专题，你可能还会想看</div>
+        <a class="related-card" href="article-trade-agreements.html">
+          <span class="related-cat">专栏 · 贸易协定</span>
+          <span class="related-name">全球三大贸易协定：关税减让与原产地规则</span>
+        </a>
+        <a class="related-card" href="article-eu-customs-regulations.html">
+          <span class="related-cat">专栏 · 欧盟海关</span>
+          <span class="related-name">欧盟海关与关税类法规专题</span>
+        </a>
+        <a class="related-card" href="index.html#about">
+          <span class="related-cat">专栏</span>
+          <span class="related-name">返回专栏首页</span>
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        本站所列网址均为外部链接，其指向与页面内容不由本站实际控制；网址来源于公开网络信息整理。<br>
+        本站收录上述网址时，已对其可访问性作初步核验，但无法保证其内容的实时准确性与合规性。<br>
+        如后续相关网站内容出现违规或链接失效，建议直接联系其网站管理员处理，本站对此不承担任何责任。<br>
+        本站与各平台、机构无隶属或合作关系，仅作信息导航整理之用。<br>
+        部分平台需注册账号或提供相应业务凭证后方可使用，具体功能与适用范围以各官方最新公告为准。<br>
+        本页内容最近更新于：2026-10-22
+      </div>
+    </div>
+  </article>
+
+  <!-- 页脚 -->
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html">关于 William</a>
+        <a href="index.html#about">专栏订阅</a>
+        <a href="index.html#footer">商务合作</a>
+      </div>
+            <div class="footer-legal">
+        <p class="footer-copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
