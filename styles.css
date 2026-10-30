@@ -331,6 +331,62 @@ img, svg, video, iframe { max-width: 100%; height: auto; }
   z-index: 2;
 }
 
+/* ===== #about 内嵌：专栏文章检索（搜索 + 分类 + 卡片） ===== */
+#about .about-search { margin-top: 52px; }
+#about .about-search-head { margin-bottom: 20px; }
+#about .about-search-title {
+  font-family: var(--font-cn);
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+#about .about-search-desc {
+  font-family: var(--font-cn);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-gray);
+  max-width: 720px;
+}
+#about .about-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(212,175,55,0.4);
+  border-radius: 12px;
+  padding: 12px 16px;
+  max-width: 560px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+#about .about-searchbar:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+}
+#about .about-searchbar svg { flex: 0 0 auto; }
+#about .about-search-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: var(--font-cn);
+  font-size: 15px;
+}
+#about .about-search-input::placeholder { color: var(--text-gray); }
+#about .about-search-clear {
+  flex: 0 0 auto;
+  background: var(--gold);
+  color: #0B1221;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: var(--font-cn);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
 /* ===== 数据说话（padding 60/80 / 蓝浪 78% 遮罩）===== */
 .metrics {
   padding: 60px 0;

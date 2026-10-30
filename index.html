@@ -10,9 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=tidebooks3-20261024" />
+  <link rel="stylesheet" href="styles.css?v=tidebooks4-20261025" />
   <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
-  <script src="assets/i18n.js?v=i18n3-20261024" defer></script>
+  <script src="assets/i18n.js?v=i18n5-20261028" defer></script>
 </head>
 <body>
 
@@ -38,7 +38,7 @@
         <a href="#about" data-i18n="nav_column">专栏</a>
         <a href="#books" data-i18n="nav_books">潮汐漫读</a>
         <a href="#tools" data-i18n="nav_tools">实用工具</a>
-        <a href="#footer" data-i18n="nav_contact">联系</a>
+        <a href="contact.html" data-i18n="nav_contact">联系</a>
       </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
         <p class="hero-sub" data-i18n-html="hero_sub">深耕货代物流领域<br />以专业深度构建航运知识体系</p>
         <div class="hero-cta">
           <a href="#about" class="btn btn-primary" data-i18n="hero_cta1">了解我的专栏</a>
-          <a href="#footer" class="btn btn-secondary" data-i18n="hero_cta2">联系合作</a>
+          <a href="contact.html" class="btn btn-secondary" data-i18n="hero_cta2">联系合作</a>
         </div>
       </div>
       <div class="hero-slogan">
@@ -142,6 +142,7 @@
           <p class="card-desc" data-i18n="card_hazmat_d">PHMSA 危险品运输法规（HMR / 49 CFR）的框架、9 大类分类、危险信息传递与锂电池专项，官方原文源 + 结构化速查</p>
         </a>
       </div>
+
     </div>
   </section>
 
@@ -154,7 +155,7 @@
       <div class="tools-header">
         <span class="eyebrow">TOOLS</span>
         <h2 class="section-title" data-i18n="tools_title">实用工具</h2>
-        <p class="tools-desc" data-i18n="tools_desc">为航运从业者与 AI 爱好者整理的即开即用工具：世界时区对照、主流船公司直达、中国沿海主要港口业务操作 / 查询平台导航、货代报价单生成器、航运术语表中英对照、常用单位换算与实时汇率换算</p>
+        <p class="tools-desc" data-i18n="tools_desc">为航运从业者与 AI 爱好者整理的即开即用工具：世界时区对照、主流船公司直达、中国沿海主要港口业务操作 / 查询平台导航、货代报价单生成器、航运术语表中英对照、常用单位换算、实时汇率换算、文件批量重命名、集装箱皮重查询与 Incoterms 2020 交互速查</p>
       </div>
       <div class="tools-grid">
         <a class="tool-card" href="tool-quote.html">
@@ -226,6 +227,32 @@
           <h3 class="tool-title" data-i18n="tool_units">单位换算</h3>
           <p class="tool-desc" data-i18n="tool_units_d">货代物流常用单位一键互转：重量 kg↔lb、体积 CBM↔CBF、长度 英寸↔厘米、温度 ℃↔℉，输入即出结果、可交换单位</p>
         </a>
+        <a class="tool-card" href="tool-tare.html">
+          <div class="tool-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <rect x="12" y="13" width="20" height="16" rx="2" stroke="#D4AF37" stroke-width="2" fill="none" />
+              <path d="M12 18h20M12 23h20" stroke="#D4AF37" stroke-width="1.6" />
+              <path d="M17 29l-2 4M27 29l2 4" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3 class="tool-title" data-i18n="tool_tare">集装箱皮重查询</h3>
+          <p class="tool-desc" data-i18n="tool_tare_d">收录 MAERSK / CMA / COSCO 等 16 家主流船公司官方皮重（集装箱自重）查询入口，点击即可在新标签页直达官网查询页</p>
+        </a>
+
+        <a class="tool-card" href="tool-incoterms.html">
+          <div class="tool-icon">
+            <svg viewBox="0 0 44 32" fill="none" aria-hidden="true">
+              <rect x="4" y="6" width="14" height="20" rx="2" stroke="#D4AF37" stroke-width="2" />
+              <rect x="26" y="6" width="14" height="20" rx="2" stroke="#D4AF37" stroke-width="2" />
+              <path d="M18 16h8" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
+              <path d="M22 12v8" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3 class="tool-title" data-i18n="tool_incoterms">Incoterms 2020 交互速查</h3>
+          <p class="tool-desc" data-i18n="tool_incoterms_d">按运输方式列出 11 个贸易术语，点击查看运费 / 保险 / 清关 / 风险转移的责任矩阵，支持并排对比与选型向导</p>
+        </a>
+
         <a class="tool-card" href="tool-currency.html">
           <div class="tool-icon">
             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -235,7 +262,20 @@
             </svg>
           </div>
           <h3 class="tool-title" data-i18n="tool_fx">实时汇率换算</h3>
-          <p class="tool-desc" data-i18n="tool_fx_d">美元、人民币、欧元、港币、日元等 19 种货币一键互转，汇率来自公开接口的真实市场参考价，输入即出结果、可双向换算与交换</p>
+      <p class="tool-desc" data-i18n="tool_fx_d">美元、人民币、欧元、港币、日元等 19 种货币一键互转，汇率来自公开接口的真实市场参考价，输入即出结果、可双向换算与交换</p>
+    </a>
+
+        <a class="tool-card" href="tool-rename.html">
+          <div class="tool-icon">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="44" height="44" rx="10" fill="#D4AF37" fill-opacity="0.15" />
+              <path d="M14 16h16v12H14z" stroke="#D4AF37" stroke-width="2" stroke-linejoin="round" />
+              <path d="M19 21h6M22 18v8" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
+              <path d="M17 28l-3 4M27 28l3 4" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <h3 class="tool-title" data-i18n="tool_rename">文件批量重命名</h3>
+          <p class="tool-desc" data-i18n="tool_rename_d">选择文件、设定重命名规则、实时预览新文件名，并导出 Windows / Mac / Linux 一键改名脚本，文件仅在本地处理、不上传</p>
         </a>
 
       </div>
@@ -364,7 +404,7 @@
       <div class="footer-links">
         <a href="about.html" data-i18n="foot_about">关于 William</a>
         <a href="#about" data-i18n="foot_subscribe">专栏订阅</a>
-        <a href="#footer" data-i18n="foot_coop">商务合作</a>
+        <a href="contact.html" data-i18n="foot_coop">商务合作</a>
       </div>
             <div class="footer-legal">
         <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
