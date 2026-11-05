@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n-title="title_tools_incoterms">Incoterms 2020 交互速查 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=incoterms-20261030" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n7-20261030" defer></script>
+</head>
+<body>
+  <div class="tool-page">
+    <div class="tool-topline">
+      <a class="tool-back" href="index.html" data-i18n="back_site">← 返回 航运派 Trans Pi</a>
+      <div class="lang-switch" role="group" aria-label="Language / 语言">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <h1 class="tool-h1" data-i18n="toolh_incoterms">Incoterms® 2020 交互速查</h1>
+    <p class="tool-sub" data-i18n="toolsub_incoterms">下方按运输方式列出 Incoterms® 2020 全部 11 个贸易术语。点击任一术语查看「谁付运费、谁买保险、谁办清关、风险何时转移」的责任矩阵，并可并排对比或跟随向导选型。</p>
+
+    <div class="tool-panel">
+      <div class="inc-tabs" role="tablist">
+        <button type="button" class="inc-tab on" data-mode="all" data-i18n="inc_all">全部</button>
+        <button type="button" class="inc-tab" data-mode="any" data-i18n="inc_any">任何运输</button>
+        <button type="button" class="inc-tab" data-mode="sea" data-i18n="inc_sea">水运</button>
+      </div>
+      <div class="inc-grid" id="incGrid"></div>
+    </div>
+
+    <div class="tool-panel">
+      <div id="incDetail">
+        <p class="tool-sub" data-i18n="inc_detail_hint" style="margin:0;">点击上方任一术语卡片，在此查看完整责任矩阵与风险转移点。</p>
+      </div>
+    </div>
+
+    <div class="tool-panel">
+      <h2 data-i18n="inc_compare_title">并排对比</h2>
+      <p class="tool-sub" data-i18n="inc_compare_sub" style="margin-bottom:18px;">选择任意两个术语，逐项对比责任划分，差异点自动高亮。</p>
+      <div class="inc-cmp-pick">
+        <div class="field">
+          <label data-i18n="inc_cmp_a">术语 A</label>
+          <select id="cmpA"></select>
+        </div>
+        <div class="field">
+          <label data-i18n="inc_cmp_b">术语 B</label>
+          <select id="cmpB"></select>
+        </div>
+        <button type="button" class="tool-btn inc-cmp-btn" id="cmpBtn" data-i18n="inc_compare_btn">对比</button>
+      </div>
+      <div id="cmpResult"></div>
+    </div>
+
+    <div class="tool-panel">
+      <h2 data-i18n="inc_wizard_title">决策向导</h2>
+      <p class="tool-sub" data-i18n="inc_wizard_sub" style="margin-bottom:18px;">回答 3 个问题，为你推荐合适的贸易术语。</p>
+      <div class="inc-wiz-q">
+        <label data-i18n="inc_q1">① 运输方式？</label>
+        <div class="inc-wiz-opts">
+          <button type="button" class="inc-opt" data-q="mode" data-v="any" data-i18n="inc_q1_any">任何运输方式</button>
+          <button type="button" class="inc-opt" data-q="mode" data-v="sea" data-i18n="inc_q1_sea">仅水运</button>
+        </div>
+      </div>
+      <div class="inc-wiz-q">
+        <label data-i18n="inc_q2">② 运费由谁承担？</label>
+        <div class="inc-wiz-opts">
+          <button type="button" class="inc-opt" data-q="freight" data-v="S" data-i18n="inc_q2_seller">卖方付</button>
+          <button type="button" class="inc-opt" data-q="freight" data-v="B" data-i18n="inc_q2_buyer">买方付</button>
+        </div>
+      </div>
+      <div class="inc-wiz-q">
+        <label data-i18n="inc_q3">③ 是否需卖方买保险？</label>
+        <div class="inc-wiz-opts">
+          <button type="button" class="inc-opt" data-q="insurance" data-v="S" data-i18n="inc_q3_seller">需要卖方投保</button>
+          <button type="button" class="inc-opt" data-q="insurance" data-v="B" data-i18n="inc_q3_buyer">买方自行投保</button>
+        </div>
+      </div>
+      <div id="wizardResult"></div>
+    </div>
+
+    <p class="tool-note" data-i18n="inc_note">说明：本工具责任划分依据国际商会（ICC）Incoterms® 2020 官方规则整理，仅供学习参考；实际业务请以买卖合同约定及最新官方文本为准。本页为纯静态页面，不收集任何信息。</p>
+  </div>
+
+  <script>
+    (function () {
+      function isEn() { return (document.documentElement.getAttribute('data-lang') || 'zh') === 'en'; }
+      function T(zh, en) { return isEn() ? en : zh; }
+
+      var DIM = [
+        { zh: '主运费（至目的地）', en: 'Main freight (to destination)' },
+        { zh: '保险费', en: 'Insurance' },
+        { zh: '出口清关', en: 'Export clearance' },
+        { zh: '进口清关', en: 'Import clearance' },
+        { zh: '装货', en: 'Loading' },
+        { zh: '卸货', en: 'Unloading' }
+      ];
+      var STAGES = [
+        { zh: '卖方备货', en: 'Seller prepares' },
+        { zh: '装货', en: 'Loading' },
+        { zh: '交承运人 / 装船', en: 'Handover / On board' },
+        { zh: '运输途中', en: 'In transit' },
+        { zh: '卸货', en: 'Unloading' },
+        { zh: '目的地交货', en: 'Delivery' }
+      ];
+
+      var INCO = [
+        { code: 'EXW', enName: 'Ex Works', zhName: '工厂交货', mode: 'any', resp: ['B','B','B','B','B','B'], riskStage: 0,
+          risk: { zh: '卖方工厂/仓库备妥交货时，风险即转移给买方', en: 'Risk transfers when goods are made available at the seller’s premises' } },
+        { code: 'FCA', enName: 'Free Carrier', zhName: '货交承运人', mode: 'any', resp: ['B','B','S','B','S','B'], riskStage: 2,
+          risk: { zh: '货物在指定地点交付承运人时转移', en: 'Risk transfers when goods are delivered to the carrier at the named place' } },
+        { code: 'CPT', enName: 'Carriage Paid To', zhName: '运费付至', mode: 'any', resp: ['S','B','S','B','S','B'], riskStage: 2,
+          risk: { zh: '货物交付第一承运人时转移（卖方付到目的地运费）', en: 'Risk transfers on delivery to the first carrier (seller pays freight to destination)' } },
+        { code: 'CIP', enName: 'Carriage and Insurance Paid To', zhName: '运费保险费付至', mode: 'any', resp: ['S','S','S','B','S','B'], riskStage: 2,
+          risk: { zh: '货物交付第一承运人时转移（卖方付运费并投保）', en: 'Risk transfers on delivery to the first carrier (seller pays freight and insurance)' } },
+        { code: 'DAP', enName: 'Delivered at Place', zhName: '目的地交货', mode: 'any', resp: ['S','B','S','B','S','B'], riskStage: 5,
+          risk: { zh: '货物在目的地约定地点（未卸货）交由买方时转移', en: 'Risk transfers when goods are placed at the buyer’s disposal at destination, not unloaded' } },
+        { code: 'DPU', enName: 'Delivered at Place Unloaded', zhName: '目的地卸货交货', mode: 'any', resp: ['S','B','S','B','S','S'], riskStage: 4,
+          risk: { zh: '货物在目的地卸货后交由买方时转移（唯一卖方负责卸货）', en: 'Risk transfers after unloading at destination (the only rule where seller unloads)' } },
+        { code: 'DDP', enName: 'Delivered Duty Paid', zhName: '完税后交货', mode: 'any', resp: ['S','B','S','S','S','B'], riskStage: 5,
+          risk: { zh: '货物在目的地约定地点交由买方时转移（卖方承担进口税费）', en: 'Risk transfers when goods are placed at the buyer’s disposal at destination (seller pays import duties)' } },
+        { code: 'FAS', enName: 'Free Alongside Ship', zhName: '船边交货', mode: 'sea', resp: ['B','B','S','B','B','B'], riskStage: 1,
+          risk: { zh: '货物置于船边时转移', en: 'Risk transfers when goods are placed alongside the vessel' } },
+        { code: 'FOB', enName: 'Free On Board', zhName: '船上交货', mode: 'sea', resp: ['B','B','S','B','S','B'], riskStage: 2,
+          risk: { zh: '货物装上船时转移', en: 'Risk transfers when goods are on board the vessel' } },
+        { code: 'CFR', enName: 'Cost and Freight', zhName: '成本加运费', mode: 'sea', resp: ['S','B','S','B','S','B'], riskStage: 2,
+          risk: { zh: '风险在装船时转移，费用（运费）付至目的港', en: 'Risk transfers on board; freight paid to destination port' } },
+        { code: 'CIF', enName: 'Cost, Insurance and Freight', zhName: '成本保险费加运费', mode: 'sea', resp: ['S','S','S','B','S','B'], riskStage: 2,
+          risk: { zh: '风险在装船时转移，卖方付运费并投保', en: 'Risk transfers on board; seller pays freight and insurance' } }
+      ];
+
+      var state = { filter: 'all', detail: null, cmpA: null, cmpB: null, wizard: {} };
+      var grid = document.getElementById('incGrid');
+      var detail = document.getElementById('incDetail');
+      var cmpA = document.getElementById('cmpA');
+      var cmpB = document.getElementById('cmpB');
+      var cmpResult = document.getElementById('cmpResult');
+      var wizardResult = document.getElementById('wizardResult');
+
+      function dotOn() { return '<span class="inc-dot on"></span>'; }
+      function dash() { return '<span class="inc-dash">—</span>'; }
+      function modeLabel(m) { return m === 'sea' ? T('仅水运', 'Sea only') : T('任何运输', 'Any mode'); }
+
+      function renderGrid() {
+        grid.innerHTML = '';
+        INCO.forEach(function (t) {
+          if (state.filter !== 'all' && t.mode !== state.filter) return;
+          var card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'inc-card' + (state.detail === t.code ? ' active' : '');
+          card.setAttribute('data-code', t.code);
+          card.innerHTML = '<span class="inc-code">' + t.code + '</span>' +
+            '<span class="inc-en">' + t.enName + '</span>' +
+            '<span class="inc-zh">' + t.zhName + '</span>' +
+            '<span class="inc-mode">' + modeLabel(t.mode) + '</span>';
+          card.addEventListener('click', function () { state.detail = t.code; renderAll(); });
+          grid.appendChild(card);
+        });
+      }
+
+      function matrixHTML(t) {
+        var rows = '';
+        DIM.forEach(function (d, i) {
+          var v = t.resp[i];
+          rows += '<tr>' +
+            '<td class="inc-dim">' + T(d.zh, d.en) + '</td>' +
+            '<td class="inc-sb">' + (v === 'S' ? dotOn() : dash()) + '</td>' +
+            '<td class="inc-sb">' + (v === 'B' ? dotOn() : dash()) + '</td>' +
+            '</tr>';
+        });
+        rows += '<tr class="inc-risk-row">' +
+          '<td class="inc-dim">' + T('风险转移点', 'Risk transfer point') + '</td>' +
+          '<td class="inc-risk-text" colspan="2">' + T(t.risk.zh, t.risk.en) + '</td>' +
+          '</tr>';
+
+        var axis = '';
+        STAGES.forEach(function (s, i) {
+          axis += '<div class="inc-axis-seg' + (i === t.riskStage ? ' active' : '') + '">' +
+            '<span class="inc-axis-num">' + (i + 1) + '</span>' +
+            '<span class="inc-axis-label">' + T(s.zh, s.en) + '</span>' +
+            '</div>';
+        });
+
+        return '<div class="inc-detail-head">' +
+          '<span class="inc-detail-code">' + t.code + '</span>' +
+          '<span class="inc-detail-name">' + t.enName + ' · ' + t.zhName + '</span>' +
+          '<span class="inc-detail-mode">' + modeLabel(t.mode) + '</span>' +
+          '</div>' +
+          '<table class="inc-matrix">' +
+          '<thead><tr><th>' + T('责任项', 'Item') + '</th><th>' + T('卖方', 'Seller') + '</th><th>' + T('买方', 'Buyer') + '</th></tr></thead>' +
+          '<tbody>' + rows + '</tbody></table>' +
+          '<div class="inc-axis-title">' + T('风险转移时间轴', 'Risk transfer timeline') + '</div>' +
+          '<div class="inc-axis">' + axis + '</div>' +
+          '<p class="inc-axis-note">' + T('金色高亮段即为「风险从卖方转移给买方」的节点。', 'The gold-highlighted stage is where risk passes from seller to buyer.') + '</p>';
+      }
+
+      function renderDetail() {
+        if (!state.detail) {
+          detail.innerHTML = '<p class="tool-sub" data-i18n="inc_detail_hint" style="margin:0;">' + T('点击上方任一术语卡片，在此查看完整责任矩阵与风险转移点。', 'Click any term card above to see its full responsibility matrix and risk-transfer point.') + '</p>';
+          return;
+        }
+        var t = INCO.filter(function (x) { return x.code === state.detail; })[0];
+        detail.innerHTML = matrixHTML(t);
+      }
+
+      function fillCmpSelects() {
+        var opts = '<option value="">' + T('请选择', 'Select') + '</option>' +
+          INCO.map(function (t) { return '<option value="' + t.code + '">' + t.code + ' · ' + t.zhName + '</option>'; }).join('');
+        cmpA.innerHTML = opts; cmpB.innerHTML = opts;
+        if (state.cmpA) cmpA.value = state.cmpA;
+        if (state.cmpB) cmpB.value = state.cmpB;
+      }
+
+      function renderCompare() {
+        var a = cmpA.value, b = cmpB.value;
+        if (!a || !b) { cmpResult.innerHTML = ''; return; }
+        if (a === b) { cmpResult.innerHTML = '<p class="inc-cmp-same">' + T('请选择两个不同的术语。', 'Please choose two different terms.') + '</p>'; return; }
+        var ta = INCO.filter(function (x) { return x.code === a; })[0];
+        var tb = INCO.filter(function (x) { return x.code === b; })[0];
+        function block(t, other) {
+          var rows = '';
+          DIM.forEach(function (d, i) {
+            var diff = t.resp[i] !== other.resp[i];
+            rows += '<tr class="' + (diff ? 'inc-diff' : '') + '"><td class="inc-dim">' + T(d.zh, d.en) + '</td><td class="inc-sb">' + (t.resp[i] === 'S' ? dotOn() : dash()) + '</td><td class="inc-sb">' + (t.resp[i] === 'B' ? dotOn() : dash()) + '</td></tr>';
+          });
+          var riskDiff = t.riskStage !== other.riskStage;
+          rows += '<tr class="' + (riskDiff ? 'inc-diff' : '') + ' inc-risk-row"><td class="inc-dim">' + T('风险转移点', 'Risk transfer point') + '</td><td class="inc-risk-text" colspan="2">' + T(t.risk.zh, t.risk.en) + '</td></tr>';
+          return '<div class="inc-cmp-col"><div class="inc-detail-head"><span class="inc-detail-code">' + t.code + '</span><span class="inc-detail-name">' + t.zhName + '</span></div>' +
+            '<table class="inc-matrix"><thead><tr><th>' + T('责任项', 'Item') + '</th><th>' + T('卖方', 'Seller') + '</th><th>' + T('买方', 'Buyer') + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+        }
+        cmpResult.innerHTML = '<div class="inc-cmp-wrap">' + block(ta, tb) + block(tb, ta) + '</div>' +
+          '<p class="inc-cmp-legend">' + T('高亮行 = 两术语在该项上不同。', 'Highlighted rows = where the two terms differ.') + '</p>';
+      }
+
+      function renderWizard() {
+        var w = state.wizard;
+        var matches = INCO.filter(function (t) {
+          if (w.mode && t.mode !== w.mode) return false;
+          if (w.freight && t.resp[0] !== w.freight) return false;
+          if (w.insurance && t.resp[1] !== w.insurance) return false;
+          return true;
+        });
+        if (!w.mode && !w.freight && !w.insurance) { wizardResult.innerHTML = ''; return; }
+        if (matches.length === 0) {
+          wizardResult.innerHTML = '<p class="inc-wiz-none">' + T('没有完全匹配的术语，请放宽条件。', 'No exact match — please relax a condition.') + '</p>';
+          return;
+        }
+        var chips = matches.map(function (t) {
+          return '<button type="button" class="inc-wiz-chip" data-code="' + t.code + '">' + t.code + ' · ' + t.zhName + '</button>';
+        }).join('');
+        wizardResult.innerHTML = '<p class="inc-wiz-result-title">' + T('推荐术语', 'Recommended terms') + '</p><div class="inc-wiz-chips">' + chips + '</div>';
+        Array.prototype.forEach.call(wizardResult.querySelectorAll('.inc-wiz-chip'), function (btn) {
+          btn.addEventListener('click', function () { state.detail = btn.getAttribute('data-code'); renderAll(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        });
+      }
+
+      function renderAll() {
+        renderGrid(); renderDetail(); renderCompare(); renderWizard();
+      }
+
+      document.querySelectorAll('.inc-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.inc-tab').forEach(function (x) { x.classList.remove('on'); });
+          tab.classList.add('on');
+          state.filter = tab.getAttribute('data-mode');
+          renderGrid();
+        });
+      });
+      cmpA.addEventListener('change', function () { state.cmpA = cmpA.value; renderCompare(); });
+      cmpB.addEventListener('change', function () { state.cmpB = cmpB.value; renderCompare(); });
+      document.querySelectorAll('.inc-opt').forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          var q = opt.getAttribute('data-q');
+          document.querySelectorAll('.inc-opt[data-q="' + q + '"]').forEach(function (x) { x.classList.remove('on'); });
+          opt.classList.add('on');
+          state.wizard[q] = opt.getAttribute('data-v');
+          renderWizard();
+        });
+      });
+
+      var obs = new MutationObserver(function (muts) {
+        muts.forEach(function (m) { if (m.attributeName === 'data-lang') { renderAll(); } });
+      });
+      obs.observe(document.documentElement, { attributes: true });
+
+      fillCmpSelects();
+      renderAll();
+    })();
+  </script>
+
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="contact.html" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

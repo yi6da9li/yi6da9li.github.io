@@ -354,3 +354,20 @@
 @media (max-width: 768px) {
   .book-item { flex-direction: column; gap: 16px; padding: 20px 18px; }
 }
+
+/* 书单详情：默认隐藏，点击封面后才展开对应条目 */
+.book-item { display: none; }
+.book-item.is-shown { display: flex; }
+.book-detail-hint {
+  text-align: center;
+  color: var(--text-gray);
+  font-size: 15px;
+  letter-spacing: .02em;
+  padding: 26px 18px;
+  margin: 10px 0 0;
+  border: 1px dashed rgba(212, 175, 55, 0.35);
+  border-radius: 12px;
+  background: rgba(212, 175, 55, 0.04);
+}
+#booksNote { display: none; }
+#booksNote.is-shown { display: block; }

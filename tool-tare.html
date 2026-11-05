@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n-title="title_tools_tare">集装箱皮重查询 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=tare-20261031" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n6-20261030" defer></script>
+</head>
+<body>
+  <div class="tool-page">
+    <div class="tool-topline">
+      <a class="tool-back" href="index.html" data-i18n="back_site">← 返回 航运派 Trans Pi</a>
+      <div class="lang-switch" role="group" aria-label="Language / 语言">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <h1 class="tool-h1" data-i18n="toolh_tare">集装箱皮重查询</h1>
+    <p class="tool-sub" data-i18n="toolsub_tare">下方收录各主流船公司官方皮重（集装箱自重 / Tare Weight）查询入口。点击船公司名称，即可在新标签页直达对应官网的查询页面，在官网输入箱号即可查询。</p>
+
+    <div class="tool-panel">
+      <h2 data-i18n="tare_dir_title">各船公司皮重查询入口</h2>
+      <p class="tool-sub" data-i18n="tare_dir_sub" style="margin-bottom:18px;">下方为各船公司官方皮重 / 箱重查询页面直达链接。点击名称在新标签页打开对应官网，在官网输入箱号即可查询。</p>
+      <div class="carrier-grid" id="tareDir"></div>
+    </div>
+
+    <p class="tool-note" data-i18n="tare_privacy">说明：本页为查询入口导航，皮重数据由各船公司官网实时提供；点击下方任一船公司名称时会在新标签页打开对应官网，本页不存储、不上传任何信息。</p>
+  </div>
+
+  <script>
+    (function () {
+      var carriers = [
+        { key: 'MAERSK', url: 'https://www.maersk.com.cn/tare/' },
+        { key: 'CMA CGM', url: 'https://www.cma-cgm.com/ebusiness/tarefinder' },
+        { key: 'COSCO', url: 'https://elines.coscoshipping.com/ebusiness/containerTareWeight/query' },
+        { key: 'OOCL', url: 'https://www.oocl.com/eng/ourservices/eservices/ContainerSpecEnquiry/Pages/ContainerSpecificationEnquiry.aspx', note: { zh: '注意：在 OOCL 官网查询时，请不要输入箱号最后一位（校验位）。', en: 'Note: when querying on OOCL, do NOT enter the last digit (check digit) of the container number.' } },
+        { key: 'ONE', url: 'https://www.one-line.com/ecom/CUP_HOM_3069.do?sessLocale=en' },
+        { key: 'EVERGREEN', url: 'https://ss.shipmentlink.com/eqc1/jsp/EQC1_Container_Tare_Weight_Search.jsp' },
+        { key: 'HMM', url: 'https://www.hmm21.com/e-service/information/tareWeightLookUp/TareWeightLookUp.do' },
+        { key: 'YANG MING', url: 'https://www.yangming.com/en/esolution/my_shipment/solas_vgm/sv_container_query' },
+        { key: 'ZIM', url: 'https://www.zim.com/tools/tare-weight-inquiry' },
+        { key: 'WAN HAI', url: 'https://www.wanhai.com/views/cargoTrack/ContainerTareWeight.xhtml' },
+        { key: 'KMTC', url: 'https://www.ekmtc.com.cn/index.html#/main', note: { zh: 'KMTC 请在官网左侧链接栏进入“皮重查询”入口。', en: 'KMTC: use the left sidebar on the official site to find the tare weight inquiry.' } },
+        { key: 'ESL', url: 'https://esea.emiratesline.com/ESLVGM/' },
+        { key: 'CU LINE', url: 'https://eservice.culines.com/gnoss/CUP_HOM_3065.do' },
+        { key: 'RCL', url: 'https://uat1-www.rclgroup.com/TareWeight' },
+        { key: 'SINOLINES', url: 'https://ebusiness.sinolines.com.cn/SnlEbusiness/EQUERY/QueryContainerE.aspx' },
+        { key: 'SM LINE', url: 'https://esvc.smlines.com/smline/CUP_HOM_3255.do' }
+      ];
+
+      var dir = document.getElementById('tareDir');
+
+      function isEn() { return (document.documentElement.getAttribute('data-lang') || 'zh') === 'en'; }
+      function T(zh, en) { return isEn() ? en : zh; }
+
+      function buildDir() {
+        dir.innerHTML = '';
+        carriers.forEach(function (c) {
+          var a = document.createElement('a');
+          a.className = 'carrier-item'; a.href = c.url; a.target = '_blank'; a.rel = 'noopener';
+          var nm = document.createElement('span'); nm.className = 'name'; nm.textContent = c.key;
+          a.appendChild(nm);
+          if (c.note) {
+            var nt = document.createElement('span'); nt.className = 'note'; nt.textContent = T(c.note.zh, c.note.en);
+            a.appendChild(nt);
+          }
+          dir.appendChild(a);
+        });
+      }
+
+      var obs = new MutationObserver(function (muts) {
+        muts.forEach(function (m) {
+          if (m.attributeName === 'data-lang') { buildDir(); }
+        });
+      });
+      obs.observe(document.documentElement, { attributes: true });
+
+      buildDir();
+    })();
+  </script>
+
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="contact.html" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

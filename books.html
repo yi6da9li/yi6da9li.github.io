@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=tidebooks3-20261024" />
-  <link rel="stylesheet" href="article.css?v=tidebooks3-20261024" />
+  <link rel="stylesheet" href="styles.css?v=tidebooks5-20261101" />
+  <link rel="stylesheet" href="article.css?v=booksdetail-20261101" />
   <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
   <script src="assets/i18n.js?v=i18n4-20261024" defer></script>
 </head>
@@ -46,6 +46,19 @@
       <h1 class="article-list-title" data-i18n="books_title">潮汐漫读</h1>
       <p class="article-list-subtitle" data-i18n="books_subtitle">随潮汐展卷，于书页远航</p>
       <p class="article-list-desc" data-i18n="books_page_desc">潮汐漫读，是属于航运人的书单自留地。这里既有集装箱革命、全球海运图景、航运先驱传记等行业经典，也收纳人文、历史与科幻佳作。不必只读海图与单证，在潮起潮落间慢读，于文字里看见更辽阔的世界。</p>
+
+      <!-- 3D 封面展示（混合式：上方轮播 + 下方完整书单） -->
+      <div class="book-carousel" aria-label="书籍封面 3D 展示">
+        <div class="book-carousel-stage" id="bookStage">
+          <div class="book-carousel-ring" id="bookRing"></div>
+          <button class="book-carousel-btn prev" id="bookPrev" type="button" aria-label="上一本">‹</button>
+          <button class="book-carousel-btn next" id="bookNext" type="button" aria-label="下一本">›</button>
+        </div>
+        <div class="book-carousel-caption" id="bookCaption"></div>
+        <div class="book-carousel-dots" id="bookDots"></div>
+      </div>
+
+      <p class="book-detail-hint" id="bookHint">点击上方任意封面，查看该书的完整介绍</p>
 
       <div class="book-item" id="the-box">
         <div class="book-cover">The Box</div>
@@ -97,7 +110,7 @@
           <h2 class="article-item-title">冬牧场</h2>
           <p class="book-title-sub">Winter Pasture</p>
           <div class="book-author">李娟</div>
-          <p class="article-item-excerpt">李娟随哈萨克牧民居麻一家深入阿勒泰的冬季牧场，与羊群、冰雪和匮乏共度四个月。文字克制而温热：在全球化与集装箱网络之外，另一种仍在缓慢运转的「运输」——游牧——被完整记录下来。适合在厚重的单证与运价里抬起头来，换一口气时读。</p>
+          <p class="article-item-excerpt">李娟随哈萨克牧民居麻一家深入阿勒泰的冬季牧场，与羊群、冰雪和匮乏共度四个月。文字克制而温热，把游牧生活里最粗粝也最温柔的日常——转场、背雪、荒野中的孤独与笑声——原原本本地记录下来。在喧嚣之外，这是一本让人重新学会安静的书。</p>
         </div>
       </div>
 
@@ -118,7 +131,7 @@
           <div class="article-item-cat">科幻小说 · 极限求生</div>
           <h2 class="article-item-title book-title-en">The Martian</h2>
           <div class="book-author">Andy Weir</div>
-          <p class="article-item-excerpt">一场沙暴把马克·沃特尼独自留在了火星。他靠植物学知识和手头物资，在火星上种土豆、算水与氧气、改装火星车求生。这是一部把工程与计算写成喜剧的硬科幻——和航运一样，极端环境里能救命的从来不是运气，而是把每个变量算清楚的耐心。</p>
+          <p class="article-item-excerpt">一场沙暴把宇航员马克·沃特尼独自留在了火星。他靠植物学知识和手头有限的物资，在火星上种土豆、精算水与氧气、改装火星车求生。这是一部把工程与计算写成喜剧的硬科幻：决定生死的从来不是运气，而是把每一个变量都算清楚的耐心与幽默。</p>
         </div>
       </div>
 
@@ -129,7 +142,7 @@
           <h2 class="article-item-title book-title-en">Empire of Things</h2>
           <p class="book-title-sub">How We Became a World of Consumers, from the Fifteenth Century to the Twenty-First</p>
           <div class="book-author">Frank Trentmann</div>
-          <p class="article-item-excerpt">一部跨越六个世纪的消费社会史。Trentmann 追溯人类从「克制」走向「拥有」的漫长转变：殖民贸易、全球商品流通、超市与广告，直至现代购物体验。它让读者看见，每一件被买下的物背后，都连着一条横跨海洋与大陆的供给链条——理解消费，也就读懂了航运与全球化的一半。</p>
+          <p class="article-item-excerpt">一部跨越六个世纪的消费社会史。Trentmann 追溯人类从「克制」走向「拥有」的漫长转变：从殖民贸易与全球商品流通，到超市、广告与现代购物体验的兴起。它让读者看见，我们与物的关系如何重塑了家庭、国家与世界——一部读懂「我们为何想买、买了什么、又为何想要更多」的宏大叙事。</p>
         </div>
       </div>
 
@@ -140,11 +153,44 @@
           <h2 class="article-item-title">寻味东西</h2>
           <p class="book-title-sub">Collected Essays</p>
           <div class="book-author">扶霞·邓洛普（Fuchsia Dunlop）</div>
-          <p class="article-item-excerpt">英国美食作家扶霞·邓洛普的代表随笔集，原作 Collected Essays。她以深耕中国饮食文化二十余年的功底，借「吃东吃西」「奇菜异味」「心胃相通」「食之史」四个主题，把绍兴臭霉与欧洲奶酪的偏见、宫保鸡丁与左宗棠鸡的来历、不同材质勺子对味觉的影响写得既幽默又扎实。在集装箱把全球餐桌连成一张网之前，人与食物的相遇早已跨越山海——这本书恰好从「吃」的角度，带读者读懂东西方如何彼此误读、又彼此靠近。</p>
+          <p class="article-item-excerpt">英国美食作家扶霞·邓洛普的代表随笔集，原作 Collected Essays。她以深耕中国饮食文化二十余年的功底，借「吃东吃西」「奇菜异味」「心胃相通」「食之史」四个主题，把绍兴臭霉与欧洲奶酪的偏见、宫保鸡丁与左宗棠鸡的来历、不同材质勺子对味觉的影响写得既幽默又扎实。这是一本从「吃」出发，带读者读懂东西方如何彼此误读、又彼此靠近的饮食文化之书。</p>
         </div>
       </div>
 
-      <p class="article-list-desc" style="margin-top:36px;margin-bottom:0;font-size:14px;" data-i18n="books_note">以上为个人阅读推荐，书目信息与版本以出版社及官方最新公告为准；书目会不定期补充与调整。</p>
+      <div class="book-item" id="count-of-monte-cristo">
+        <div class="book-cover">Monte<br />Cristo</div>
+        <div class="book-body">
+          <div class="article-item-cat">经典文学 · 冒险史诗</div>
+          <h2 class="article-item-title">基督山伯爵</h2>
+          <p class="book-title-sub">Le Comte de Monte-Cristo · The Count of Monte Cristo</p>
+          <div class="book-author">大仲马（Alexandre Dumas）</div>
+          <p class="article-item-excerpt">大仲马的复仇史诗。主角爱德蒙·唐泰斯本是一名满怀前途的地中海年轻水手、法老号代理船长，却在订婚当天遭人构陷，被秘密投入伊夫堡暗无天日的黑牢十四年。越狱、寻宝、化身基督山伯爵，他精心设局、一一复仇，却在终局留下那句箴言：人类的一切智慧，都包含在「等待」与「希望」之中。</p>
+        </div>
+      </div>
+
+      <div class="book-item" id="neuromancer">
+        <div class="book-cover">Neuromancer</div>
+        <div class="book-body">
+          <div class="article-item-cat">科幻小说 · 赛博朋克</div>
+          <h2 class="article-item-title book-title-en">Neuromancer</h2>
+          <p class="book-title-sub">神经漫游者</p>
+          <div class="book-author">威廉·吉布森（William Gibson）</div>
+          <p class="article-item-excerpt">吉布森的开山之作，几乎凭一己之力定义了赛博朋克，并首次写下「赛博空间」(cyberspace) 一词。落魄黑客凯斯因神经受损失去接入网络的能力，被神秘势力治愈并雇去执行一桩看似不可能的任务；他与义体女杀手莫莉联手，周旋于意图自我觉醒的人工智能「冬寂」(Wintermute) 与「神经漫游者」之间。这是一部关于网络、意识与身份的小说——在人人连线的时代读来，反而更像一则预言。</p>
+        </div>
+      </div>
+
+      <div class="book-item" id="story-of-art">
+        <div class="book-cover">Story of Art</div>
+        <div class="book-body">
+          <div class="article-item-cat">艺术史 · 入门经典</div>
+          <h2 class="article-item-title book-title-en">The Story of Art</h2>
+          <p class="book-title-sub">艺术的故事</p>
+          <div class="book-author">E.H. 贡布里希（E.H. Gombrich）</div>
+          <p class="article-item-excerpt">贡布里希的传世经典，自 1950 年初版以来被译成三十多种语言、畅销逾半个世纪，被誉为艺术史入门的「圣经」。它用清晰平易的语言，从史前的洞穴壁画一路讲到二十世纪实验艺术，告诉读者：艺术史不是名作与大师的罗列，而是「各种传统不断迂回、不断改变的历史」。想真正看懂一幅画，不妨从这一本开始。</p>
+        </div>
+      </div>
+
+      <p class="article-list-desc" id="booksNote" style="margin-top:36px;margin-bottom:0;font-size:14px;" data-i18n="books_note">以上为个人阅读推荐，书目信息与版本以出版社及官方最新公告为准；书目会不定期补充与调整。</p>
 
     </div>
   </section>
@@ -170,6 +216,130 @@
       </div>
     </div>
   </footer>
+
+  <script>
+  (function () {
+    var ring = document.getElementById('bookRing');
+    if (!ring) return;
+    var stage = document.getElementById('bookStage');
+    var caption = document.getElementById('bookCaption');
+    var dotsWrap = document.getElementById('bookDots');
+    var hintEl = document.getElementById('bookHint');
+    var noteEl = document.getElementById('booksNote');
+    var items = Array.prototype.slice.call(document.querySelectorAll('.book-item'));
+    var N = items.length;
+    if (N === 0) return;
+    var theta = 360 / N;
+    var faceW = 150, radius = 320;
+
+    function computeRadius() {
+      faceW = window.matchMedia('(max-width: 640px)').matches ? 116 : 150;
+      radius = Math.round((faceW / 2) / Math.tan(Math.PI / N)) + 40;
+    }
+
+    var faces = [];
+    items.forEach(function (it, i) {
+      var cover = it.querySelector('.book-cover');
+      var title = it.querySelector('.article-item-title');
+      var author = it.querySelector('.book-author');
+      var face = document.createElement('div');
+      face.className = 'book-face';
+      face.innerHTML = '<div class="book-cover">' + (cover ? cover.innerHTML : '') + '</div>';
+      face.setAttribute('data-title', title ? title.textContent.trim() : '');
+      face.setAttribute('data-author', author ? author.textContent.trim() : '');
+      face.addEventListener('click', function () {
+        go(i); pause(); showDetail(i);
+      });
+      ring.appendChild(face);
+      faces.push(face);
+    });
+
+    var current = 0;
+
+    function layoutFaces() {
+      computeRadius();
+      faces.forEach(function (f, i) {
+        f.style.transform = 'rotateY(' + (i * theta) + 'deg) translateZ(' + radius + 'px)';
+      });
+    }
+
+    function render() {
+      ring.style.transform = 'translateZ(-' + radius + 'px) rotateY(' + (-current * theta) + 'deg)';
+      faces.forEach(function (f, i) { f.classList.toggle('is-active', i === current); });
+      var f = faces[current];
+      if (caption && f) {
+        var t = f.getAttribute('data-title') || '';
+        var a = f.getAttribute('data-author') || '';
+        caption.innerHTML = '<span class="cap-title">' + t + '</span>' +
+          (a ? '<span class="cap-sep">·</span><span class="cap-author">' + a + '</span>' : '');
+      }
+      Array.prototype.forEach.call(dotsWrap.children, function (d, i) { d.classList.toggle('is-active', i === current); });
+    }
+
+    function go(i) { current = ((i % N) + N) % N; render(); }
+
+    function showDetail(i) {
+      items.forEach(function (it, idx) { it.classList.toggle('is-shown', idx === i); });
+      if (hintEl) hintEl.style.display = 'none';
+      if (noteEl) noteEl.classList.add('is-shown');
+      var el = items[i];
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    faces.forEach(function (f, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', '第 ' + (i + 1) + ' 本');
+      b.addEventListener('click', function () { go(i); pause(); showDetail(i); });
+      dotsWrap.appendChild(b);
+    });
+
+    document.getElementById('bookPrev').addEventListener('click', function () { go(current - 1); pause(); showDetail(current); });
+    document.getElementById('bookNext').addEventListener('click', function () { go(current + 1); pause(); showDetail(current); });
+
+    // 拖拽 / 触摸
+    var dragging = false, startX = 0, startRot = 0, moved = false;
+    stage.addEventListener('pointerdown', function (e) {
+      dragging = true; moved = false; startX = e.clientX; startRot = -current * theta;
+      ring.classList.add('is-dragging'); pause();
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      var deg = startRot + dx * 0.4;
+      ring.style.transform = 'translateZ(-' + radius + 'px) rotateY(' + deg + 'deg)';
+    });
+    window.addEventListener('pointerup', function (e) {
+      if (!dragging) return;
+      dragging = false; ring.classList.remove('is-dragging');
+      if (moved) {
+        var dx = e.clientX - startX;
+        var steps = Math.round((dx * 0.4) / theta);
+        go(current - steps);
+      }
+    });
+
+    // 自动旋转（尊重 reduce-motion）
+    var timer = null;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function play() { if (reduce) return; if (timer) return; timer = setInterval(function () { go(current + 1); }, 3800); }
+    function pause() { if (timer) { clearInterval(timer); timer = null; } }
+
+    stage.addEventListener('mouseenter', pause);
+    stage.addEventListener('mouseleave', function () { if (!dragging) play(); });
+
+    layoutFaces();
+    render();
+    play();
+
+    var rt;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () { layoutFaces(); render(); }, 150);
+    });
+  })();
+  </script>
 
 </body>
 </html>

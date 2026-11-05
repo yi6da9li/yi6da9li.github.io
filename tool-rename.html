@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n-title="title_tools_rename">文件批量重命名 · 航运派 Trans Pi</title>
+  <link rel="stylesheet" href="tool.css?v=rename-20261030" />
+  <link rel="stylesheet" href="assets/i18n.css?v=i18n-20261024" />
+  <script src="assets/i18n.js?v=i18n6-20261030" defer></script>
+</head>
+<body>
+  <div class="tool-page">
+    <div class="tool-topline">
+      <a class="tool-back" href="index.html" data-i18n="back_site">← 返回 航运派 Trans Pi</a>
+      <div class="lang-switch" role="group" aria-label="Language / 语言">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <h1 class="tool-h1" data-i18n="toolh_rename">文件批量重命名</h1>
+    <div class="tool-panel">
+      <h2 data-i18n="rename_howto_title">如何使用脚本</h2>
+      <ol class="rename-steps">
+        <li data-i18n="rename_howto_1">在本页选择或拖拽需要重命名的文件（文件名仅在你的浏览器本地读取，绝不会上传到任何服务器）。</li>
+        <li data-i18n="rename_howto_2">在上方设定重命名规则（查找替换、前缀、后缀、编号、大小写、去空格等），下方实时预览确认新文件名无误、无重复。</li>
+        <li data-i18n="rename_howto_3">点击「下载 Windows 脚本 (.bat)」或「下载 Mac/Linux 脚本 (.sh)」，把下载的脚本文件放进待重命名文件所在的同一个文件夹。</li>
+        <li data-i18n="rename_howto_4">进入该文件夹运行脚本：Windows 直接双击 .bat 文件；Mac / Linux 打开终端，执行 <code>bash rename_files.sh</code>。</li>
+        <li data-i18n="rename_howto_5">文件即按预览结果批量改名。建议先复制少量文件到单独的测试文件夹试运行一次，确认无误后再处理全部文件。</li>
+      </ol>
+    </div>
+
+    <div class="rename-drop" id="drop">
+      <p data-i18n="rename_upload_tip">点击选择文件，或将文件拖拽到此处</p>
+      <input type="file" id="fileInput" multiple hidden />
+    </div>
+    <p class="rename-selected" id="selCount"></p>
+
+    <div class="tool-panel">
+      <h2 data-i18n="rename_rules">重命名规则</h2>
+      <div class="tool-grid">
+        <div class="field">
+          <label data-i18n="rename_find">查找</label>
+          <input type="text" id="rFind" placeholder="如 扫描件" />
+        </div>
+        <div class="field">
+          <label data-i18n="rename_replace">替换为</label>
+          <input type="text" id="rReplace" placeholder="如 scan" />
+        </div>
+      </div>
+      <label class="rename-check"><input type="checkbox" id="rRegex" /> <span data-i18n="rename_regex">使用正则表达式</span></label>
+
+      <div class="tool-grid" style="margin-top:16px;">
+        <div class="field">
+          <label data-i18n="rename_prefix">添加前缀</label>
+          <input type="text" id="rPrefix" placeholder="如 2026_" />
+        </div>
+        <div class="field">
+          <label data-i18n="rename_suffix">添加后缀（扩展名前）</label>
+          <input type="text" id="rSuffix" placeholder="如 _final" />
+        </div>
+      </div>
+
+      <label class="rename-check"><input type="checkbox" id="rNumber" /> <span data-i18n="rename_number">添加编号</span></label>
+      <div class="tool-grid" id="numOpts" style="margin-top:12px; display:none;">
+        <div class="field">
+          <label data-i18n="rename_num_start">起始数字</label>
+          <input type="number" id="rStart" value="1" min="0" />
+        </div>
+        <div class="field">
+          <label data-i18n="rename_num_digits">位数（补零）</label>
+          <input type="number" id="rDigits" value="3" min="1" max="6" />
+        </div>
+        <div class="field">
+          <label data-i18n="rename_num_pos">编号位置</label>
+          <select id="rPos">
+            <option value="before" data-i18n="rename_pos_before">名称前</option>
+            <option value="after" data-i18n="rename_pos_after">名称后</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tool-grid" style="margin-top:16px;">
+        <div class="field">
+          <label data-i18n="rename_case">大小写</label>
+          <select id="rCase">
+            <option value="keep" data-i18n="rename_case_keep">保持</option>
+            <option value="lower" data-i18n="rename_case_lower">小写</option>
+            <option value="upper" data-i18n="rename_case_upper">大写</option>
+            <option value="title" data-i18n="rename_case_title">首字母大写</option>
+          </select>
+        </div>
+      </div>
+      <label class="rename-check"><input type="checkbox" id="rTrim" /> <span data-i18n="rename_trim_space">去除空格</span></label>
+      <label class="rename-check"><input type="checkbox" id="rStrip" /> <span data-i18n="rename_strip_illegal">去除文件名非法字符</span></label>
+    </div>
+
+    <div class="tool-panel">
+      <h2 data-i18n="rename_preview">预览（原名 → 新名）</h2>
+      <div class="rename-list" id="list"></div>
+      <p class="rename-warn" id="warn" style="display:none;"></p>
+    </div>
+
+    <p class="tool-note" data-i18n="rename_privacy">隐私说明：文件名仅在你的浏览器本地读取与处理，不会上传到任何服务器。</p>
+
+    <div class="rename-actions">
+      <button class="tool-btn" id="dlBat" data-i18n="rename_dl_bat">下载 Windows 脚本 (.bat)</button>
+      <button class="tool-btn" id="dlSh" data-i18n="rename_dl_sh">下载 Mac/Linux 脚本 (.sh)</button>
+      <button class="tool-btn" id="copyBtn" data-i18n="rename_copy">复制脚本</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var files = []; // { name, base, ext }
+      var input = document.getElementById('fileInput');
+      var drop = document.getElementById('drop');
+      var list = document.getElementById('list');
+      var warn = document.getElementById('warn');
+      var selCount = document.getElementById('selCount');
+
+      function isEn() { return (document.documentElement.getAttribute('data-lang') || 'zh') === 'en'; }
+      function T(zh, en) { return isEn() ? en : zh; }
+
+      drop.addEventListener('click', function () { input.click(); });
+      input.addEventListener('change', function (e) { addFiles(e.target.files); });
+      ['dragenter', 'dragover'].forEach(function (ev) {
+        drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); });
+      });
+      ['dragleave', 'drop'].forEach(function (ev) {
+        drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+      });
+      drop.addEventListener('drop', function (e) { addFiles(e.dataTransfer.files); });
+
+      function addFiles(fileList) {
+        Array.prototype.forEach.call(fileList, function (f) {
+          var n = f.name;
+          var dot = n.lastIndexOf('.');
+          var base = dot > 0 ? n.slice(0, dot) : n;
+          var ext = dot > 0 ? n.slice(dot) : '';
+          files.push({ name: n, base: base, ext: ext });
+        });
+        render();
+      }
+
+      function getRules() {
+        return {
+          find: document.getElementById('rFind').value,
+          replace: document.getElementById('rReplace').value,
+          regex: document.getElementById('rRegex').checked,
+          prefix: document.getElementById('rPrefix').value,
+          suffix: document.getElementById('rSuffix').value,
+          number: document.getElementById('rNumber').checked,
+          start: parseInt(document.getElementById('rStart').value, 10) || 1,
+          digits: parseInt(document.getElementById('rDigits').value, 10) || 3,
+          pos: document.getElementById('rPos').value,
+          kase: document.getElementById('rCase').value,
+          trim: document.getElementById('rTrim').checked,
+          strip: document.getElementById('rStrip').checked
+        };
+      }
+
+      function applyRules(r) {
+        var idx = r.start;
+        var pairs = [];
+        var seen = {};
+        var hasDup = false;
+        files.forEach(function (f) {
+          var base = f.base;
+          if (r.find) {
+            try {
+              if (r.regex) {
+                base = base.replace(new RegExp(r.find, 'g'), r.replace);
+              } else {
+                base = base.split(r.find).join(r.replace);
+              }
+            } catch (e) { /* 无效正则则忽略 */ }
+          }
+          if (r.trim) base = base.replace(/\s+/g, '');
+          if (r.strip) base = base.replace(/[\\/:*?"<>|]/g, '');
+          if (r.kase === 'lower') base = base.toLowerCase();
+          else if (r.kase === 'upper') base = base.toUpperCase();
+          else if (r.kase === 'title') base = base.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+
+          var nb = r.prefix + base + r.suffix;
+          if (r.number) {
+            var num = String(idx);
+            while (num.length < r.digits) num = '0' + num;
+            nb = (r.pos === 'after') ? (nb + num) : (num + nb);
+            idx++;
+          }
+          var newName = nb + f.ext;
+          var dup = !!seen[newName];
+          if (dup) hasDup = true;
+          seen[newName] = true;
+          pairs.push({ old: f.name, newName: newName, dup: dup });
+        });
+        return { pairs: pairs, hasDup: hasDup };
+      }
+
+      function escapeHtml(s) {
+        return s.replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+
+      function render() {
+        selCount.textContent = T('已选择 ' + files.length + ' 个文件', 'Selected ' + files.length + ' file' + (files.length === 1 ? '' : 's'));
+        if (!files.length) { list.innerHTML = ''; warn.style.display = 'none'; return; }
+        var res = applyRules(getRules());
+        list.innerHTML = '';
+        res.pairs.forEach(function (p) {
+          var row = document.createElement('div');
+          row.className = 'rename-row' + (p.dup ? ' dup' : '');
+          row.innerHTML = '<span class="old">' + escapeHtml(p.old) + '</span>' +
+            '<span class="arrow">→</span>' +
+            '<span class="new">' + escapeHtml(p.newName) + '</span>';
+          list.appendChild(row);
+        });
+        if (res.hasDup) {
+          warn.style.display = 'block';
+          warn.textContent = T('警告：检测到新文件名重复，请调整规则后再导出。', 'Warning: duplicate new names detected. Adjust your rules before exporting.');
+        } else {
+          warn.style.display = 'none';
+        }
+      }
+
+      ['rFind', 'rReplace', 'rPrefix', 'rSuffix', 'rStart', 'rDigits'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', render);
+      });
+      ['rRegex', 'rNumber', 'rTrim', 'rStrip'].forEach(function (id) {
+        document.getElementById(id).addEventListener('change', function () {
+          if (id === 'rNumber') {
+            document.getElementById('numOpts').style.display = document.getElementById('rNumber').checked ? 'grid' : 'none';
+          }
+          render();
+        });
+      });
+      document.getElementById('rCase').addEventListener('change', render);
+      document.getElementById('rPos').addEventListener('change', render);
+
+      function buildScript(isWin) {
+        if (!files.length) { alert(T('请先选择文件。', 'Please select files first.')); return null; }
+        var res = applyRules(getRules());
+        var lines = [];
+        lines.push(isWin ? '@echo off' : '#!/bin/bash');
+        lines.push('# ' + T('文件批量重命名脚本 · 航运派 Trans Pi', 'Batch rename script · Trans Pi'));
+        lines.push('# ' + T('将本脚本与待重命名文件放在同一文件夹，Windows 双击运行 / Mac·Linux 执行 bash 脚本', 'Place this script in the same folder as the files. Windows: double-click. Mac/Linux: run with bash'));
+        lines.push('');
+        res.pairs.forEach(function (p) {
+          if (p.old === p.newName) return;
+          if (isWin) {
+            lines.push('ren "' + p.old.replace(/"/g, '""') + '" "' + p.newName.replace(/"/g, '""') + '"');
+          } else {
+            lines.push('mv -n "' + p.old + '" "' + p.newName + '"');
+          }
+        });
+        return lines.join('\n');
+      }
+
+      function download(name, content) {
+        var blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+      }
+
+      document.getElementById('dlBat').addEventListener('click', function () {
+        var s = buildScript(true); if (s === null) return;
+        download('rename_files.bat', s);
+      });
+      document.getElementById('dlSh').addEventListener('click', function () {
+        var s = buildScript(false); if (s === null) return;
+        download('rename_files.sh', s);
+      });
+      document.getElementById('copyBtn').addEventListener('click', function () {
+        var s = buildScript(false); if (s === null) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(s).then(function () { flashCopied(); });
+        } else {
+          flashCopied();
+        }
+      });
+      function flashCopied() {
+        var btn = document.getElementById('copyBtn');
+        var old = btn.textContent;
+        btn.textContent = T('已复制！', 'Copied!');
+        setTimeout(function () { btn.textContent = old; }, 1500);
+      }
+
+      var obs = new MutationObserver(function (muts) {
+        muts.forEach(function (m) { if (m.attributeName === 'data-lang') render(); });
+      });
+      obs.observe(document.documentElement, { attributes: true });
+    })();
+  </script>
+
+  <footer class="footer" id="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" data-i18n="brand_footer">航运派</span>
+        <span class="footer-logo-en">Trans Pi</span>
+      </div>
+      <p class="footer-tagline" data-i18n="foot_tagline">传递资讯，更传递价值</p>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="about.html" data-i18n="foot_about">关于 William</a>
+        <a href="index.html#about" data-i18n="foot_subscribe">专栏订阅</a>
+        <a href="contact.html" data-i18n="foot_coop">商务合作</a>
+      </div>
+      <div class="footer-legal">
+        <p class="footer-copy" data-i18n="foot_copy">© 2026 航运派（Trans Pi）. 保留所有权利。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal1">本网站原创的文字、图表与版式设计之著作权均归「航运派」及其主理人William 所有；未经书面授权，不得以任何形式转载、摘编或用于商业用途。</p>
+        <p class="footer-legal-text" data-i18n="foot_legal2">本站所引用的法规、政策原文均已注明来源，其著作权归原作者或相关官方机构所有；一切以官方发布的最新版本为准。</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
